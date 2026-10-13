@@ -237,6 +237,12 @@ const items = [
  tip:"Сравни с обувью, дающей защиту или сокращение перезарядки."
 },
 {
+ id:"roam-boots",name:"Roaming Blessing",ru:"Роум-благословение",cat:"Movement",
+ stats:"Роум-эффект, связанный с обувью",
+ desc:"Справочная карточка: роум-эффект выбирается для поддержки команды и связан с ботинками. Это не отдельная пара обуви для покупки.",
+ tip:"Открой вкладку «Перки», чтобы сравнить четыре эффекта: Скрытность, Поощрение, Благословение и Меткий удар. Перед матчем сверяй доступность и правила с текущей версией игры."
+},
+{
  id:"retribution",name:"Retribution",ru:"Возмездие",cat:"Jungle",
  stats:"Базовое заклинание лесника",
  desc:"Боевой навык для фарма лесных монстров и борьбы за нейтральные цели.",
@@ -708,6 +714,7 @@ function renderTierList() {
 
 function effectIconMarkup(item) {
   const art = {
+    "roam-boots": '<path d="M24 54c8 1 14-4 18-15l10 8c7 5 13 7 20 7 5 0 9 4 9 9v8H18v-7c0-5 2-8 6-10Z" fill="#b88cff" stroke="#eadbff" stroke-width="3" stroke-linejoin="round"/><path d="M22 65h55M42 45l-3 8M51 49l-2 5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
     "ice-retribution": '<g fill="none" stroke="#8feaff" stroke-width="3" stroke-linecap="round"><path d="M48 22v52M25 35l46 26M71 35L25 61M39 29l9 7 9-7M39 67l9-7 9 7M20 43l5-8 9 1M62 64l9 1 5-8M20 53l5 8 9-1M62 36l9-1 5 8"/></g>',
     "flame-retribution": '<path d="M49 18c4 14-8 17-2 29 4-7 11-10 12-19 14 13 18 25 12 37-5 11-15 17-27 14-15-3-23-16-17-29 3-7 10-13 12-22 4 5 5 9 4 14 8-6 10-14 6-24Z" fill="#ff9858" stroke="#ffd1a0" stroke-width="3" stroke-linejoin="round"/><path d="M47 51c7 7 10 12 6 19-3 5-10 4-12-1-3-6 2-11 6-18Z" fill="#fff0bf"/>',
     "bloody-retribution": '<path d="M48 18C39 32 27 43 27 56a21 21 0 0 0 42 0C69 43 57 32 48 18Z" fill="#ff526b" stroke="#ffb2bc" stroke-width="3"/><path d="M37 57c1 6 5 9 10 10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
@@ -732,12 +739,12 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
     // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
-    const vectorIcon = item.cat === "Roam" || (item.cat === "Jungle" && item.id !== "retribution")
+    const vectorIcon = item.id === "roam-boots" || item.cat === "Roam" || (item.cat === "Jungle" && item.id !== "retribution")
       ? effectIconMarkup(item)
       : "";
     const iconSource = item.id === "retribution"
       ? "assets/retribution.svg"
-      : item.cat === "Roam" || item.cat === "Jungle"
+      : item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle"
         ? ""
         : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = vectorIcon || (iconSource
