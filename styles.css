@@ -2956,3 +2956,219 @@ img.hero-image,
   .item-purpose-filters { gap:6px; }
   .item-purpose-filters .filter { padding:8px 10px; }
 }
+
+
+/* HERO QUALITY PASS — cinematic portrait cards, clearer hierarchy, and responsive detail pages */
+.hero-card {
+  position:relative;
+  isolation:isolate;
+  background:linear-gradient(155deg,#17121a 0%,#100d13 60%,#181018 100%);
+  border-color:#382632;
+  box-shadow:0 8px 24px #0002;
+}
+.hero-card::before {
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:2px;
+  z-index:3;
+  background:linear-gradient(90deg,transparent,#f04c69 48%,#ff9caa 52%,transparent);
+  opacity:.45;
+  transition:opacity .2s;
+}
+.hero-card:hover::before,.hero-card:focus-within::before { opacity:1; }
+.hero-image-wrap {
+  height:clamp(230px,22vw,330px);
+  background:
+    radial-gradient(ellipse at 50% 82%,rgba(226,39,75,.25),transparent 48%),
+    radial-gradient(ellipse at 50% 15%,rgba(118,70,122,.16),transparent 55%),
+    linear-gradient(145deg,#201521 0%,#100d14 52%,#1d1119 100%);
+}
+.hero-image-wrap::before {
+  inset:10px;
+  border-color:rgba(255,185,198,.12);
+  border-radius:7px;
+}
+.hero-image-wrap::after {
+  height:42%;
+  background:linear-gradient(180deg,transparent 8%,rgba(9,8,12,.16) 55%,rgba(9,8,12,.78));
+}
+.hero-image-wrap .hero-image {
+  padding:8px 4px 0;
+  filter:drop-shadow(0 12px 18px #0009) saturate(1.08) contrast(1.035);
+}
+.hero-id {
+  z-index:4;
+  top:17px;
+  left:17px;
+  border:1px solid #ffffff1c;
+  border-radius:4px;
+  letter-spacing:1.25px;
+  backdrop-filter:blur(8px);
+}
+.hero-image-hint {
+  z-index:4;
+  right:16px;
+  bottom:14px;
+  padding:6px 9px;
+  border-color:#ff8b9a55;
+  font-size:10px;
+  letter-spacing:.2px;
+  backdrop-filter:blur(8px);
+}
+.hero-card-content {
+  position:relative;
+  padding:15px 15px 14px;
+}
+.hero-card h3 {
+  margin:0 0 6px;
+  font-size:clamp(15px,1.2vw,18px);
+  letter-spacing:.1px;
+}
+.hero-card .hero-role {
+  margin:0;
+  color:#ff9aa8;
+  font-size:11px;
+  letter-spacing:.55px;
+  text-transform:uppercase;
+}
+.hero-card .hero-tags { gap:6px; margin:11px 0 13px; }
+.hero-card .hero-tags span {
+  padding:4px 7px;
+  border:1px solid #ffffff0d;
+  border-radius:4px;
+  background:linear-gradient(135deg,#30202d,#211923);
+  color:#e8dbe7;
+  font-size:10px;
+}
+.hero-card-actions { gap:7px; }
+.hero-card-actions .btn {
+  min-height:36px;
+  padding:8px 9px;
+  font-size:10px;
+}
+.hero-card .favorite-btn {
+  min-height:36px;
+  border-radius:5px;
+  font-size:11px;
+}
+.hero-card details { margin-top:12px; }
+.hero-card details summary { font-weight:700; }
+.hero-detail-layout {
+  grid-template-columns:minmax(250px,.78fr) minmax(0,1.22fr);
+  gap:clamp(22px,3vw,42px);
+}
+.hero-detail-art {
+  position:relative;
+  height:clamp(340px,39vw,540px);
+  background:
+    radial-gradient(ellipse at 50% 78%,rgba(226,39,75,.28),transparent 52%),
+    radial-gradient(ellipse at 50% 18%,rgba(110,67,128,.19),transparent 56%),
+    linear-gradient(150deg,#241623,#100d13 62%,#1c1119);
+  border-color:#503142;
+  box-shadow:inset 0 0 0 8px #ffffff03,0 14px 35px #0003;
+}
+.hero-detail-art::after {
+  content:"GRIM_GG  /  HERO ARCHIVE";
+  position:absolute;
+  left:14px;
+  bottom:12px;
+  color:#e9a0ad;
+  font:700 9px Orbitron, sans-serif;
+  letter-spacing:1.3px;
+  text-shadow:0 2px 8px #000;
+  pointer-events:none;
+}
+.hero-detail-art .hero-image {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding:10px 8px 4px;
+  filter:drop-shadow(0 16px 24px #0009) saturate(1.08) contrast(1.035);
+}
+.hero-detail-copy {
+  padding:clamp(4px,1vw,12px) 0;
+}
+.hero-detail-copy .eyebrow { color:#ff8799; letter-spacing:1.8px; }
+.hero-detail-copy h2 {
+  margin:12px 0 8px;
+  line-height:1.08;
+  letter-spacing:-.7px;
+}
+.hero-detail-copy .hero-role { font-size:12px; letter-spacing:.8px; }
+.hero-detail-copy .hero-tags { margin:14px 0 20px; }
+.hero-detail-actions { gap:9px; }
+.hero-detail-actions .btn,.hero-detail-actions .favorite-btn {
+  min-height:42px;
+  border-radius:6px;
+}
+.hero-detail-section {
+  margin-top:22px;
+  padding:clamp(16px,2vw,24px);
+  border:1px solid #3b2938;
+  border-radius:10px;
+  background:linear-gradient(145deg,#17121a,#100d13 78%);
+  box-shadow:0 8px 24px #0002;
+}
+.hero-detail-section>h3,.hero-build-inline-heading h3 {
+  font-size:clamp(17px,1.6vw,21px);
+  letter-spacing:.15px;
+}
+.hero-talent-grid { gap:10px; }
+.hero-talent-card {
+  padding:14px;
+  border-radius:7px;
+  background:linear-gradient(145deg,#211722,#171219);
+  border:1px solid #392837;
+}
+.hero-talent-label {
+  color:#ff9aa8;
+  font-size:10px;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+.hero-talent-card p { margin:8px 0 0; line-height:1.75; }
+.hero-skill-steps { padding-left:24px; }
+.hero-skill-steps li { padding:7px 0 7px 4px; line-height:1.7; }
+.hero-build-inline .build-item-list { gap:4px; }
+.hero-build-inline .build-item-row {
+  padding:10px 0;
+  border-bottom:1px solid #ffffff0d;
+}
+.hero-build-inline .build-item-row:last-child { border-bottom:0; }
+.hero-build-inline .build-item-row strong { font-size:12px; }
+.hero-build-inline .build-item-row span:not(.build-slot) { line-height:1.6; }
+#heroDetailPage .hero-detail-layout { max-width:1320px; }
+#heroDetailPage .hero-detail-art { height:clamp(420px,45vw,620px); }
+#heroDetailPage .hero-detail-section { max-width:1320px; margin-inline:auto; }
+@media (min-width:1500px) {
+  .hero-card-content { padding:17px; }
+  .hero-card-actions .btn { font-size:11px; }
+}
+@media (max-width:900px) {
+  .hero-detail-layout { grid-template-columns:minmax(200px,.8fr) minmax(0,1.2fr); gap:18px; }
+  .hero-detail-art { height:350px; }
+}
+@media (max-width:650px) {
+  .hero-image-wrap { height:clamp(150px,47vw,205px); }
+  .hero-card-content { padding:11px 10px 10px; }
+  .hero-card h3 { font-size:14px; }
+  .hero-card .hero-role { font-size:9px; }
+  .hero-card .hero-tags { gap:4px; margin:8px 0 10px; }
+  .hero-card .hero-tags span { padding:3px 5px; font-size:9px; }
+  .hero-card-actions { display:grid; grid-template-columns:1fr; }
+  .hero-card-actions .btn { width:100%; min-height:34px; }
+  .hero-id { top:12px; left:12px; font-size:8px; }
+  .hero-image-hint { right:12px; bottom:10px; font-size:9px; }
+  .hero-detail-layout { grid-template-columns:minmax(0,1fr); gap:15px; }
+  .hero-detail-art { height:min(88vw,390px); }
+  #heroDetailPage .hero-detail-art { height:min(100vw,460px); }
+  .hero-detail-copy h2 { font-size:clamp(29px,8vw,42px); }
+  .hero-detail-actions { grid-template-columns:1fr 1fr; }
+  .hero-detail-actions .btn,.hero-detail-actions .favorite-btn { min-width:0; padding:9px 7px; font-size:11px; }
+  .hero-detail-section { margin-top:14px; padding:15px; }
+  .hero-talent-grid { grid-template-columns:minmax(0,1fr); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .hero-card,.hero-image,.hero-card::before { transition:none !important; }
+}
