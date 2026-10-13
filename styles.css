@@ -608,3 +608,54 @@ body.modal-open { overflow:hidden; }
   .tier-details summary { min-height:30px; }
 }
 @media(max-width:360px) { .tier-grid { grid-template-columns:1fr; } .tier-card-art { height:160px; } }
+
+
+/* Skill combo library — responsive Grim_gg cards */
+.combo-intro { display:flex; align-items:flex-start; gap:14px; max-width:900px; margin:0 0 22px; padding:17px; background:linear-gradient(110deg,#26121b,#171219 75%); border:1px solid #53303c; border-radius:8px; }
+.combo-intro-mark { display:grid; place-items:center; flex:0 0 42px; width:42px; height:42px; color:#ff7b8b; background:#3a1723; border:1px solid #6a293b; border-radius:8px; font-size:28px; }
+.combo-intro strong { color:#ff8a9a; font-size:12px; letter-spacing:.4px; }
+.combo-intro p { margin:5px 0 0; color:#cbbdcd; font-size:12px; line-height:1.8; }
+.combo-search-label { display:block; margin:12px 0 7px; color:#e9dfe9; font-size:12px; font-weight:700; }
+.combo-search { max-width:680px; margin-bottom:10px; }
+.combo-filters { margin:10px 0; }
+.combo-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; align-items:stretch; }
+.combo-card { min-width:0; padding:17px; background:var(--panel); border:1px solid var(--border); border-radius:9px; }
+.combo-card:hover { border-color:#704052; }
+.combo-card-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.combo-code { color:#ff7b8b; font:10px Orbitron,sans-serif; letter-spacing:1px; }
+.combo-difficulty { padding:4px 7px; border:1px solid var(--border); border-radius:4px; font-size:10px; }
+.difficulty-easy { color:#a8d7b2; background:#17251b; border-color:#31573b; }
+.difficulty-medium { color:#f1cc76; background:#2b2115; border-color:#614a28; }
+.difficulty-hard { color:#ff8a9a; background:#30151d; border-color:#713044; }
+.combo-card-heading { display:flex; align-items:center; gap:11px; margin:16px 0; }
+.combo-avatar { display:grid; place-items:center; flex:0 0 46px; width:46px; height:46px; color:#fff; background:radial-gradient(ellipse,#622337,#21131c); border:1px solid #794054; border-radius:8px; font:800 21px Orbitron,sans-serif; }
+.combo-card-heading h3 { margin:0 0 3px; font-size:17px; }
+.combo-role { color:var(--muted); font-size:11px; }
+.combo-sequence { display:flex; align-items:stretch; gap:5px; padding:12px; background:#0d0a0e; border:1px solid #302630; border-radius:7px; overflow-x:auto; }
+.combo-step { display:flex; flex:1 0 44px; min-width:38px; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:7px 3px; background:#211720; border:1px solid #4a2938; border-radius:5px; }
+.combo-step b { display:grid; place-items:center; width:25px; height:25px; color:#fff; background:#4b1b2b; border-radius:5px; font:800 13px Orbitron,sans-serif; }
+.combo-step small { color:#a99eaa; font-size:9px; white-space:nowrap; }
+.combo-arrow { align-self:center; color:#ff5369; font-size:19px; }
+.combo-details { margin-top:13px; padding-top:11px; border-top:1px solid var(--border); }
+.combo-details summary { display:inline-flex; align-items:center; min-height:34px; color:#ff8292; font-size:12px; font-weight:700; }
+.combo-details ol { padding-left:22px; color:#d4c6d5; font-size:12px; line-height:1.8; }
+.combo-details li { padding-left:3px; margin:6px 0; }
+.combo-tip { margin-top:12px; padding:12px; background:#20151d; border-left:2px solid var(--red); border-radius:0 5px 5px 0; }
+.combo-tip strong { color:#ff8a9a; font-size:11px; }
+.combo-tip p { margin:4px 0 0; color:#cfc1d0; font-size:11px; line-height:1.8; }
+.combo-empty { grid-column:1/-1; padding:24px; text-align:center; background:var(--panel); border:1px solid var(--border); border-radius:8px; }
+.combo-empty p { color:var(--muted); font-size:12px; }
+.combo-basics { margin-top:22px; }
+@media(max-width:800px) { .combo-grid { grid-template-columns:1fr; } }
+@media(max-width:650px) {
+  .combo-intro { gap:10px; padding:13px; }
+  .combo-intro-mark { flex-basis:36px; width:36px; height:36px; font-size:24px; }
+  .combo-intro strong { font-size:11px; }
+  .combo-card { padding:13px; }
+  .combo-card-heading { margin:13px 0; }
+  .combo-card-heading h3 { font-size:16px; }
+  .combo-sequence { gap:4px; padding:8px; }
+  .combo-step { flex-basis:39px; min-width:34px; padding:6px 2px; }
+  .combo-step b { width:23px; height:23px; font-size:12px; }
+  .combo-step small { font-size:8px; }
+}
