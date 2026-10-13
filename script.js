@@ -1935,7 +1935,7 @@ function init() {
   favoriteItems = new Set(safeRead("grimgg-favorite-items").map(String));
   
   // Keep the selected filter state available to assistive technology.
-  document.querySelectorAll("[data-role],[data-tier],[data-tier-role],[data-category],[data-perk-category],[data-build-role],[data-combo-role]").forEach(button => {
+  document.querySelectorAll("[data-role],[data-tier],[data-tier-role],[data-category],[data-item-purpose],[data-perk-category],[data-build-role],[data-combo-role]").forEach(button => {
     button.setAttribute("aria-pressed", String(button.classList.contains("active")));
   });
 
