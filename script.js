@@ -739,6 +739,20 @@ function getHeroById(id) {
   return heroes.find(hero => String(hero.id) === String(id)) || null;
 }
 
+function getHeroTalentPreset(heroName, roles, style = "Командные бои") {
+  const role = resolveBuildRole(roles);
+  const data = window.GrimGGTalentData;
+  const rolePresets = data?.recommendations?.[role];
+  const selectedStyle = rolePresets?.[style] ? style : (rolePresets ? Object.keys(rolePresets)[0] : null);
+  const talents = selectedStyle && rolePresets ? rolePresets[selectedStyle] : [];
+  return {
+    role,
+    style: selectedStyle || style,
+    emblem: data?.emblemNames?.[role] || roleBuildTemplates[role]?.emblem || "Эмблема под роль героя",
+    talents: Array.isArray(talents) ? talents : []
+  };
+}
+
 function renderHeroDetailContent(hero, target) {
   if (!hero || !target) return;
   const roles = getHeroClasses(hero);
@@ -760,18 +774,22 @@ function renderHeroDetailContent(hero, target) {
     "Танк": "Приоритет: выживаемость и командная польза; выбирай дополнительный талант под контроль, начало боя или восстановление.",
     "Поддержка": "Приоритет: командная польза, восстановление и сокращение перезарядки; подстраивай выбор под лечение, щиты и контроль героя."
   };
+  const talentPreset = getHeroTalentPreset(hero.name, roles);
   const talentText = build.talents || talentRoleDefaults[resolveBuildRole(roles)] || talentRoleDefaults["Боец"];
-  const emblemText = build.emblem || roleBuildTemplates[resolveBuildRole(roles)]?.emblem || "Выбери эмблему под роль и механику героя.";
+  const emblemText = build.emblem || talentPreset.emblem || "Выбери эмблему под роль и механику героя.";
   const spellText = build.spell || roleBuildTemplates[resolveBuildRole(roles)]?.spell || "Боевой навык выбирай под роль и состав соперника.";
+  const talentCards = talentPreset.talents.length
+    ? talentPreset.talents.map((talent,index)=>`<article class="hero-talent-pick"><span class="hero-talent-pick-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][index] || "ТАЛАНТ"}</span><div class="hero-talent-pick-icon" aria-hidden="true">${["✦","⬡","◈"][index] || "✦"}</div><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("")
+    : `<p>${escapeHTML(talentText)}</p>`;
   const talentSection = `<div class="hero-detail-section hero-talents-section">
     <span class="eyebrow">GRIM_GG / EMBLEM & TALENTS</span>
     <h3>Эмблема, таланты и боевой навык</h3>
     <div class="hero-talent-grid">
       <div class="hero-talent-card"><span class="hero-talent-label">Эмблема</span><p>${escapeHTML(emblemText)}</p></div>
-      <div class="hero-talent-card"><span class="hero-talent-label">Таланты</span><p>${escapeHTML(talentText)}</p></div>
+      <div class="hero-talent-card hero-talent-card-picks"><span class="hero-talent-label">Таланты · ${escapeHTML(talentPreset.style)}</span><div class="hero-talent-picks">${talentCards}</div></div>
       <div class="hero-talent-card"><span class="hero-talent-label">Боевой навык</span><p>${escapeHTML(spellText)}</p></div>
     </div>
-    <p class="fine-print">Это рекомендации по роли и герою, а не подтверждённый пресет трёх конкретных талантов. Точные названия и иконки добавим после проверки данных актуального патча, чтобы не показывать неверные перки.</p>
+    <p class="fine-print">Это стартовый вариант по роли и стилю, а не гарантированная мета-сборка для каждого героя. Сверяй эффекты талантов с текущей версией MLBB и меняй выбор под матч.</p>
   </div>`;
   const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
   const skillsSection = combo
@@ -1246,7 +1264,9 @@ function renderHeroBuildModal() {
     return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в клиенте игры.")}</span></div></div>`;
   }).join("");
   const variantLabel = activeBuildVariant === "standard" ? "Основная" : activeBuildVariant === "antiTank" ? "Против танков" : "Защитная";
-  const talentText = build.talents || "Первый талант: под стиль героя и выбранную линию. Второй талант: урон/выживаемость по ситуации. Третий талант: основной талант эмблемы, подходящий механике героя.";
+  const talentPreset = getHeroTalentPreset(activeBuildHeroName, activeBuildRoles);
+  const talentText = build.talents || "Выбери таланты под механику героя и текущую ситуацию.";
+  const modalTalentRows = talentPreset.talents.map((talent,index)=>`<article class="build-talent-row"><span class="build-talent-index">${["I","II","III"][index] || index+1}</span><span class="build-talent-glyph" aria-hidden="true">${["✦","⬡","◈"][index] || "✦"}</span><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("");
   content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(activeBuildHeroName)} <span class="red">/ СБОРКА</span></h2>
     <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${build.isMagicBuild ? "МАГИЧЕСКАЯ СБОРКА" : "СБОРКА ПО РОЛИ"} · ${escapeHTML(build.goal)}</p>
     <div class="build-variant-tabs" role="group" aria-label="Вариант сборки">
@@ -1256,8 +1276,8 @@ function renderHeroBuildModal() {
     </div>
     <div class="build-modal-section"><h3>${escapeHTML(variantLabel)} · предметы по порядку</h3><p class="fine-print">Порядок покупки — ориентир, а не обязательная последовательность для каждого матча.</p><div class="build-item-list">${itemRows}</div></div>
     <div class="build-advice">
-      <div class="build-advice-card"><span class="build-advice-icon">✦</span><div><strong>Эмблема</strong><p>${escapeHTML(build.emblem)}</p></div></div>
-      <div class="build-advice-card"><span class="build-advice-icon">◆</span><div><strong>Таланты / перки</strong><p>${escapeHTML(talentText)}</p></div></div>
+      <div class="build-advice-card"><span class="build-advice-icon">✦</span><div><strong>Эмблема</strong><p>${escapeHTML(build.emblem || talentPreset.emblem)}</p></div></div>
+      <div class="build-advice-card build-advice-talents"><span class="build-advice-icon">◆</span><div><strong>Таланты / перки · ${escapeHTML(talentPreset.style)}</strong>${modalTalentRows ? `<div class="build-talent-list">${modalTalentRows}</div>` : `<p>${escapeHTML(talentText)}</p>`}</div></div>
       <div class="build-advice-card"><span class="build-advice-icon">➤</span><div><strong>Боевой навык</strong><p>${escapeHTML(build.spell)}</p></div></div>
     </div>
     <p class="build-modal-note">${build.personalized ? "Рекомендация для конкретного героя. " : "Пока это шаблон по классу, а не точная сборка для каждого героя. "}${escapeHTML(build.note)}</p>
