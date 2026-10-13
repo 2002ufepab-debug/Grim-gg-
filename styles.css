@@ -710,3 +710,8 @@ body.modal-open { overflow:hidden; }
   .hero-image { transition:none; }
   .hero-card:hover .hero-image { transform:none; }
 }
+
+
+/* Page-style navigation: each section has its own URL (?page=...). */
+.page-hidden { display: none !important; }
+.nav a[aria-current="page"] { color: var(--red); }
