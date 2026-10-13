@@ -25,6 +25,14 @@ for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "fa
     require(f'id="{section_id}"' in html, f"Missing core section #{section_id}")
 
 require('href="?page=talents"' in html, "Talent page must be reachable from the main navigation")
+require('href="favicon.svg"' in html, "Main page favicon reference is missing")
+require('styles.css?v=48' in (ROOT / "404.html").read_text(encoding="utf-8"),
+        "404 page must use the current main stylesheet cache key")
+require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding="utf-8"),
+        "404 page must use the correct GitHub Pages favicon path")
+for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "counterpicks", "esports"):
+    require(f'href="?page={route}"' in html, f"Main navigation is missing route ?page={route}")
+
 require('knownPages.includes(requestedPage)' in talents and 'section.classList.add("page-hidden")' in talents,
         "Talent section must respect the initial page route")
 require('"perks","talents","builds"' in script, "Talent route is missing from the page router")
