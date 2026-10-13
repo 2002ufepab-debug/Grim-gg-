@@ -25,7 +25,7 @@ for asset in ("styles.css?v=48", "talents.css?v=3", "layout-wide.css?v=2", "scri
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
 
 # Catch duplicate static IDs and accidentally unbalanced CSS before publishing.
-static_ids = re.findall(r'\\bid=["\\']([^"\\']+)["\\']', html)
+static_ids = re.findall(r"""\bid=["']([^"']+)["']""", html)
 require(len(static_ids) == len(set(static_ids)), "index.html contains duplicate element IDs")
 for stylesheet_name, stylesheet in (
     ("styles.css", styles),
