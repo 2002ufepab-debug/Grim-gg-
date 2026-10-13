@@ -133,7 +133,7 @@
 <section class="section" id="perks">
   <div class="section-heading">
     <div><div class="eyebrow">04 / SPELLS & BLESSINGS</div><h2>ПЕРКИ <span class="red">И ЗАКЛИНАНИЯ</span></h2></div>
-    <p>Отдельный справочник заклинаний лесника и роум-эффектов — с описаниями и советами по выбору.</p>
+    <p>Возмездие и его усиления, а также четыре роум-благословения. Роум — это эффект, связанный с обувью, а не отдельная пара ботинок.</p>
   </div>
   <input class="search" id="perkSearch" type="search" placeholder="Поиск заклинания или эффекта..." aria-label="Поиск заклинания или эффекта">
   <div class="filter-row" id="perkFilters">
@@ -149,16 +149,21 @@
 <section class="section section-muted" id="builds">
   <div class="section-heading">
     <div><div class="eyebrow">05 / BUILD LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">СБОРОК</span></h2></div>
-    <p>Примеры сборок с пояснениями, зачем может понадобиться каждый предмет.</p>
+    <p>Каталог сборок для всех загруженных героев. Выбирай роль, находи персонажа и открывай варианты экипировки, эмблем и боевых заклинаний.</p>
   </div>
-  <div class="filter-row" id="buildFilters">
-    <button class="filter active" data-build="Все">Все сборки</button>
-    <button class="filter" data-build="Фанни">Фанни</button>
-    <button class="filter" data-build="Вексана">Вексана</button>
-    <button class="filter" data-build="Клод">Клод</button>
-    <button class="filter" data-build="Белерик">Белерик</button>
+  <input class="search build-search" id="buildSearch" type="search" placeholder="Найти героя для сборки..." aria-label="Поиск героя для сборки">
+  <div class="filter-row" id="buildFilters" aria-label="Фильтр сборок по роли">
+    <button class="filter active" data-build-role="Все">Все роли</button>
+    <button class="filter" data-build-role="Убийца">Убийцы</button>
+    <button class="filter" data-build-role="Маг">Маги</button>
+    <button class="filter" data-build-role="Стрелок">Стрелки</button>
+    <button class="filter" data-build-role="Боец">Бойцы</button>
+    <button class="filter" data-build-role="Танк">Танки</button>
+    <button class="filter" data-build-role="Поддержка">Поддержка</button>
   </div>
+  <p class="count" id="buildCount" aria-live="polite"></p>
   <div class="build-grid" id="buildGrid"></div>
+  <p class="fine-print">Для героев без индивидуальной карточки используется стартовый шаблон по роли. Он помечен отдельно и не выдаётся за проверенную мета-сборку. Актуальность предметов и талантов зависит от патча и состава соперника.</p>
 </section>
 
 <section class="section" id="favorites">
