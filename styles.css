@@ -465,3 +465,13 @@ body.modal-open { overflow:hidden; }
  .build-modal-card { padding:17px; max-height:94dvh; }
  .hero-build-btn { font-size:10px; }
 }
+
+.build-variant-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:15px 0; }
+.build-variant { min-height:40px; padding:8px 6px; color:#d8cbd8; background:#171219; border:1px solid #392a38; border-radius:6px; font-size:11px; font-weight:800; }
+.build-variant:hover,.build-variant.active { color:#fff; background:#421522; border-color:var(--red); box-shadow:inset 0 -2px 0 var(--red); }
+.build-modal-card .build-item-list { gap:8px; }
+.build-modal-card .build-item-row { padding:8px 0; border-bottom:1px solid #302630; }
+.build-modal-card .build-item-row:last-child { border-bottom:0; }
+.build-modal-card .build-item-row strong { font-size:12px; }
+.build-modal-card .build-item-row span:not(.build-slot) { color:var(--muted); font-size:10px; }
+@media(max-width:380px) { .build-variant-tabs { grid-template-columns:1fr; } .build-variant { min-height:36px; } }
