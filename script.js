@@ -1191,20 +1191,17 @@ async function loadExternalHeroes() {
 }
 
 
-function setupPageNavigation() {
+function applyPageNavigation(requestedPage, shouldScroll = true) {
   const pageIds = ["home","heroes","tierlist","items","builds","favorites","guides","counterpicks"];
-  const params = new URLSearchParams(window.location.search);
-  const requestedPage = params.get("page");
-  if (!requestedPage) return;
+  const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
 
-  const page = pageIds.includes(requestedPage) ? requestedPage : "home";
   document.querySelectorAll("main > section").forEach(section => {
-    section.classList.toggle("page-hidden", section.id !== page);
+    section.classList.toggle("page-hidden", Boolean(page) && section.id !== page);
   });
 
   document.querySelectorAll("#nav a").forEach(link => {
     const linkPage = new URLSearchParams(link.search).get("page");
-    if (linkPage === page) {
+    if (page && linkPage === page) {
       link.setAttribute("aria-current", "page");
     } else {
       link.removeAttribute("aria-current");
@@ -1221,8 +1218,35 @@ function setupPageNavigation() {
     guides: "Комбо и гайды",
     counterpicks: "Контрпики"
   };
-  document.title = `Grim_gg — ${titles[page]}`;
-  window.scrollTo(0, 0);
+  document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — MLBB Tactical Database";
+
+  if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function setupPageNavigation() {
+  const getRequestedPage = () => new URLSearchParams(window.location.search).get("page");
+  applyPageNavigation(getRequestedPage(), false);
+
+  document.addEventListener("click", event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const link = event.target.closest("a[href]");
+    if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+
+    const url = new URL(link.href, window.location.href);
+    if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.searchParams.has("page")) return;
+
+    event.preventDefault();
+    if (url.href !== window.location.href) history.pushState({}, "", url.href);
+    applyPageNavigation(url.searchParams.get("page"));
+    const nav = $("nav");
+    const toggle = $("menuToggle");
+    nav?.classList.remove("open");
+    toggle?.setAttribute("aria-expanded", "false");
+  });
+
+  window.addEventListener("popstate", () => {
+    applyPageNavigation(getRequestedPage(), false);
+  });
 }
 
 function setupMenu() {
