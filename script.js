@@ -739,6 +739,22 @@ function getHeroById(id) {
   return heroes.find(hero => String(hero.id) === String(id)) || null;
 }
 
+function talentIconMarkupForBuild(name, index) {
+  const renderer = window.GrimGGTalentData?.iconMarkup;
+  if (typeof renderer === "function") return renderer(name, index);
+  const glyph = ["✦", "⬡", "◈"][index] || "✦";
+  return '<span class="talent-icon talent-icon-art" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><text x="32" y="41" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
+}
+
+function battleSpellMarkup(spellText) {
+  const label = String(spellText || "Выбери боевой навык под героя и матч.");
+  if (/возмездие|retribution/i.test(label)) {
+    const src = new URL("assets/retribution.svg", window.location.href).href;
+    return '<span class="build-spell-display"><img class="build-spell-icon" src="' + escapeHTML(src) + '" alt="Иконка Возмездия" loading="lazy" decoding="async"><span>' + escapeHTML(label) + '</span></span>';
+  }
+  return '<span class="build-spell-display"><span class="build-spell-placeholder" aria-hidden="true">✦</span><span>' + escapeHTML(label) + '</span></span>';
+}
+
 function getHeroTalentPreset(heroName, roles, style = "Командные бои") {
   const role = resolveBuildRole(roles);
   const data = window.GrimGGTalentData;
@@ -779,7 +795,7 @@ function renderHeroDetailContent(hero, target) {
   const emblemText = build.emblem || talentPreset.emblem || "Выбери эмблему под роль и механику героя.";
   const spellText = build.spell || roleBuildTemplates[resolveBuildRole(roles)]?.spell || "Боевой навык выбирай под роль и состав соперника.";
   const talentCards = talentPreset.talents.length
-    ? talentPreset.talents.map((talent,index)=>`<article class="hero-talent-pick"><span class="hero-talent-pick-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][index] || "ТАЛАНТ"}</span><div class="hero-talent-pick-icon" aria-hidden="true">${["✦","⬡","◈"][index] || "✦"}</div><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("")
+    ? talentPreset.talents.map((talent,index)=>`<article class="hero-talent-pick"><span class="hero-talent-pick-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][index] || "ТАЛАНТ"}</span><div class="hero-talent-pick-icon" aria-hidden="true">${talentIconMarkupForBuild(talent[1],index)}</div><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("")
     : `<p>${escapeHTML(talentText)}</p>`;
   const talentSection = `<div class="hero-detail-section hero-talents-section">
     <span class="eyebrow">GRIM_GG / EMBLEM & TALENTS</span>
@@ -787,7 +803,7 @@ function renderHeroDetailContent(hero, target) {
     <div class="hero-talent-grid">
       <div class="hero-talent-card"><span class="hero-talent-label">Эмблема</span><p>${escapeHTML(emblemText)}</p></div>
       <div class="hero-talent-card hero-talent-card-picks"><span class="hero-talent-label">Таланты · ${escapeHTML(talentPreset.style)}</span><div class="hero-talent-picks">${talentCards}</div></div>
-      <div class="hero-talent-card"><span class="hero-talent-label">Боевой навык</span><p>${escapeHTML(spellText)}</p></div>
+      <div class="hero-talent-card"><span class="hero-talent-label">Боевой навык</span>${battleSpellMarkup(spellText)}</div>
     </div>
     <p class="fine-print">Это стартовый вариант по роли и стилю, а не гарантированная мета-сборка для каждого героя. Сверяй эффекты талантов с текущей версией MLBB и меняй выбор под матч.</p>
   </div>`;
@@ -1266,7 +1282,7 @@ function renderHeroBuildModal() {
   const variantLabel = activeBuildVariant === "standard" ? "Основная" : activeBuildVariant === "antiTank" ? "Против танков" : "Защитная";
   const talentPreset = getHeroTalentPreset(activeBuildHeroName, activeBuildRoles);
   const talentText = build.talents || "Выбери таланты под механику героя и текущую ситуацию.";
-  const modalTalentRows = talentPreset.talents.map((talent,index)=>`<article class="build-talent-row"><span class="build-talent-index">${["I","II","III"][index] || index+1}</span><span class="build-talent-glyph" aria-hidden="true">${["✦","⬡","◈"][index] || "✦"}</span><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("");
+  const modalTalentRows = talentPreset.talents.map((talent,index)=>`<article class="build-talent-row"><span class="build-talent-index">${["I","II","III"][index] || index+1}</span><span class="build-talent-glyph" aria-hidden="true">${talentIconMarkupForBuild(talent[1],index)}</span><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("");
   content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(activeBuildHeroName)} <span class="red">/ СБОРКА</span></h2>
     <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${build.isMagicBuild ? "МАГИЧЕСКАЯ СБОРКА" : "СБОРКА ПО РОЛИ"} · ${escapeHTML(build.goal)}</p>
     <div class="build-variant-tabs" role="group" aria-label="Вариант сборки">
@@ -1278,7 +1294,7 @@ function renderHeroBuildModal() {
     <div class="build-advice">
       <div class="build-advice-card"><span class="build-advice-icon">✦</span><div><strong>Эмблема</strong><p>${escapeHTML(build.emblem || talentPreset.emblem)}</p></div></div>
       <div class="build-advice-card build-advice-talents"><span class="build-advice-icon">◆</span><div><strong>Таланты / перки · ${escapeHTML(talentPreset.style)}</strong>${modalTalentRows ? `<div class="build-talent-list">${modalTalentRows}</div>` : `<p>${escapeHTML(talentText)}</p>`}</div></div>
-      <div class="build-advice-card"><span class="build-advice-icon">➤</span><div><strong>Боевой навык</strong><p>${escapeHTML(build.spell)}</p></div></div>
+      <div class="build-advice-card build-advice-spell"><span class="build-advice-icon">➤</span><div><strong>Боевой навык</strong>${battleSpellMarkup(build.spell)}</div></div>
     </div>
     <p class="build-modal-note">${build.personalized ? "Рекомендация для конкретного героя. " : "Пока это шаблон по классу, а не точная сборка для каждого героя. "}${escapeHTML(build.note)}</p>
     <p class="fine-print">Сборки и таланты могут меняться после патчей. Перед ранговой игрой проверь обновления и подстраивай защитный слот под врагов.</p>`;
