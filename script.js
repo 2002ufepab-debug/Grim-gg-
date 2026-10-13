@@ -1190,6 +1190,41 @@ async function loadExternalHeroes() {
   }
 }
 
+
+function setupPageNavigation() {
+  const pageIds = ["home","heroes","tierlist","items","builds","favorites","guides","counterpicks"];
+  const params = new URLSearchParams(window.location.search);
+  const requestedPage = params.get("page");
+  if (!requestedPage) return;
+
+  const page = pageIds.includes(requestedPage) ? requestedPage : "home";
+  document.querySelectorAll("main > section").forEach(section => {
+    section.classList.toggle("page-hidden", section.id !== page);
+  });
+
+  document.querySelectorAll("#nav a").forEach(link => {
+    const linkPage = new URLSearchParams(link.search).get("page");
+    if (linkPage === page) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+
+  const titles = {
+    home: "Главная",
+    heroes: "Герои",
+    tierlist: "Тир-лист",
+    items: "Предметы",
+    builds: "Сборки",
+    favorites: "Избранное",
+    guides: "Комбо и гайды",
+    counterpicks: "Контрпики"
+  };
+  document.title = `Grim_gg — ${titles[page]}`;
+  window.scrollTo(0, 0);
+}
+
 function setupMenu() {
   const toggle = $("menuToggle");
   const nav = $("nav");
@@ -1254,6 +1289,7 @@ function init() {
     updateFavorite(button.dataset.favoriteType,button.dataset.favoriteId);
   });
 
+  setupPageNavigation();
   setupFilters();
   setupMenu();
   document.addEventListener("keydown",event=>{ if(event.key==="Escape") closeHeroBuild(); });
