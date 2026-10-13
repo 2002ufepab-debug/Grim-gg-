@@ -4,13 +4,13 @@
     "Стрелок": {
       "Агрессивно": [
         ["Стрельба","Swift","Помогает чаще проводить обычные атаки; подходит героям, которым важна скорость атаки."],
-        ["Специализация","Weapons Master","Усиливает ценность атакующих характеристик от экипировки и эмблем."],
+        ["Специализация","Weapon Master","Усиливает ценность атакующих характеристик от экипировки и эмблем."],
         ["Темп боя","Quantum Charge","Поддерживает темп перестрелок и помогает менять позицию после атак."]
       ],
       "Командные бои": [
         ["Стрельба","Swift","Вариант для героев, которым нужна стабильная скорость атак."],
         ["Специализация","Weapons Master","Полезен при сборке с заметной долей атакующих характеристик."],
-        ["Выживаемость","Weakness Finder","Может помогать сдерживать противника обычными атаками; проверь доступность и эффект в текущем патче."]
+        ["Темп боя","Quantum Charge","Урон навыками помогает ускоряться и восстанавливать здоровье; проверяй условия срабатывания в клиенте."]
       ],
       "Выживаемость": [
         ["Гибкость","Agility","Дополнительная мобильность может помочь держать безопасную дистанцию."],
@@ -32,7 +32,7 @@
       "Выживаемость": [
         ["Мобильность","Agility","Может помочь быстрее менять позицию."],
         ["Гибкость","Wilderness Blessing","Рассматривай для перемещений по карте, если талант доступен в текущей версии."],
-        ["Безопасный выход","Temporal Reign","Проверь условия срабатывания и доступность в актуальном наборе талантов."]
+        ["Серия устранений","Killing Spree","После участия в устранении помогает восстановить здоровье и ускориться."]
       ]
     },
     "Маг": {
@@ -193,7 +193,7 @@
         <div><div class="eyebrow">06 / EMBLEM & TALENT LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">ТАЛАНТОВ</span></h2></div>
         <p>Подбирай пример эмблем и талантов под героя и стиль игры.</p>
       </div>
-      <p class="talent-intro">Выбери роль, героя и стиль — получишь стартовую рекомендацию с пояснениями. Это справочник-помощник, а не автоматическая проверка текущего патча: названия, доступность и эффекты талантов могут меняться.</p>
+      <p class="talent-intro">Выбери роль, героя и стиль — получишь стартовую комбинацию. Сверено со справочником талантов патча 2.2.16; это ориентир, а не персональная мета-сборка и не официальная рекомендация MOONTON.</p>
       <div class="talent-controls">
         <div class="talent-control"><label for="talentRole">Роль</label><select id="talentRole"><option>Стрелок</option><option>Убийца</option><option>Маг</option><option>Боец</option><option>Танк</option><option>Поддержка</option></select></div>
         <div class="talent-control"><label for="talentHero">Герой</label><select id="talentHero"></select></div>
@@ -202,7 +202,7 @@
       <div class="talent-result" aria-live="polite">
         <div class="talent-result-head"><div class="talent-hero-heading"><div class="talent-hero-portrait" id="talentHeroPortrait" role="img" aria-label="Портрет героя"><span class="talent-portrait-placeholder">GG</span></div><div><h3 id="talentResultTitle">Таланты для Клинта</h3><p id="talentResultDesc" class="talent-intro">Рекомендуемая стартовая комбинация.</p></div></div><span class="talent-chip" id="talentRoleChip">СТРЕЛОК</span></div>
         <div class="talent-slots" id="talentSlots"></div>
-        <p class="talent-note" id="talentNote">Проверь доступность и эффекты в текущем клиенте MLBB перед использованием.</p>
+        <p class="talent-note" id="talentNote">Ориентир по системе талантов патча 2.2.16. Перед матчем сверь эффекты в клиенте MLBB и адаптируй выбор под соперников.</p>
         <div class="talent-actions"><button type="button" id="talentCopy">Копировать комбинацию</button><button type="button" class="secondary" id="talentReset">Сбросить выбор</button></div>
         <p class="talent-status" id="talentStatus" role="status"></p>
       </div>`;
