@@ -12,6 +12,8 @@ const $ = id => document.getElementById(id);
 
 const HERO_SOURCE =
   "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/hero.json";
+const EQUIPMENT_SOURCE =
+  "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/equipment.json";
 
 const HERO_IMAGE_BASE =
   "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/";
@@ -580,6 +582,18 @@ function renderHeroDetailContent(hero, target) {
   const roles = getHeroClasses(hero);
   const tip = heroTips[hero.name] || "Учитывай дальность навыков, следи за мини-картой и подстраивай тактику под состав команды соперника.";
   const headingId = target.id === "heroDetailModalContent" ? "heroDetailModalTitle" : "heroDetailPageTitle";
+  const build = getHeroBuild(hero.name, roles);
+  const buildRows = build.items.map((name,index)=>{
+    const item = items.find(entry=>entry.name===name);
+    const iconSlug = item ? itemIconSlug(item.name) : null;
+    const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
+    return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
+  }).join("");
+  const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
+  const skillsSection = combo
+    ? `<div class="hero-detail-section"><h3>Навыки и комбо</h3><p class="fine-print">Комбо: ${combo.skills.map(escapeHTML).join(" → ")}</p><ol class="hero-skill-steps">${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><p>${escapeHTML(combo.tip)}</p></div>`
+    : `<div class="hero-detail-section"><h3>Навыки героя</h3><p class="fine-print">Подробные описания навыков этого героя ещё не подключены к справочнику. Не показываем выдуманные данные.</p><a class="btn btn-ghost" href="?page=guides">Открыть комбо и гайды ↗</a></div>`;
   target.innerHTML = `
     <div class="hero-detail-layout">
       <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
@@ -590,13 +604,19 @@ function renderHeroDetailContent(hero, target) {
         <div class="hero-tags">${roles.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <div class="hero-detail-tip"><strong>Совет Grim_gg</strong><p>${escapeHTML(tip)}</p></div>
         <div class="hero-detail-actions">
-          <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Сборка героя ↗</button>
           ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
           <button type="button" class="btn btn-ghost" data-open-hero-full="${escapeHTML(hero.name)}">Полная страница ↗</button>
           <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
           <a class="btn btn-ghost" href="?page=counterpicks">Контрпики ↗</a>
         </div>
       </div>
+    </div>
+    ${skillsSection}
+    <div class="hero-detail-section hero-build-inline">
+      <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
+      <div class="build-item-list">${buildRows}</div>
+      <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
+      <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Другие варианты сборки ↗</button>
     </div>`;
 }
 
@@ -809,11 +829,13 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const vectorIcon = item.id !== "retribution" && (item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle")
       ? effectIconMarkup(item)
       : "";
-    const iconSource = item.id === "retribution"
-      ? "assets/retribution.svg"
-      : item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle"
-        ? ""
-        : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const iconSource = item.imageFile
+      ? ITEM_IMAGE_BASE + item.imageFile
+      : item.id === "retribution"
+        ? "assets/retribution.svg"
+        : item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle"
+          ? ""
+          : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = vectorIcon || (iconSource
       ? `<img class="item-image" src="${escapeHTML(iconSource)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
       : `<div class="item-symbol" aria-label="Иконка предмета недоступна">${symbol}</div>`);
@@ -1363,6 +1385,52 @@ function setupFilters() {
   });
 }
 
+async function loadExternalItems() {
+  try {
+    const response = await fetch(EQUIPMENT_SOURCE,{cache:"no-cache"});
+    if (!response.ok) throw new Error("Каталог предметов недоступен");
+    const data = await response.json();
+    if (!Array.isArray(data) || !data.length) throw new Error("Неверный формат каталога предметов");
+    const existingNames = new Set(items.map(item=>String(item.name).toLocaleLowerCase()));
+    const categoryFor = (name,index) => {
+      const value = String(name).toLocaleLowerCase();
+      if (/retribution|conceal|dire hit|encourage|favor|allow throw|broken heart|throw forbidden/.test(value)) return "Roam";
+      if (/boots|shoes/.test(value)) return "Movement";
+      if (/wand|crystal|codex|tome|magic necklace|magic blade|book of sages|flower of hope|lantern of hope|wishing lantern|concentrated energy|starlium|lightning truncheon|holy crystal|divine glaive|genius wand|glowing wand|ice queen|blood wings|feather of heaven|clock of destiny|enchanted talisman|mystic container|azure blade|elegant gem|exotic veil/.test(value)) return "Magic";
+      if (/armor|shield|helmet|breastplate|guardian|immortality|oracle|wings|belt|cloak|jerkin|legplates|vitality|healing necklace|rock potion|black ice|dreadnaught|molten essence|silence robe|chastise|thunder belt|dominance|athena|antique|radiant|cursed|queen's wings/.test(value)) return "Defense";
+      if (/potion/.test(value)) return "Attack";
+      if (/dagger|spear|sword|bow|glove|scythe|malefic|fury|corrosion|despair|heptaseas|hunter strike|wind of nature|windtalker|sky piercer|hunting bow|knife|crossbow|vampire mallet|ogre tomahawk|regular spear|rogue meteor|hass's claws|berserker/.test(value)) return "Attack";
+      return index < 34 ? "Attack" : index < 63 ? "Magic" : index < 88 ? "Defense" : index < 97 ? "Movement" : "Roam";
+    };
+    data.forEach((entry,index)=>{
+      const name = String(entry["name-equipment"] || "").trim();
+      if (!name || existingNames.has(name.toLocaleLowerCase())) return;
+      const imageFile = String(entry["logo-equipment"] || "").trim();
+      const price = Number(entry["prize-gold"]);
+      const cat = categoryFor(name,index);
+      items.push({
+        id:"catalog-" + name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
+        name,
+        ru:name,
+        cat,
+        imageFile,
+        stats:Number.isFinite(price) && price > 0 ? "Цена: " + price.toLocaleString("ru-RU") + " золота" : "Цена не указана",
+        desc:"Предмет добавлен из внешнего каталога MLBB. Название и иконка могут зависеть от версии источника.",
+        tip:"Проверь наличие, цену и характеристики предмета в актуальной версии игры."
+      });
+      existingNames.add(name.toLocaleLowerCase());
+    });
+    renderItems();
+    renderPerks();
+    renderBuilds();
+    renderFavorites();
+    const count = $("itemCount");
+    if (count) count.textContent = `Предметов в справочнике: ${items.filter(item=>item.cat!=="Jungle" && item.cat!=="Roam").length}`;
+  } catch (error) {
+    console.warn("Grim_gg: внешний каталог предметов недоступен.",error);
+  }
+}
+
 async function loadExternalHeroes() {
   const note = $("heroSourceNote");
   try {
@@ -1522,13 +1590,8 @@ function init() {
   document.addEventListener("click",event=>{
     const openHeroButton = event.target.closest("[data-open-hero]");
     if (openHeroButton) {
-      // По нажатию на портрет или имя сразу открываем сборку героя.
-      // Профиль остаётся отдельной функцией и не мешает быстрому доступу к экипировке.
-      const hero = getHeroById(openHeroButton.dataset.openHero);
-      if (hero) {
-        closeHeroDetail();
-        openHeroBuild(hero.name, getHeroClasses(hero).join(","));
-      }
+      // Профиль сразу показывает навыки/комбо и сборку на одной панели.
+      openHeroDetail(openHeroButton.dataset.openHero);
       return;
     }
     const fullHeroButton = event.target.closest("[data-open-hero-full]");
@@ -1587,6 +1650,7 @@ function init() {
   renderFavorites();
 
   loadExternalHeroes();
+  loadExternalItems();
 }
 
 document.addEventListener("DOMContentLoaded",init);
