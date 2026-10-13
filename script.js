@@ -1698,7 +1698,7 @@ async function loadEsportsNews() {
     const updated = $("esportsLastUpdated");
     if (updated) updated.textContent = "Не удалось обновить ленту — показаны доступные данные";
     const grid = $("esportsNewsGrid");
-    if (grid && !grid.children.length) grid.innerHTML = '<article class="esports-card"><h3>Лента временно недоступна</h3><p>Проверь подключение к интернету и попробуй позже.</p><a class="esports-link" href="https://en.moonton.com/news/index.html" target="_blank" rel="noopener noreferrer">Открыть MOONTON ↗</a></article>';
+    if (grid) grid.innerHTML = '<article class="esports-card"><h3>Не удалось загрузить ленту</h3><p>Проверь подключение и попробуй ещё раз. Можно открыть официальный источник.</p><a class="esports-link" href="https://en.moonton.com/news/index.html" target="_blank" rel="noopener noreferrer">Открыть MOONTON ↗</a></article>';
   }
   if (!esportsRefreshTimer) esportsRefreshTimer = window.setInterval(loadEsportsNews, 5 * 60 * 1000);
 }
@@ -1805,6 +1805,13 @@ function init() {
   loadExternalHeroes();
   loadExternalItems();
   loadEsportsNews();
+  $("refreshEsportsNews")?.addEventListener("click", () => {
+    const button = $("refreshEsportsNews");
+    if (button) { button.disabled = true; button.textContent = "Обновляем…"; }
+    loadEsportsNews().finally(() => {
+      if (button) { button.disabled = false; button.textContent = "Обновить ленту ↻"; }
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded",init);
