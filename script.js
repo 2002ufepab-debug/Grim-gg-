@@ -1522,7 +1522,13 @@ function init() {
   document.addEventListener("click",event=>{
     const openHeroButton = event.target.closest("[data-open-hero]");
     if (openHeroButton) {
-      openHeroDetail(openHeroButton.dataset.openHero);
+      // По нажатию на портрет или имя сразу открываем сборку героя.
+      // Профиль остаётся отдельной функцией и не мешает быстрому доступу к экипировке.
+      const hero = getHeroById(openHeroButton.dataset.openHero);
+      if (hero) {
+        closeHeroDetail();
+        openHeroBuild(hero.name, getHeroClasses(hero).join(","));
+      }
       return;
     }
     const fullHeroButton = event.target.closest("[data-open-hero-full]");
