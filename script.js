@@ -643,9 +643,18 @@ function renderHeroDetailContent(hero, target) {
   const skillsSection = combo
     ? `<div class="hero-detail-section"><h3>Навыки и комбо</h3><p class="fine-print">Комбо: ${combo.skills.map(escapeHTML).join(" → ")}</p><ol class="hero-skill-steps">${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><p>${escapeHTML(combo.tip)}</p></div>`
     : `<div class="hero-detail-section"><h3>Навыки героя</h3><p class="fine-print">Подробные описания навыков этого героя ещё не подключены к справочнику. Не показываем выдуманные данные.</p><a class="btn btn-ghost" href="?page=guides">Открыть комбо и гайды ↗</a></div>`;
+  const buildSection = `<div class="hero-detail-section hero-build-inline">
+    <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
+    <div class="build-item-list">${buildRows}</div>
+    <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
+    <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Другие варианты сборки ↗</button>
+  </div>`;
   target.innerHTML = `
     <div class="hero-detail-layout">
-      <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
+      <div class="hero-detail-left">
+        <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
+        ${buildSection}
+      </div>
       <div class="hero-detail-copy">
         <span class="eyebrow">GRIM_GG / HERO PROFILE</span>
         <h2 id="${headingId}">${escapeHTML(hero.name)}</h2>
@@ -661,13 +670,7 @@ function renderHeroDetailContent(hero, target) {
       </div>
     </div>
     ${skillsSection}
-    ${talentSection}
-    <div class="hero-detail-section hero-build-inline">
-      <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
-      <div class="build-item-list">${buildRows}</div>
-      <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
-      <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Другие варианты сборки ↗</button>
-    </div>`;
+    ${talentSection}`;
 }
 
 function renderHeroFullPage(name) {
