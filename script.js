@@ -1103,7 +1103,7 @@ function showCounterpick() {
   const result = $("counterResult");
   if (!result) return;
   if (!enemy) {
-    result.innerHTML = '<div class="result-icon">!</div><div><strong>Выбери героя противника</strong><p>Укажи персонажа, против которого хочешь подготовиться.</p></div>';
+    result.innerHTML = '<div class="result-icon">!</div><div><strong>Выбери героя противника</strong><p>Укажи героя, к встрече с которым хочешь подготовиться.</p></div>';
     return;
   }
   const enemyRole = inferHeroRole(enemy);
