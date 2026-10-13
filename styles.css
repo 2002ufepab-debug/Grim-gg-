@@ -2730,3 +2730,16 @@ img.hero-image,
   transform: none !important;
   backface-visibility: visible !important;
 }
+
+
+/* Keep the hero build immediately below the avatar, before secondary details. */
+.hero-detail-left { min-width:0; }
+.hero-detail-left .hero-build-inline { margin:14px 0 0; }
+.hero-detail-left .hero-build-inline-heading { display:block; }
+.hero-detail-left .hero-build-inline-heading p { margin-top:6px; text-align:left; }
+.hero-detail-left .build-item-row { align-items:flex-start; }
+@media (max-width:650px) {
+  .hero-detail-left { display:flex; flex-direction:column; }
+  .hero-detail-left .hero-detail-art { width:100%; }
+  .hero-detail-left .hero-build-inline { width:100%; }
+}
