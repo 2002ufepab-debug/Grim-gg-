@@ -14,12 +14,27 @@ def require(condition: bool, message: str) -> None:
         errors.append(message)
 
 html = (ROOT / "index.html").read_text(encoding="utf-8")
+styles = (ROOT / "styles.css").read_text(encoding="utf-8")
+talents_styles = (ROOT / "talents.css").read_text(encoding="utf-8")
+wide_styles = (ROOT / "layout-wide.css").read_text(encoding="utf-8")
 script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
 for asset in ("styles.css?v=48", "talents.css?v=3", "layout-wide.css?v=2", "script.js?v=49", "talents.js?v=6"):
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
+
+# Catch duplicate static IDs and accidentally unbalanced CSS before publishing.
+static_ids = re.findall(r'\\bid=["\\']([^"\\']+)["\\']', html)
+require(len(static_ids) == len(set(static_ids)), "index.html contains duplicate element IDs")
+for stylesheet_name, stylesheet in (
+    ("styles.css", styles),
+    ("talents.css", talents_styles),
+    ("layout-wide.css", wide_styles),
+):
+    require(stylesheet.count("{") == stylesheet.count("}"),
+            f"{stylesheet_name} has unbalanced CSS braces")
+
 
 for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports"):
     require(f'id="{section_id}"' in html, f"Missing core section #{section_id}")
