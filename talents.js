@@ -187,6 +187,9 @@
     return '<span class="talent-icon talent-icon-art" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><path d="M32 11 48 20v24L32 53 16 44V20Z" fill="none" stroke="#ff8795" stroke-opacity=".4"/><text x="32" y="40" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
   }
 
+  // Share the same talent icon renderer with hero profiles and build modals.
+  window.GrimGGTalentData.iconMarkup = talentIconMarkup;
+
   function init() {
     const perks = document.getElementById("perks");
     if (!perks || document.getElementById("talentLab")) return;
