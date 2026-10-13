@@ -63,7 +63,7 @@ const fallbackHeroes = [
   lane:h[1],
   role:h[2],
   roles:[h[2]],
-  image:""
+  image:HERO_IMAGE_BASE + h[0].toLowerCase().replace(/[^a-z0-9]/g,"") + ".png"
 }));
 
 const heroTips = {
