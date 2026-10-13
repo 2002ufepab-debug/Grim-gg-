@@ -465,8 +465,10 @@ function itemIconSlug(name) {
   const overrides = {
     "Magic Shoes":"magic_boots",
     "Demon Shoes":"demon_boots",
-    "Retribution":null,
-    "Roaming Blessing":null
+    // Для заклинания лесника используем существующую иконку улучшенного Возмездия.
+    "Retribution":"ice_retribution",
+    // Общий значок роум-экипировки: один из доступных значков роум-эффекта.
+    "Roaming Blessing":"conceal"
   };
   if (Object.prototype.hasOwnProperty.call(overrides,name)) return overrides[name];
   return String(name)
