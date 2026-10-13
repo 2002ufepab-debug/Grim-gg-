@@ -171,6 +171,17 @@
     portrait.setAttribute("aria-label", "Портрет героя " + select.value);
   }
 
+  function talentIconMarkup(name,index) {
+    const key = String(name).toLowerCase();
+    const glyph = /swift|agility|quantum|speed|мобиль|стрельб/.test(key) ? "↗"
+      : /rupture|master assassin|lethal|ignition|пробив|урон|weapon/.test(key) ? "✦"
+      : /firmness|tenacity|vitality|smite|защит|стойк|здоров/.test(key) ? "⬡"
+      : /hunter|bargain|seasoned|эконом/.test(key) ? "◈"
+      : /festival|blood|rage|восстанов/.test(key) ? "✚"
+      : /focusing|pull yourself|support|команд|помощ/.test(key) ? "◎" : ["✦","⬡","◈"][index];
+    return '<span class="talent-icon talent-icon-art" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><path d="M32 11 48 20v24L32 53 16 44V20Z" fill="none" stroke="#ff8795" stroke-opacity=".4"/><text x="32" y="40" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
+  }
+
   function init() {
     const perks = document.getElementById("perks");
     if (!perks || document.getElementById("talentLab")) return;
@@ -218,7 +229,7 @@
       section.querySelector("#talentResultDesc").textContent = emblemNames[role] + " · стиль: " + style.toLowerCase() + ". Пример комбинации для дальнейшей настройки.";
       section.querySelector("#talentRoleChip").textContent = role.toUpperCase();
       section.querySelector("#talentSlots").innerHTML = list.map((t,i) => `
-        <article class="talent-slot"><span class="talent-slot-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][i]}</span><span class="talent-icon" aria-hidden="true">${["I","II","III"][i]}</span><div><h4>${t[1]}</h4><p>${t[2]}</p></div></article>`).join("");
+        <article class="talent-slot"><span class="talent-slot-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][i]}</span>${talentIconMarkup(t[1],i)}<div><h4>${t[1]}</h4><p>${t[2]}</p></div></article>`).join("");
       section.querySelector("#talentNote").textContent = "Проверяй названия, уровни и эффекты талантов в актуальном клиенте. Подбор примерный: он не учитывает патч, ранг, состав соперника и конкретные игровые условия.";
       section.querySelector("#talentStatus").textContent = "";
       renderHeroPortrait();
