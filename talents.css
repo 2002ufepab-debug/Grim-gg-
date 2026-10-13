@@ -1,0 +1,23 @@
+/* GRIM_GG — talent planner */
+.talent-lab{padding:62px 6%;background:linear-gradient(145deg,#100d12,#171017);border-top:1px solid #302630;border-bottom:1px solid #302630}
+.talent-lab .talent-intro{max-width:720px;color:#b8acba;font-size:13px}
+.talent-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:24px 0}
+.talent-control{padding:16px;background:#121014;border:1px solid #302630;border-radius:8px}
+.talent-control label{display:block;margin-bottom:8px;font-size:12px;font-weight:800;color:#f7f2f7}
+.talent-control select{max-width:none;margin:0}
+.talent-result{padding:22px;background:#121014;border:1px solid #45303e;border-radius:10px}
+.talent-result-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.talent-result h3{margin:0 0 5px;font-size:20px}
+.talent-chip{display:inline-flex;align-items:center;padding:5px 9px;border:1px solid #63303b;border-radius:999px;color:#ff8795;font-size:10px;font-weight:800;letter-spacing:.5px}
+.talent-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+.talent-slot{min-width:0;padding:16px;background:#19151b;border:1px solid #302630;border-radius:8px}
+.talent-slot-num{color:#ff5367;font:700 10px Orbitron,sans-serif;letter-spacing:1px}
+.talent-slot h4{margin:8px 0 5px;font-size:14px}
+.talent-slot p{margin:0;color:#b8acba;font-size:12px}
+.talent-slot .talent-icon{display:grid;place-items:center;width:42px;height:42px;margin:10px 0;background:linear-gradient(145deg,#49202b,#21151f);border:1px solid #80404c;border-radius:9px;color:#ffdce1;font:800 17px Orbitron,sans-serif}
+.talent-note{margin:16px 0 0;padding:12px 14px;border-left:3px solid #ff3048;background:#1a1319;color:#c8bdc9;font-size:12px}
+.talent-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.talent-actions button{padding:10px 14px;border:1px solid #ff3048;border-radius:5px;background:#ff3048;color:white;font-weight:800;font-size:12px}
+.talent-actions button.secondary{background:transparent;border-color:#57404e}
+.talent-status{min-height:20px;margin-top:10px;color:#ff8795;font-size:12px}
+@media(max-width:700px){.talent-controls,.talent-slots{grid-template-columns:1fr}.talent-lab{padding:42px 5%}.talent-control,.talent-result{padding:15px}.talent-slot{display:grid;grid-template-columns:44px 1fr;column-gap:12px}.talent-slot .talent-icon{grid-row:2;grid-column:1}.talent-slot h4{margin:7px 0 2px}.talent-slot p{grid-column:2}}
