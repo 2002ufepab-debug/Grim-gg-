@@ -594,23 +594,66 @@ let activeBuildHeroName = "";
 let activeBuildRoles = [];
 let activeBuildVariant = "standard";
 
-function getHeroBuild(heroName, roles) {
-  const featured = featuredHeroBuilds[heroName];
-  if (featured) return {...featured, personalized:true};
+const magicDamageHeroNames = new Set([
+  "Alice","Aurora","Cecilion","Chang'e","Cyclops","Esmeralda","Eudora",
+  "Faramis","Gord","Harith","Harley","Kadita","Kagura","Kimmy","Lylia",
+  "Luo Yi","Lunox","Nana","Novaria","Odette","Pharsa","Selena","Valentina",
+  "Vale","Valir","Vexana","Xavier","Yve","Zhask"
+]);
+const roleAliases = {
+  "assassin":"Убийца","убийца":"Убийца",
+  "mage":"Маг","маг":"Маг",
+  "marksman":"Стрелок","стрелок":"Стрелок",
+  "fighter":"Боец","боец":"Боец",
+  "tank":"Танк","танк":"Танк",
+  "support":"Поддержка","поддержка":"Поддержка"
+};
+function resolveBuildRole(roles) {
   const classes = Array.isArray(roles) ? roles : [String(roles || "")];
-  const role = classes.find(value=>roleBuildTemplates[value]) || "Боец";
-  return {...roleBuildTemplates[role], personalized:false};
+  for (const value of classes) {
+    const normalized = String(value).trim().toLowerCase();
+    const role = roleAliases[normalized] || value;
+    if (roleBuildTemplates[role]) return role;
+  }
+  return "Боец";
+}
+function getHeroBuild(heroName, roles) {
+  const name = String(heroName || "").trim();
+  const featured = featuredHeroBuilds[name];
+  const role = resolveBuildRole(roles);
+  const roleText = String(featured?.role || role || "");
+  const isMagicBuild = magicDamageHeroNames.has(name) ||
+    role === "Маг" ||
+    /(^|[ ·/])маг($|[ ·/])/i.test(roleText);
+  const magicTemplate = roleBuildTemplates["Маг"];
+  if (featured) {
+    const build = {...featured, personalized:true, isMagicBuild};
+    const hasPhysicalAttackItem = build.items.some(itemName =>
+      items.some(item => item.name === itemName && item.cat === "Attack")
+    );
+    if (isMagicBuild && hasPhysicalAttackItem) {
+      build.items = [...magicTemplate.items];
+      build.goal = "Магический урон и пробивание";
+      build.note = "Исправленная базовая магическая сборка. Подстраивай защитный слот и порядок покупки под соперников.";
+    }
+    return build;
+  }
+  const template = isMagicBuild ? magicTemplate : roleBuildTemplates[role];
+  return {...template, personalized:false, isMagicBuild};
 }
 function getVariantItems(build, variant) {
-  if (variant === "standard") return build.items;
   const roleText = String(build.role || "");
+  const isMagicBuild = Boolean(build.isMagicBuild) ||
+    /(^|[ ·/])маг($|[ ·/])/i.test(roleText);
+  if (variant === "standard") return build.items;
   if (variant === "antiTank") {
-    if (roleText.includes("Маг")) return ["Arcane Boots","Glowing Wand","Divine Glaive","Holy Crystal","Lightning Truncheon","Immortality"];
-    if (roleText.includes("Стрелок")) return ["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Malefic Roar","Rose Gold Meteor","Immortality"];
-    if (roleText.includes("Танк") || roleText.includes("Поддержка")) return ["Tough Boots","Dominance Ice","Antique Cuirass","Cursed Helmet","Athena's Shield","Immortality"];
+    if (isMagicBuild) return ["Arcane Boots","Glowing Wand","Divine Glaive","Holy Crystal","Lightning Truncheon","Immortality"];
+    if (/Стрелок/i.test(roleText)) return ["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Malefic Roar","Rose Gold Meteor","Immortality"];
+    if (/Танк|Поддержка/i.test(roleText)) return ["Tough Boots","Dominance Ice","Antique Cuirass","Cursed Helmet","Athena's Shield","Immortality"];
     return ["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Blade of Despair","Immortality"];
   }
-  if (roleText.includes("Танк") || roleText.includes("Поддержка")) return ["Tough Boots","Cursed Helmet","Dominance Ice","Athena's Shield","Antique Cuirass","Guardian Helmet"];
+  if (/Танк|Поддержка/i.test(roleText)) return ["Tough Boots","Cursed Helmet","Dominance Ice","Athena's Shield","Antique Cuirass","Guardian Helmet"];
+  if (isMagicBuild) return ["Tough Boots","Athena's Shield","Rose Gold Meteor","Immortality","Oracle","Divine Glaive"];
   return ["Tough Boots","Athena's Shield","Antique Cuirass","Rose Gold Meteor","Immortality","Oracle"];
 }
 function renderHeroBuildModal() {
@@ -630,7 +673,7 @@ function renderHeroBuildModal() {
   const variantLabel = activeBuildVariant === "standard" ? "Основная" : activeBuildVariant === "antiTank" ? "Против танков" : "Защитная";
   const talentText = build.talents || "Первый талант: под стиль героя и выбранную линию. Второй талант: урон/выживаемость по ситуации. Третий талант: основной талант эмблемы, подходящий механике героя.";
   content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(activeBuildHeroName)} <span class="red">/ СБОРКА</span></h2>
-    <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${escapeHTML(build.goal)}</p>
+    <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${build.isMagicBuild ? "Магический урон" : "Физический / смешанный урон"} · ${escapeHTML(build.goal)}</p>
     <div class="build-variant-tabs" role="group" aria-label="Вариант сборки">
       <button type="button" class="build-variant ${activeBuildVariant==="standard"?"active":""}" data-build-variant="standard" aria-pressed="${activeBuildVariant==="standard"}">Основная</button>
       <button type="button" class="build-variant ${activeBuildVariant==="antiTank"?"active":""}" data-build-variant="antiTank" aria-pressed="${activeBuildVariant==="antiTank"}">Против танков</button>
