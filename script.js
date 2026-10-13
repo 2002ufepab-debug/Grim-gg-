@@ -1556,6 +1556,23 @@ function setupMenu() {
   }));
 }
 
+function setupBackToTop() {
+  const button = $("backToTop");
+  if (!button) return;
+
+  const updateVisibility = () => {
+    const shouldShow = window.scrollY > 420;
+    button.hidden = !shouldShow;
+    button.classList.toggle("is-visible", shouldShow);
+  };
+
+  window.addEventListener("scroll", updateVisibility, { passive: true });
+  button.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  });
+  updateVisibility();
+}
+
 function init() {
   $("year").textContent = new Date().getFullYear();
 
@@ -1633,6 +1650,7 @@ function init() {
   });
 
   setupPageNavigation();
+  setupBackToTop();
   setupFilters();
   setupMenu();
   document.addEventListener("keydown",event=>{
