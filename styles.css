@@ -1504,3 +1504,215 @@ body {
   .hero-image-wrap .hero-image, .nav a::after { transition: none !important; }
 }
 
+
+
+/* Grim_gg design system refinement — clear hierarchy, tactile controls, and calmer motion. */
+:root {
+  --bg: #09080c;
+  --panel: #121017;
+  --panel2: #1a151f;
+  --border: #382633;
+  --red: #ff3048;
+  --red-soft: #ff7888;
+  --surface-glow: rgba(255, 48, 72, .08);
+}
+::selection {
+  color: #fff;
+  background: #8e2037;
+}
+body {
+  min-width: 320px;
+  background-color: var(--bg);
+}
+.site-header {
+  background: rgba(9, 8, 12, .9);
+  border-bottom-color: rgba(255, 83, 103, .2);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, .22);
+}
+.brand {
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.brand-symbol {
+  border-radius: 9px 3px 9px 3px;
+  background: linear-gradient(145deg, rgba(255, 48, 72, .18), rgba(18, 16, 23, .4));
+  box-shadow: inset 0 0 18px rgba(255, 48, 72, .07), 0 0 22px rgba(255, 48, 72, .06);
+}
+.nav a {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.nav a[aria-current="page"] {
+  color: #fff;
+  text-shadow: 0 0 18px rgba(255, 48, 72, .22);
+}
+.nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+  box-shadow: 0 0 12px rgba(255, 48, 72, .3);
+}
+.hero-section {
+  border-bottom: 1px solid rgba(255, 83, 103, .13);
+}
+.hero-copy h1 {
+  text-wrap: balance;
+}
+.hero-desc {
+  max-width: 42ch;
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 1.8;
+}
+.hero-actions .btn {
+  min-height: 46px;
+  padding-inline: 19px;
+}
+.btn {
+  min-height: 42px;
+  border-radius: 7px;
+  letter-spacing: .01em;
+}
+.btn-red {
+  box-shadow: 0 8px 24px rgba(255, 48, 72, .13);
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, .018);
+}
+.hero-art {
+  isolation: isolate;
+}
+.hero-art::before {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 48, 72, .12), transparent 68%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+.art-core {
+  border-radius: 26% 7% 26% 7%;
+}
+.section {
+  scroll-margin-top: 82px;
+}
+.section-heading {
+  margin-bottom: 28px;
+}
+.section-heading .eyebrow {
+  margin-bottom: 5px;
+}
+.hero-card, .item-card, .tier-card, .build-card, .guide-card, .combo-card {
+  border-color: rgba(255, 255, 255, .085);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+}
+.hero-card:hover, .item-card:hover, .tier-card:hover, .build-card:hover, .guide-card:hover, .combo-card:hover {
+  border-color: rgba(255, 83, 103, .62);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, .22), 0 0 0 1px rgba(255, 48, 72, .035);
+}
+.hero-image-wrap {
+  background:
+    radial-gradient(ellipse at 50% 68%, rgba(255, 48, 72, .13), transparent 65%),
+    linear-gradient(145deg, #201923, #100e12 72%);
+}
+.hero-image {
+  filter: saturate(1.08) contrast(1.035);
+}
+.item-image-wrap, .perk-image-wrap {
+  background: radial-gradient(ellipse, rgba(255, 255, 255, .06), transparent 72%), #151119;
+  border: 1px solid rgba(255, 255, 255, .045);
+}
+.item-image {
+  object-fit: contain;
+}
+.search, input, select, textarea {
+  border-radius: 8px;
+}
+.search, select {
+  min-height: 46px;
+}
+.filter, .tab-button, .role-filter {
+  min-height: 40px;
+  border-radius: 7px;
+}
+.favorite-btn {
+  min-height: 40px;
+}
+.panel, .hero-detail-section, .hero-detail-modal-card, .build-modal-card {
+  border-color: rgba(255, 255, 255, .09);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, .2);
+}
+.footer {
+  border-top: 1px solid rgba(255, 83, 103, .18);
+}
+a, button, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #ff8191;
+  outline-offset: 3px;
+}
+@media (max-width: 900px) {
+  .site-header { gap: 14px; }
+  .nav { gap: 11px; }
+  .nav a { font-size: 11px; }
+}
+@media (max-width: 650px) {
+  .site-header {
+    padding: 10px 4%;
+    min-height: 62px;
+  }
+  .brand { gap: 8px; }
+  .brand small { font-size: 7px; letter-spacing: 1.45px; }
+  .menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 8px;
+    font-size: 20px;
+  }
+  .nav.open {
+    gap: 6px 18px;
+    padding: 12px 5% 18px;
+    background: rgba(13, 10, 15, .98);
+    box-shadow: 0 18px 30px rgba(0, 0, 0, .3);
+  }
+  .nav a {
+    min-height: 44px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .055);
+    font-size: 12px;
+  }
+  .hero-section { padding-top: 46px; }
+  .hero-desc { max-width: 38ch; }
+  .hero-actions { gap: 9px; }
+  .hero-actions .btn { flex: 1 1 auto; }
+  .hero-stats { justify-content: space-between; gap: 10px; }
+  .hero-stats span { font-size: 10px; }
+  .section-heading { margin-bottom: 20px; }
+  .section-heading h2 { line-height: 1.25; }
+  .hero-image-wrap { height: 164px; }
+  .item-image-wrap { min-height: 84px; }
+  .filter, .tab-button, .role-filter { min-height: 42px; }
+  .footer { gap: 12px; }
+}
+@media (max-width: 380px) {
+  .brand { font-size: 13px; letter-spacing: .6px; }
+  .brand-symbol { width: 31px; height: 31px; font-size: 18px; }
+  .brand small { font-size: 6px; letter-spacing: 1px; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-stats { gap: 8px; }
+  .hero-stats span { max-width: 86px; line-height: 1.4; }
+  .hero-image-wrap { height: 145px; }
+}
+@media (hover: none) {
+  .hero-card:hover, .item-card:hover, .tier-card:hover, .build-card:hover, .guide-card:hover, .combo-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .art-ring, .art-core, .hero-card, .item-card, .tier-card, .build-card, .guide-card, .combo-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}
