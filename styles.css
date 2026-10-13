@@ -2286,3 +2286,18 @@ p { overflow-wrap:anywhere; }
 @media (prefers-reduced-motion:reduce) {
   .hero-section::after,.hero-art,.art-core,.art-cross,.live-dot { animation:none!important; }
 }
+
+/* GRIM_GG // 3D HERO MODEL ACCESS */
+.btn-3d {
+  color:#fff;
+  border:1px solid rgba(255,48,72,.75);
+  background:linear-gradient(135deg,rgba(255,48,72,.22),rgba(30,20,32,.92));
+  box-shadow:inset 0 0 18px rgba(255,48,72,.08),0 0 14px rgba(255,48,72,.10);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.btn-3d:hover {
+  transform:translateY(-2px);
+  border-color:var(--red);
+  box-shadow:inset 0 0 22px rgba(255,48,72,.16),0 0 22px rgba(255,48,72,.22);
+}
+@media (prefers-reduced-motion:reduce) { .btn-3d { transition:none; } }
