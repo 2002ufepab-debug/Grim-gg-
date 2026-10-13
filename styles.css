@@ -1143,3 +1143,70 @@ body {
   .hero-image-wrap .hero-image { transform: scale(.9); }
   .hero-card:hover .hero-image-wrap .hero-image { transform: scale(.94); }
 }
+
+
+/* Accessibility and finish pass: clear focus, readable spacing, and thumb-friendly controls. */
+.skip-link {
+  position: fixed;
+  z-index: 300;
+  top: 10px;
+  left: 10px;
+  padding: 12px 16px;
+  color: #fff;
+  background: #a8213c;
+  border: 2px solid #ff9baa;
+  border-radius: 8px;
+  transform: translateY(-160%);
+  transition: transform .18s ease;
+}
+.skip-link:focus { transform: translateY(0); }
+#main-content { min-width: 0; }
+main > section { scroll-margin-top: 90px; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: #ff304825; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid #ff9baa;
+  outline-offset: 3px;
+}
+.search, select, textarea, input { max-width: 100%; }
+img { max-width: 100%; }
+.back-to-top[hidden] { display: none !important; }
+.back-to-top {
+  position: fixed;
+  z-index: 80;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: #fff;
+  background: linear-gradient(145deg, #a8213c, #5a1728);
+  border: 1px solid #ff8292;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px #0008, 0 0 20px #ff30481c;
+  font-size: 26px;
+  font-weight: 800;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.back-to-top.is-visible { opacity: 1; transform: translateY(0); }
+.back-to-top:hover { box-shadow: 0 10px 32px #000a, 0 0 24px #ff304833; }
+.site-header { padding-top: max(12px, env(safe-area-inset-top)); }
+.section { scroll-margin-top: 88px; }
+.hero-card, .item-card, .tier-card, .build-card, .guide-card, .combo-card {
+  overflow-wrap: anywhere;
+}
+.hero-card .favorite-btn, .item-card .favorite-btn { min-height: 38px; }
+@media (max-width: 650px) {
+  main > section { scroll-margin-top: 74px; }
+  .skip-link { font-size: 14px; }
+  .back-to-top { right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
+  .nav a { min-height: 42px; display: flex; align-items: center; }
+  .search, select { min-height: 44px; font-size: 16px; }
+  .hero-detail-modal-card, .build-modal-card { overflow-x: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link, .back-to-top { transition: none !important; }
+}
