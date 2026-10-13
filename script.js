@@ -77,7 +77,7 @@ const heroTips = {
 const comboGuides = [
   {hero:"Фанни",key:"Fanny",role:"Убийца",difficulty:"Сложно",situation:"Вход и выход",skills:["1","2","2","3"],steps:["Проверь запас энергии и выбери безопасный маршрут.","Используй тросы, чтобы занять угол атаки.","Попади навыками по цели и оцени остаток энергии.","Заверши атаку только при уверенном попадании; оставь путь отхода."],tip:"Главное — точность тросов и контроль энергии. Не продолжай погоню, если теряешь безопасный маршрут.",search:"лес тросы мобильность"},
   {hero:"Госсен",key:"Gusion",role:"Убийца",difficulty:"Сложно",situation:"Быстрый урон по одной цели",skills:["2","1","1","3","2"],steps:["Начни с метания кинжалов.","Попади первым навыком по выбранной цели и повтори его для сближения.","Используй ультимейт для обновления навыков и смены позиции.","Повтори атаку кинжалами, затем оцени возможность безопасно выйти."],tip:"Не трать сближение вслепую: промах первым навыком сильно усложняет продолжение комбо.",search:"лес кинжалы burst"},
-  {hero:"Вексана",key:"Vexana",role:"Маг",difficulty:"Средне",situation:"Контроль перед командным боем",skills:["1","2","3"],steps:["Попробуй остановить опасную цель первым навыком.","Пока враг ограничен в движении, направь второй навык по области.","Используй ультимейт, когда он поможет закрепить преимущество в бою."],tip:"Играй из-за передней линии. Не расходуй все навыки на танка, если рядом есть доступная уязвимая цель.",search:"мид маг контроль teamfight"},
+  {hero:"Вексана",key:"Vexana",role:"Маг",difficulty:"Средне",situation:"Контроль перед командным боем",skills:["1","2","3"],steps:["Попробуй остановить опасную цель первым навыком.","Пока враг ограничен в движении, направь второй навык по области.","Используй ультимейт, когда он поможет закрепить преимущество в бою."],tip:"Играй за передней линией. Не расходуй все навыки на танка, если рядом есть уязвимая цель.",search:"мид маг контроль teamfight"},
   {hero:"Клод",key:"Claude",role:"Стрелок",difficulty:"Средне",situation:"Урон по группе",skills:["1","2","3"],steps:["Попади первым навыком по врагам, чтобы усилить подготовку к атаке.","Поставь вторую способность так, чтобы сохранить возможность вернуться в безопасную позицию.","Входи с ультимейтом, когда противники потратили опасный контроль или не могут быстро остановить тебя."],tip:"Не начинай ультимейт в центре врагов, если у них готовы оглушение или другие способы прервать атаку.",search:"голд стрелок ультимейт позиция"},
   {hero:"Белерик",key:"Belerick",role:"Танк",difficulty:"Просто",situation:"Защита союзников",skills:["2","1","3"],steps:["Подойди к союзникам и выбери момент, когда противник угрожает задней линии.","Используй навык сближения или замедления, чтобы помешать врагу.","Примени ультимейт, когда несколько противников находятся в зоне действия и команда готова продолжить."],tip:"Не начинай бой далеко от союзников. Твоя задача — создать для команды удобное окно, а не просто ворваться первым.",search:"роум танк защита контроль"},
   {hero:"Хуфра",key:"Khufra",role:"Танк",difficulty:"Средне",situation:"Инициация и контроль",skills:["2","1","3"],steps:["Используй второй навык, если нужно мешать мобильным противникам.","Выбери безопасную траекторию для входа первым навыком.","Собери противников ультимейтом у стены или в удобной для команды позиции, если ситуация позволяет."],tip:"Согласуй вход с союзниками: контроль без последующего урона редко приносит пользу.",search:"роум танк мобильные герои инициировать"},
@@ -399,7 +399,7 @@ const counters = {
   },
   Gusion:{
     picks:["Khufra","Franco","Kaja"],
-    reason:"Контроль может прервать удобный для Гусена вход. Следи за тем, когда он потратил навыки."
+    reason:"Контроль может прервать удобный для Госсена вход. Следи за тем, когда он потратил навыки."
   }
 };
 
@@ -507,9 +507,9 @@ function normalizeRemoteHero(hero,index) {
 function heroImageMarkup(hero) {
   const initial = escapeHTML((hero.name || "?").slice(0,1).toUpperCase());
   if (!hero.image) {
-    return `<div class="hero-image-fallback" aria-label="Изображение героя недоступно">${initial}</div>`;
+    return `<div class="hero-image-fallback" role="img" aria-label="Изображение героя недоступно">${initial}</div>`;
   }
-  return `<img class="hero-image" src="${escapeHTML(hero.image)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)}}))">`;
+  return `<img class="hero-image" src="${escapeHTML(hero.image)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))">`;
 }
 
 function favoriteButton(type,id,saved) {
@@ -1079,7 +1079,7 @@ function renderComboGuides() {
         <span class="combo-code">COMBO_${String(index+1).padStart(2,"0")}</span>
         <span class="combo-difficulty difficulty-${combo.difficulty==="Сложно"?"hard":combo.difficulty==="Средне"?"medium":"easy"}">${escapeHTML(combo.difficulty)}</span>
       </div>
-      <div class="combo-card-heading"><div class="combo-avatar" aria-hidden="true">${escapeHTML(combo.hero.slice(0,1).toUpperCase())}</div><div><h3>${escapeHTML(combo.hero)}</h3><span class="combo-role">${escapeHTML(combo.role)} · ${escapeHTML(combo.situation)}</span></div></div>
+      <div class="combo-card-heading"><div class="combo-avatar">${(() => { const matchedHero = heroes.find(hero => hero.name.toLocaleLowerCase() === combo.key.toLocaleLowerCase()); return matchedHero ? heroImageMarkup(matchedHero) : `<span aria-hidden="true">${escapeHTML(combo.hero.slice(0,1).toUpperCase())}</span>`; })()}</div><div><h3>${escapeHTML(combo.hero)}</h3><span class="combo-role">${escapeHTML(combo.role)} · ${escapeHTML(combo.situation)}</span></div></div>
       <div class="combo-sequence" aria-label="Порядок навыков">${combo.skills.map((skill,i)=>`<span class="combo-step"><b>${escapeHTML(skill)}</b><small>${i===combo.skills.length-1?"Финиш":"Шаг "+(i+1)}</small></span>`).join('<span class="combo-arrow" aria-hidden="true">›</span>')}</div>
       <details class="combo-details"><summary>Показать объяснение комбо</summary><ol>${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><div class="combo-tip"><strong>Совет Grim_gg</strong><p>${escapeHTML(combo.tip)}</p></div></details>
     </article>`).join("");
@@ -1180,6 +1180,7 @@ async function loadExternalHeroes() {
     if (note) note.textContent = "Загружен сторонний каталог сообщества. Он неофициальный и может отставать от текущего патча; роли обозначают классы героев, а не рекомендуемые линии.";
     renderHeroes();
     renderTierList();
+    renderComboGuides();
     renderCounterpicks();
     renderFavorites();
   } catch (error) {
