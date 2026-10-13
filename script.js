@@ -592,7 +592,7 @@ function renderHeroDetailContent(hero, target) {
         <div class="hero-detail-actions">
           <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Сборка героя ↗</button>
           ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
-          <a class="btn btn-ghost" href="?page=hero&amp;name=${encodeURIComponent(hero.name)}">Полная страница ↗</a>
+          <button type="button" class="btn btn-ghost" data-open-hero-full="${escapeHTML(hero.name)}">Полная страница ↗</button>
           <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
           <a class="btn btn-ghost" href="?page=counterpicks">Контрпики ↗</a>
         </div>
@@ -806,7 +806,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
     // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
-    const vectorIcon = item.id === "retribution" || item.id === "roam-boots" || item.cat === "Roam" || (item.cat === "Jungle" && item.id !== "retribution")
+    const vectorIcon = item.id !== "retribution" && (item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle")
       ? effectIconMarkup(item)
       : "";
     const iconSource = item.id === "retribution"
@@ -1523,6 +1523,19 @@ function init() {
     const openHeroButton = event.target.closest("[data-open-hero]");
     if (openHeroButton) {
       openHeroDetail(openHeroButton.dataset.openHero);
+      return;
+    }
+    const fullHeroButton = event.target.closest("[data-open-hero-full]");
+    if (fullHeroButton) {
+      const heroName = fullHeroButton.dataset.openHeroFull;
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", "hero");
+      url.searchParams.set("name", heroName);
+      closeHeroDetail();
+      closeHeroBuild();
+      history.pushState({}, "", url.href);
+      applyPageNavigation("hero");
+      renderHeroFullPage(heroName);
       return;
     }
     if (event.target.closest("[data-close-hero]")) {
