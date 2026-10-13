@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b090c">
   <meta name="description" content="Grim_gg — справочник героев, контрпиков, предметов и сборок Mobile Legends: Bang Bang.">
   <title>Grim_gg — MLBB Tactical Database</title>
-  <link rel="stylesheet" href="styles.css?v=5">
-  <script src="script.js?v=7" defer></script>
+  <link rel="stylesheet" href="styles.css?v=6">
+  <script src="script.js?v=8" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -20,11 +20,11 @@
   <nav class="nav" id="nav">
     <a href="#heroes">Герои</a>
     <a href="#tierlist">Тир-лист</a>
-    <a href="#counterpicks">Контрпики</a>
     <a href="#items">Предметы</a>
     <a href="#builds">Сборки</a>
     <a href="#favorites">Избранное</a>
     <a href="#guides">Гайды</a>
+    <a href="#counterpicks">Контрпики</a>
   </nav>
 </header>
 
@@ -79,7 +79,7 @@
 <section class="section section-muted" id="tierlist">
   <div class="section-heading">
     <div><div class="eyebrow">02 / HERO TIER LIST</div><h2>ТИР-ЛИСТ <span class="red">ГЕРОЕВ</span></h2></div>
-    <p>Полный список доступных в базе героев: ищи по имени, сортируй по уровню и отбирай по ролям.</p>
+    <p>Ищи героев по имени и фильтруй список по уровню силы и ролям.</p>
   </div>
   <div class="tier-disclaimer">
     <strong>Черновой рейтинг Grim_gg</strong>
@@ -107,29 +107,12 @@
   <p class="fine-print">В тир-листе показываются все герои, которые удалось загрузить в базу на этом устройстве. Герои без отдельной редакционной оценки временно получают нейтральный уровень B. Это не официальная статистика винрейта; рейтинг стоит пересматривать после патчей.</p>
 </section>
 
-<section class="section" id="counterpicks">
-  <div class="section-heading">
-    <div><div class="eyebrow">02 / PICK SMART</div><h2>НАЙДИ <span class="red">КОНТРПИК</span></h2></div>
-    <p>Выбери вражеского героя и получи тактическую подсказку.</p>
-  </div>
-  <div class="panel counter-panel">
-    <label for="enemySelect">1. Какой герой у противника?</label>
-    <select id="enemySelect"><option value="">Выбери вражеского героя...</option></select>
-    <label for="ownHeroSelect">2. За какого героя играешь ты?</label>
-    <select id="ownHeroSelect"><option value="">Выбери своего героя...</option></select>
-    <button class="btn btn-red" id="counterBtn">Подобрать контрпик ↗</button>
-    <div class="counter-result" id="counterResult" aria-live="polite">
-      <div class="result-icon">?</div>
-      <div><strong>Твой следующий ход</strong><p>Выбери героя соперника, чтобы получить рекомендации.</p></div>
-    </div>
-    <p class="fine-print">Контрпик не гарантирует победу. Учитывай состав команды, навыки игроков и текущий патч.</p>
-  </div>
-</section>
+
 
 <section class="section" id="items">
   <div class="section-heading">
     <div><div class="eyebrow">03 / ITEM DATABASE</div><h2>БАЗА <span class="red">ПРЕДМЕТОВ</span></h2></div>
-    <p>Изучай назначение экипировки и выбирай предметы с учётом соперника.</p>
+    <p>Изучай назначение предметов и подбирай экипировку с учётом состава соперника.</p>
   </div>
   <input class="search" id="itemSearch" type="search" placeholder="Название или эффект..." aria-label="Поиск предмета">
   <div class="filter-row" id="itemFilters">
@@ -149,7 +132,7 @@
 <section class="section section-muted" id="builds">
   <div class="section-heading">
     <div><div class="eyebrow">04 / BUILD LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">СБОРОК</span></h2></div>
-    <p>Примеры предметов и объяснения, почему они могут пригодиться герою.</p>
+    <p>Примеры сборок с пояснениями, зачем может понадобиться каждый предмет.</p>
   </div>
   <div class="filter-row" id="buildFilters">
     <button class="filter active" data-build="Все">Все сборки</button>
@@ -164,7 +147,7 @@
 <section class="section" id="favorites">
   <div class="section-heading">
     <div><div class="eyebrow">05 / YOUR COLLECTION</div><h2>МОЁ <span class="red">ИЗБРАННОЕ</span></h2></div>
-    <p>Герои и предметы, которые ты сохранил на этом устройстве.</p>
+    <p>Герои и предметы, которые ты добавил в избранное на этом устройстве.</p>
   </div>
   <div class="filter-row">
     <button class="filter active" id="favHeroesTab">Герои</button>
@@ -196,6 +179,25 @@
       <span class="guide-num">GUIDE_004</span><h3>ИГРА ПРОТИВ КОНТРОЛЯ</h3>
       <p>Не трать все способности одновременно. Следи за ключевыми умениями соперника и выбирай безопасное время для входа.</p>
     </article>
+  </div>
+</section>
+
+<section class="section" id="counterpicks">
+  <div class="section-heading">
+    <div><div class="eyebrow">07 / PICK SMART</div><h2>НАЙДИ <span class="red">КОНТРПИК</span></h2></div>
+    <p>Выбери героя соперника, чтобы увидеть возможные ответы и ситуационные советы.</p>
+  </div>
+  <div class="panel counter-panel">
+    <label for="enemySelect">1. Какой герой у противника?</label>
+    <select id="enemySelect"><option value="">Выбери вражеского героя...</option></select>
+    <label for="ownHeroSelect">2. За какого героя играешь ты?</label>
+    <select id="ownHeroSelect"><option value="">Выбери своего героя...</option></select>
+    <button class="btn btn-red" id="counterBtn">Подобрать контрпик ↗</button>
+    <div class="counter-result" id="counterResult" aria-live="polite">
+      <div class="result-icon">?</div>
+      <div><strong>Твой следующий ход</strong><p>Выбери героя соперника, чтобы получить рекомендации.</p></div>
+    </div>
+    <p class="fine-print">Контрпик не гарантирует победу. Учитывай состав команды, навыки игроков и текущий патч.</p>
   </div>
 </section>
 
