@@ -145,6 +145,12 @@
       </div>`;
     perks.insertAdjacentElement("afterend", section);
 
+    // The main router runs before this dynamically-created section exists.
+    // Match the initial URL so the talent page never leaks into another page.
+    const requestedPage = new URLSearchParams(window.location.search).get("page");
+    const knownPages = ["home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports", "hero"];
+    if (knownPages.includes(requestedPage)) section.classList.add("page-hidden");
+
     const roleSelect = section.querySelector("#talentRole");
     const heroSelect = section.querySelector("#talentHero");
     const styleSelect = section.querySelector("#talentStyle");
