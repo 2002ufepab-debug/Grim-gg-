@@ -715,3 +715,11 @@ body.modal-open { overflow:hidden; }
 /* Page-style navigation: each section has its own URL (?page=...). */
 .page-hidden { display: none !important; }
 .nav a[aria-current="page"] { color: var(--red); }
+
+
+/* Role filters with live hero totals */
+#roleFilters { align-items:center; gap:8px; }
+#roleFilters .filter { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:38px; }
+.role-count { display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 5px; color:#ff9baa; background:#2b1a25; border:1px solid #593044; border-radius:5px; font-size:10px; font-weight:800; font-variant-numeric:tabular-nums; }
+#roleFilters .filter.active .role-count { color:#fff; background:#741f35; border-color:#ff91a1; }
+@media(max-width:650px) { #roleFilters { display:flex; flex-wrap:nowrap; overflow-x:auto; padding:2px 1px 8px; margin-right:-1px; scrollbar-width:thin; } #roleFilters .filter { flex:0 0 auto; white-space:nowrap; } }
