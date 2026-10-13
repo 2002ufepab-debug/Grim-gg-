@@ -196,7 +196,7 @@ const fallbackHeroes = [
   lane:h[1],
   role:h[2],
   roles:[h[2]],
-  image:heroImageUrl(h[0])
+  image:heroHDImageUrl(h[0]) || heroImageUrl(h[0])
 }));
 
 const heroTips = {
