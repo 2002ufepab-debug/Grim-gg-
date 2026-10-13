@@ -312,6 +312,13 @@ details p { line-height:1.7; }
 .favorite-btn:hover { border-color:var(--red); }
 
 .item-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.item-image {
+  display:block;
+  width:57px;
+  height:57px;
+  object-fit:contain;
+  filter:drop-shadow(0 4px 10px #0008);
+}
 .item-symbol {
   display:grid;
   place-items:center;
