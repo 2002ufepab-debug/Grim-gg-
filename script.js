@@ -464,6 +464,7 @@ function getHeroClasses(hero) {
 function itemIconSlug(name) {
   const overrides = {
     "Magic Shoes":"magic_boots",
+    "Demon Shoes":"demon_boots",
     "Retribution":null,
     "Roaming Blessing":null
   };
@@ -581,7 +582,6 @@ const tierHighlights = {
   Gusion:{tier:"A",reason:"Высокий потенциал быстрого урона при хорошем исполнении комбинаций."},
   Faramis:{tier:"A",reason:"Командная поддержка и своевременное использование ультимейта могут изменить ход боя."},
   Lolita:{tier:"A",reason:"Защитные способности особенно ценны против подходящих снарядов и атак соперника."},
-  Karrie:{tier:"A",reason:"Может хорошо справляться с выносливыми целями при подходящих предметах."}
 };
 
 function tierReason(hero, tier) {
