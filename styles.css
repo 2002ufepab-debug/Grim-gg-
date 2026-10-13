@@ -560,3 +560,38 @@ body.modal-open { overflow:hidden; }
   height:48px !important;
   visibility:visible !important;
 }
+
+
+/* Standalone Grim_gg tier-list tab */
+.tier-disclaimer {
+  max-width: 850px;
+  margin: 0 0 18px;
+  padding: 15px 17px;
+  background: #171219;
+  border: 1px solid #53303c;
+  border-left: 3px solid var(--red);
+  border-radius: 7px;
+}
+.tier-disclaimer strong { color: #ff7b8b; font-size: 12px; }
+.tier-disclaimer p { margin: 6px 0 0; color: #d0c4d1; font-size: 11px; line-height: 1.8; }
+.tier-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 13px; }
+.tier-card { min-width: 0; overflow: hidden; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; transition: border-color .2s,transform .2s; }
+.tier-card:hover { border-color: var(--red); transform: translateY(-2px); }
+.tier-card-art { position: relative; display: grid; place-items: center; height: 150px; overflow: hidden; background: radial-gradient(ellipse,#48202d,#171319 75%); }
+.tier-card-art .hero-image { width: 100%; height: 100%; object-fit: contain; }
+.tier-rank { position: absolute; top: 9px; left: 9px; display: grid; place-items: center; width: 34px; height: 34px; color: #fff; background: #3b1723; border: 1px solid #ff5269; border-radius: 6px; font: 900 18px Orbitron,sans-serif; box-shadow: 0 4px 18px #0008; }
+.tier-s { background: #7c1e31; border-color: #ff7184; }
+.tier-a { background: #513024; border-color: #e5a56d; }
+.tier-b { background: #2b304b; border-color: #8998ff; }
+.tier-c { background: #302a35; border-color: #8c7d91; }
+.tier-card-content { padding: 12px; }
+.tier-card-content h3 { margin: 5px 0 7px; font-size: 14px; }
+.tier-card-content p { margin: 0; color: #c5b8c7; font-size: 11px; line-height: 1.7; }
+.tier-role { color: #ff7b8b; font-size: 10px; }
+@media(max-width:950px) { .tier-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media(max-width:650px) {
+  .tier-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+  .tier-card-art { height: 130px; }
+  .tier-card-content { padding: 10px; }
+  .tier-card-content h3 { font-size: 13px; }
+}
