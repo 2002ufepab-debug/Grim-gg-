@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b090c">
   <meta name="description" content="Grim_gg — справочник героев, контрпиков, предметов и сборок Mobile Legends: Bang Bang.">
   <title>Grim_gg — MLBB Tactical Database</title>
-  <link rel="stylesheet" href="styles.css?v=6">
-  <script src="script.js?v=9" defer></script>
+  <link rel="stylesheet" href="styles.css?v=7">
+  <script src="script.js?v=10" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -23,7 +23,7 @@
     <a href="#items">Предметы</a>
     <a href="#builds">Сборки</a>
     <a href="#favorites">Избранное</a>
-    <a href="#guides">Гайды</a>
+    <a href="#guides">Комбо и гайды</a>
     <a href="#counterpicks">Контрпики</a>
   </nav>
 </header>
@@ -159,27 +159,32 @@
 
 <section class="section section-muted" id="guides">
   <div class="section-heading">
-    <div><div class="eyebrow">06 / LEVEL UP</div><h2>БИБЛИОТЕКА <span class="red">ГАЙДОВ</span></h2></div>
-    <p>Практические советы для принятия решений в матче.</p>
+    <div><div class="eyebrow">06 / SKILL LAB</div><h2>КОМБО <span class="red">И ГАЙДЫ</span></h2></div>
+    <p>Пошаговые последовательности навыков и короткие игровые подсказки. Выбирай героя и тренируй комбо в своём темпе.</p>
   </div>
-  <div class="guide-grid">
-    <article class="guide-card">
-      <span class="guide-num">GUIDE_001</span><h3>БАЛАНС КОМАНДЫ</h3>
-      <p>Сочетай переднюю линию, контроль, магический и физический урон. Учитывай, кто будет начинать бой и защищать стрелка.</p>
-    </article>
-    <article class="guide-card">
-      <span class="guide-num">GUIDE_002</span><h3>ВЫБОР ПРЕДМЕТОВ</h3>
-      <p>Подстраивай экипировку под угрозы соперника. Одна и та же сборка не всегда подходит каждому матчу.</p>
-    </article>
-    <article class="guide-card">
-      <span class="guide-num">GUIDE_003</span><h3>КОНТРОЛЬ КАРТЫ</h3>
-      <p>Следи за мини-картой, линиями и целями. Не начинай рискованный бой, если союзники далеко.</p>
-    </article>
-    <article class="guide-card">
-      <span class="guide-num">GUIDE_004</span><h3>ИГРА ПРОТИВ КОНТРОЛЯ</h3>
-      <p>Не трать все способности одновременно. Следи за ключевыми умениями соперника и выбирай безопасное время для входа.</p>
-    </article>
+  <div class="combo-intro">
+    <div class="combo-intro-mark" aria-hidden="true">⌁</div>
+    <div><strong>ТРЕНИРУЙ ПОРЯДОК, А НЕ ПРОСТО НАЖАТИЯ</strong><p>Сначала отработай последовательность без спешки, затем добавляй движение, базовые атаки и выбор цели.</p></div>
   </div>
+  <label class="combo-search-label" for="comboSearch">Найти героя или ситуацию</label>
+  <input class="search combo-search" id="comboSearch" type="search" placeholder="Например, Фанни или контроль..." aria-label="Поиск комбо по герою или ситуации">
+  <div class="filter-row combo-filters" id="comboFilters" aria-label="Фильтр комбо по роли">
+    <button class="filter active" data-combo-role="Все">Все комбо</button>
+    <button class="filter" data-combo-role="Убийца">Убийцы</button>
+    <button class="filter" data-combo-role="Маг">Маги</button>
+    <button class="filter" data-combo-role="Стрелок">Стрелки</button>
+    <button class="filter" data-combo-role="Танк">Танки</button>
+    <button class="filter" data-combo-role="Поддержка">Поддержка</button>
+  </div>
+  <p class="count" id="comboCount" aria-live="polite"></p>
+  <div class="combo-grid" id="comboGrid"></div>
+  <div class="guide-grid combo-basics">
+    <article class="guide-card"><span class="guide-num">GUIDE_001</span><h3>ПЕРЕД ВХОДОМ В БОЙ</h3><p>Проверь мини-карту и положение союзников. Если ключевые умения контроля противника готовы, не входи в бой без плана отхода.</p></article>
+    <article class="guide-card"><span class="guide-num">GUIDE_002</span><h3>ПОСЛЕ КОМБО</h3><p>Не стой на месте ради ещё одной атаки. Оцени здоровье, доступные навыки и численность команд, затем решай — продолжить бой или отступить.</p></article>
+    <article class="guide-card"><span class="guide-num">GUIDE_003</span><h3>ТРЕНИРУЙ ПО ЧАСТЯМ</h3><p>Повтори порядок навыков отдельно, затем добавь перемещение и базовые атаки. Стабильное выполнение полезнее случайного быстрого нажатия.</p></article>
+    <article class="guide-card"><span class="guide-num">GUIDE_004</span><h3>АДАПТИРУЙСЯ К МАТЧУ</h3><p>Комбо — это ориентир, а не обязательная цепочка. Против контроля, мобильных героев или нескольких соперников порядок действий может меняться.</p></article>
+  </div>
+  <p class="fine-print">Комбо Grim_gg — учебные ориентиры, а не официальные рекомендации разработчика. Названия и эффекты навыков, а также оптимальный порядок могут меняться после обновлений.</p>
 </section>
 
 <section class="section" id="counterpicks">
