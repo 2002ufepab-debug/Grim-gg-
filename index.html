@@ -54,28 +54,9 @@
   <div class="hero-bottom-line"><span>МЕНЬШЕ СЛУЧАЙНОСТИ — БОЛЬШЕ ТАКТИКИ</span><a href="#heroes">ИССЛЕДОВАТЬ ↓</a></div>
 </section>
 
-<section class="section" id="counterpicks">
-  <div class="section-heading">
-    <div><div class="eyebrow">01 / PICK SMART</div><h2>НАЙДИ <span class="red">КОНТРПИК</span></h2></div>
-    <p>Выбери вражеского героя и получи тактическую подсказку.</p>
-  </div>
-  <div class="panel counter-panel">
-    <label for="enemySelect">1. Какой герой у противника?</label>
-    <select id="enemySelect"><option value="">Выбери вражеского героя...</option></select>
-    <label for="ownHeroSelect">2. За какого героя играешь ты?</label>
-    <select id="ownHeroSelect"><option value="">Выбери своего героя...</option></select>
-    <button class="btn btn-red" id="counterBtn">Подобрать контрпик ↗</button>
-    <div class="counter-result" id="counterResult" aria-live="polite">
-      <div class="result-icon">?</div>
-      <div><strong>Твой следующий ход</strong><p>Выбери героя соперника, чтобы получить рекомендации.</p></div>
-    </div>
-    <p class="fine-print">Контрпик не гарантирует победу. Учитывай состав команды, навыки игроков и текущий патч.</p>
-  </div>
-</section>
-
 <section class="section section-muted" id="heroes">
   <div class="section-heading">
-    <div><div class="eyebrow">02 / HERO DATABASE</div><h2>БАЗА <span class="red">ГЕРОЕВ</span></h2></div>
+    <div><div class="eyebrow">01 / HERO DATABASE</div><h2>БАЗА <span class="red">ГЕРОЕВ</span></h2></div>
     <p>Ищи персонажей, фильтруй роли и сохраняй любимых.</p>
   </div>
   <input class="search" id="heroSearch" type="search" placeholder="Поиск героя..." aria-label="Поиск героя">
@@ -91,6 +72,25 @@
   <p class="count" id="heroCount" aria-live="polite"></p>
   <div class="hero-grid" id="heroGrid"><p class="loading">Загружаем базу героев...</p></div>
   <p class="fine-print" id="heroSourceNote">Каталог героев и изображения предоставлены сторонним сообществом, не являются официальными данными игры и могут отставать от текущего патча.</p>
+</section>
+
+<section class="section" id="counterpicks">
+  <div class="section-heading">
+    <div><div class="eyebrow">02 / PICK SMART</div><h2>НАЙДИ <span class="red">КОНТРПИК</span></h2></div>
+    <p>Выбери вражеского героя и получи тактическую подсказку.</p>
+  </div>
+  <div class="panel counter-panel">
+    <label for="enemySelect">1. Какой герой у противника?</label>
+    <select id="enemySelect"><option value="">Выбери вражеского героя...</option></select>
+    <label for="ownHeroSelect">2. За какого героя играешь ты?</label>
+    <select id="ownHeroSelect"><option value="">Выбери своего героя...</option></select>
+    <button class="btn btn-red" id="counterBtn">Подобрать контрпик ↗</button>
+    <div class="counter-result" id="counterResult" aria-live="polite">
+      <div class="result-icon">?</div>
+      <div><strong>Твой следующий ход</strong><p>Выбери героя соперника, чтобы получить рекомендации.</p></div>
+    </div>
+    <p class="fine-print">Контрпик не гарантирует победу. Учитывай состав команды, навыки игроков и текущий патч.</p>
+  </div>
 </section>
 
 <section class="section" id="items">
