@@ -2598,3 +2598,47 @@ button:active, .btn:active, .filter:active { transform:scale(.985); }
 @media (max-width: 360px) {
   .hero-card .hero-image-wrap { height: 190px; }
 }
+
+
+/* GRIM_GG // final avatar polish: consistent portrait stage without cropping source art */
+.hero-card .hero-image-wrap {
+  height: 250px;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 50% 72%, rgba(176,35,68,.24), transparent 58%),
+    linear-gradient(145deg,#21131b 0%,#100e14 58%,#1a1118 100%);
+  border-bottom: 1px solid #5c2a3a;
+}
+.hero-card .hero-image-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  z-index: 2;
+  border: 1px solid rgba(255,255,255,.055);
+  border-radius: 5px;
+  pointer-events: none;
+}
+.hero-card .hero-image-wrap .hero-image,
+.hero-card .hero-image-open .hero-image {
+  padding: 8px 6px 0;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: drop-shadow(0 7px 12px rgba(0,0,0,.32)) !important;
+  transition: transform .25s ease, filter .25s ease;
+}
+.hero-card .hero-image-open:hover .hero-image,
+.hero-card .hero-image-open:focus-visible .hero-image {
+  transform: scale(1.035) !important;
+  filter: drop-shadow(0 9px 15px rgba(226,39,75,.2)) !important;
+}
+@media (max-width: 650px) {
+  .hero-card .hero-image-wrap { height: 205px; }
+}
+@media (max-width: 380px) {
+  .hero-card .hero-image-wrap { height: 178px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-card .hero-image-wrap .hero-image { transition: none; }
+}
