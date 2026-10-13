@@ -539,3 +539,24 @@ body.modal-open { overflow:hidden; }
   .build-modal-card .build-item-row { gap:8px; }
   .build-advice-card { padding:10px; }
 }
+
+
+/* Ensure item artwork is visible inside the build popup */
+.build-modal-card .build-item-row > img.build-item-icon {
+  display:block !important;
+  width:48px !important;
+  min-width:48px;
+  height:48px !important;
+  min-height:48px;
+  flex:0 0 48px !important;
+  object-fit:contain !important;
+  opacity:1 !important;
+  visibility:visible !important;
+}
+.build-modal-card .build-item-row > .build-item-icon-fallback {
+  display:grid !important;
+  flex:0 0 48px !important;
+  width:48px !important;
+  height:48px !important;
+  visibility:visible !important;
+}
