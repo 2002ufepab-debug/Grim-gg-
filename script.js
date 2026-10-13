@@ -447,6 +447,8 @@ let activeTier = "Все";
 let activeTierRole = "Все";
 let itemQuery = "";
 let itemCategory = "Все";
+let perkQuery = "";
+let perkCategory = "Все";
 let buildFilter = "Все";
 let favoriteTab = "heroes";
 let favoriteHeroes = new Set();
@@ -692,23 +694,12 @@ function renderTierList() {
   }).join("");
 }
 
-function renderItems() {
-  const grid = $("itemGrid");
+function renderItemCards(filtered, grid, emptyMessage) {
   if (!grid) return;
-
-  const filtered = items.filter(item=>{
-    const matchesCategory = itemCategory==="Все" || item.cat===itemCategory;
-    const haystack = `${item.name} ${item.ru} ${item.desc} ${item.stats} ${item.tip}`.toLocaleLowerCase();
-    return matchesCategory && haystack.includes(itemQuery);
-  });
-
-  $("itemCount").textContent = `Предметов в справочнике: ${filtered.length}`;
-
   if (!filtered.length) {
-    grid.innerHTML = '<p class="empty-state">Предметы не найдены.</p>';
+    grid.innerHTML = '<p class="empty-state">' + escapeHTML(emptyMessage) + '</p>';
     return;
   }
-
   grid.innerHTML = filtered.map(item=>{
     const saved = favoriteItems.has(item.id);
     const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
@@ -716,7 +707,6 @@ function renderItems() {
     const iconMarkup = iconSlug
       ? `<img class="item-image" src="${escapeHTML(ITEM_IMAGE_BASE + iconSlug + ".png")}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
       : `<div class="item-symbol" aria-label="Иконка предмета недоступна">${symbol}</div>`;
-
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
       <div class="item-content">
@@ -725,13 +715,38 @@ function renderItems() {
         <p class="item-description">${escapeHTML(item.name)}</p>
         <p class="item-stats">${escapeHTML(item.stats)}</p>
         <p class="item-description">${escapeHTML(item.desc)}</p>
-        <details><summary>Когда покупать?</summary><p class="item-tip">${escapeHTML(item.tip)}</p><p class="fine-print">Сверяй точные характеристики, цену и пассивные эффекты с текущей версией игры.</p></details>
+        <details><summary>Подробнее</summary><p class="item-tip">${escapeHTML(item.tip)}</p><p class="fine-print">Проверяй актуальные эффекты в текущей версии игры.</p></details>
         ${favoriteButton("item",item.id,saved)}
       </div>
     </article>`;
   }).join("");
 }
 
+function renderItems() {
+  const grid = $("itemGrid");
+  if (!grid) return;
+  const filtered = items.filter(item=>{
+    if (item.cat==="Jungle" || item.cat==="Roam") return false;
+    const matchesCategory = itemCategory==="Все" || item.cat===itemCategory;
+    const haystack = `${item.name} ${item.ru} ${item.desc} ${item.stats} ${item.tip}`.toLocaleLowerCase();
+    return matchesCategory && haystack.includes(itemQuery);
+  });
+  $("itemCount").textContent = `Предметов в справочнике: ${filtered.length}`;
+  renderItemCards(filtered,grid,"Предметы не найдены.");
+}
+
+function renderPerks() {
+  const grid = $("perkGrid");
+  if (!grid) return;
+  const filtered = items.filter(item=>{
+    if (item.cat!=="Jungle" && item.cat!=="Roam") return false;
+    const matchesCategory = perkCategory==="Все" || item.cat===perkCategory;
+    const haystack = `${item.name} ${item.ru} ${item.desc} ${item.stats} ${item.tip}`.toLocaleLowerCase();
+    return matchesCategory && haystack.includes(perkQuery);
+  });
+  $("perkCount").textContent = `Заклинаний и эффектов: ${filtered.length}`;
+  renderItemCards(filtered,grid,"В этом разделе ничего не найдено.");
+}
 
 const roleBuildTemplates = {
   "Убийца": {role:"Убийца", goal:"Быстрый урон по приоритетной цели", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Blade of Despair","Immortality"], emblem:"Эмблема убийцы; таланты под темп и урон — отправная точка.", spell:"Возмездие для леса; другой навык — если герой играет не в лесу.", note:"Шаблон по классу, а не индивидуальная мета-сборка для каждого убийцы."},
@@ -1192,6 +1207,14 @@ function setupFilters() {
     renderItems();
   });
 
+  $("perkFilters")?.addEventListener("click",event=>{
+    const button = event.target.closest("[data-perk-category]");
+    if (!button) return;
+    perkCategory = button.dataset.perkCategory;
+    $("perkFilters").querySelectorAll("[data-perk-category]").forEach(b=>b.classList.toggle("active",b===button));
+    renderPerks();
+  });
+
   $("buildFilters")?.addEventListener("click",event=>{
     const button = event.target.closest("[data-build]");
     if (!button) return;
@@ -1239,7 +1262,7 @@ async function loadExternalHeroes() {
 
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
-  const pageIds = ["home","heroes","tierlist","items","builds","favorites","guides","counterpicks"];
+  const pageIds = ["home","heroes","tierlist","items","perks","builds","favorites","guides","counterpicks"];
   const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
 
   document.querySelectorAll("main > section").forEach(section => {
@@ -1260,6 +1283,7 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     heroes: "Герои",
     tierlist: "Тир-лист",
     items: "Предметы",
+    perks: "Перки и заклинания",
     builds: "Сборки",
     favorites: "Избранное",
     guides: "Комбо и гайды",
@@ -1329,6 +1353,11 @@ function init() {
     renderItems();
   });
 
+  $("perkSearch")?.addEventListener("input",event=>{
+    perkQuery = event.target.value.trim().toLocaleLowerCase();
+    renderPerks();
+  });
+
   $("counterBtn").addEventListener("click",showCounterpick);
   $("favHeroesTab").addEventListener("click",()=>{
     favoriteTab = "heroes";
@@ -1366,6 +1395,7 @@ function init() {
   document.addEventListener("keydown",event=>{ if(event.key==="Escape") closeHeroBuild(); });
   renderHeroes();
   renderItems();
+  renderPerks();
   renderBuilds();
   renderComboGuides();
   renderCounterpicks();
