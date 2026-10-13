@@ -491,3 +491,51 @@ body.modal-open { overflow:hidden; }
 .counter-item-row strong { font-size:12px; }
 .counter-build>p,.counter-help { margin:10px 0 0; color:#d4c6d5; font-size:11px; }
 .counter-panel select { margin-bottom:12px; }
+
+
+/* Visual hero builds: item icons and emblem/talent panels */
+.build-modal-card .build-item-row { display:flex; align-items:center; gap:10px; }
+.build-item-icon,.build-item-icon-fallback {
+  display:grid;
+  place-items:center;
+  flex:0 0 48px;
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  padding:4px;
+  background:radial-gradient(ellipse,#4a2635,#1b131c 75%);
+  border:1px solid #5a3444;
+  border-radius:8px;
+}
+.build-item-icon-fallback { color:#ff7b8b; font-size:22px; }
+.build-modal-card .build-item-row>div { min-width:0; }
+.build-modal-card .build-item-row strong { display:block; line-height:1.4; }
+.build-advice { gap:10px; }
+.build-advice-card {
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:12px;
+  background:#211720;
+  border:1px solid #382733;
+  border-radius:7px;
+}
+.build-advice-card>div { min-width:0; }
+.build-advice-card p { margin:4px 0 0; }
+.build-advice-icon {
+  display:grid;
+  place-items:center;
+  flex:0 0 36px;
+  width:36px;
+  height:36px;
+  color:#ff8292;
+  background:#401b28;
+  border:1px solid #6a293b;
+  border-radius:8px;
+  font-size:20px;
+}
+@media(max-width:420px) {
+  .build-item-icon,.build-item-icon-fallback { flex-basis:42px; width:42px; height:42px; }
+  .build-modal-card .build-item-row { gap:8px; }
+  .build-advice-card { padding:10px; }
+}
