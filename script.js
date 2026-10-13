@@ -657,7 +657,6 @@ function renderHeroDetailContent(hero, target) {
           <button type="button" class="btn btn-ghost" data-open-hero-full="${escapeHTML(hero.name)}">Полная страница ↗</button>
           <a class="btn btn-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель ↗</a>
           <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
-          <a class="btn btn-ghost" href="?page=counterpicks">Контрпики ↗</a>
         </div>
       </div>
     </div>
