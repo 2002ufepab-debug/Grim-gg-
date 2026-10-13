@@ -450,6 +450,8 @@ let itemCategory = "Все";
 let perkQuery = "";
 let perkCategory = "Все";
 let buildFilter = "Все";
+let buildRoleFilter = "Все";
+let buildQuery = "";
 let favoriteTab = "heroes";
 let favoriteHeroes = new Set();
 let favoriteItems = new Set();
@@ -939,20 +941,38 @@ function renderBuilds() {
   const grid = $("buildGrid");
   if (!grid) return;
 
-  const filtered = builds.filter(build=>buildFilter==="Все" || build.hero===buildFilter);
-  grid.innerHTML = filtered.map(build=>{
-    const rows = build.items.map(name=>{
-      const item = items.find(i=>i.name===name);
-      return `<div class="build-item-row"><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.desc:"Проверь назначение предмета в актуальной версии игры.")}</span></div>`;
+  const query = buildQuery.trim().toLocaleLowerCase();
+  const filtered = heroes.filter(hero => {
+    const roles = getHeroClasses(hero);
+    const matchesRole = buildRoleFilter === "Все" || roles.includes(buildRoleFilter);
+    const matchesQuery = String(hero.name || "").toLocaleLowerCase().includes(query);
+    return matchesRole && matchesQuery;
+  });
+
+  const count = $("buildCount");
+  if (count) count.textContent = `Сборок в каталоге: ${filtered.length} из ${heroes.length} героев`;
+
+  if (!filtered.length) {
+    grid.innerHTML = '<p class="empty-state">Герои не найдены. Измени поиск или выбери другую роль.</p>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(hero => {
+    const roles = getHeroClasses(hero);
+    const build = getHeroBuild(hero.name, roles);
+    const rows = build.items.map((name,index) => {
+      const item = items.find(entry => entry.name === name);
+      return `<div class="build-item-row"><span class="build-slot">0${index+1}</span><strong>${escapeHTML(item ? item.ru : name)}</strong><span>${escapeHTML(item ? item.stats : "Проверь предмет в актуальной версии игры.")}</span></div>`;
     }).join("");
 
     return `<article class="build-card">
-      <span class="build-label">BUILD LAB / ${escapeHTML(build.hero)}</span>
-      <h3>${escapeHTML(build.hero)}</h3>
-      <p>${escapeHTML(build.role)}</p>
+      <span class="build-label">BUILD LAB / ${escapeHTML(hero.name)}</span>
+      <h3>${escapeHTML(hero.name)}</h3>
+      <p>${escapeHTML(roles.join(" / "))}</p>
       <p><strong>Направление:</strong> ${escapeHTML(build.goal)}</p>
       <div class="build-item-list">${rows}</div>
-      <p>${escapeHTML(build.note)}</p>
+      <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
+      <button class="btn btn-ghost build-open-button" type="button" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Все варианты сборки ↗</button>
     </article>`;
   }).join("");
 }
@@ -1229,11 +1249,15 @@ function setupFilters() {
     renderPerks();
   });
 
+  $("buildSearch")?.addEventListener("input",event=>{
+    buildQuery = event.target.value;
+    renderBuilds();
+  });
   $("buildFilters")?.addEventListener("click",event=>{
-    const button = event.target.closest("[data-build]");
+    const button = event.target.closest("[data-build-role]");
     if (!button) return;
-    buildFilter = button.dataset.build;
-    $("buildFilters").querySelectorAll("[data-build]").forEach(b=>b.classList.toggle("active",b===button));
+    buildRoleFilter = button.dataset.buildRole;
+    $("buildFilters").querySelectorAll("[data-build-role]").forEach(b=>b.classList.toggle("active",b===button));
     renderBuilds();
   });
 }
@@ -1264,6 +1288,7 @@ async function loadExternalHeroes() {
     if (note) note.textContent = "Загружен сторонний каталог сообщества. Он неофициальный и может отставать от текущего патча; роли обозначают классы героев, а не рекомендуемые линии.";
     renderHeroes();
     renderTierList();
+    renderBuilds();
     renderComboGuides();
     renderCounterpicks();
     renderFavorites();
