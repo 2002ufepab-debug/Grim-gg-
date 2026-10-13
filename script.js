@@ -1102,6 +1102,8 @@ function renderFavorites() {
   const itemsTab = $("favItemsTab");
   heroesTab.classList.toggle("active",favoriteTab==="heroes");
   itemsTab.classList.toggle("active",favoriteTab==="items");
+  heroesTab.setAttribute("aria-pressed",String(favoriteTab==="heroes"));
+  itemsTab.setAttribute("aria-pressed",String(favoriteTab==="items"));
 
   if (favoriteTab==="heroes") {
     const saved = heroes.filter(h=>favoriteHeroes.has(String(h.id)));
@@ -1311,21 +1313,21 @@ function setupFilters() {
     const button = event.target.closest("[data-combo-role]");
     if (!button) return;
     activeComboRole = button.dataset.comboRole;
-    $("comboFilters").querySelectorAll("[data-combo-role]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("comboFilters"),"[data-combo-role]",button);
     renderComboGuides();
   });
   $("comboGrid")?.addEventListener("click",event=>{
     if (!event.target.closest("[data-combo-reset]")) return;
     activeComboRole = "Все";
     if ($("comboSearch")) $("comboSearch").value = "";
-    $("comboFilters")?.querySelectorAll("[data-combo-role]").forEach(b=>b.classList.toggle("active",b.dataset.comboRole==="Все"));
+    syncFilterSelection($("comboFilters"),"[data-combo-role]",$("comboFilters")?.querySelector('[data-combo-role="Все"]'));
     renderComboGuides();
   });
   $("roleFilters")?.addEventListener("click",event=>{
     const button = event.target.closest("[data-role]");
     if (!button) return;
     activeRole = button.dataset.role;
-    $("roleFilters").querySelectorAll("[data-role]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("roleFilters"),"[data-role]",button);
     renderHeroes();
   });
 
@@ -1336,8 +1338,8 @@ function setupFilters() {
     activeTier = "Все";
     activeTierRole = "Все";
     if ($("tierSearch")) $("tierSearch").value = "";
-    $("tierFilters")?.querySelectorAll("[data-tier]").forEach(b=>b.classList.toggle("active",b.dataset.tier==="Все"));
-    $("tierRoleFilters")?.querySelectorAll("[data-tier-role]").forEach(b=>b.classList.toggle("active",b.dataset.tierRole==="Все"));
+    syncFilterSelection($("tierFilters"),"[data-tier]",$("tierFilters")?.querySelector('[data-tier="Все"]'));
+    syncFilterSelection($("tierRoleFilters"),"[data-tier-role]",$("tierRoleFilters")?.querySelector('[data-tier-role="Все"]'));
     renderTierList();
   });
 
@@ -1345,7 +1347,7 @@ function setupFilters() {
     const button = event.target.closest("[data-tier]");
     if (!button) return;
     activeTier = button.dataset.tier;
-    $("tierFilters").querySelectorAll("[data-tier]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("tierFilters"),"[data-tier]",button);
     renderTierList();
   });
 
@@ -1353,7 +1355,7 @@ function setupFilters() {
     const button = event.target.closest("[data-tier-role]");
     if (!button) return;
     activeTierRole = button.dataset.tierRole;
-    $("tierRoleFilters").querySelectorAll("[data-tier-role]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("tierRoleFilters"),"[data-tier-role]",button);
     renderTierList();
   });
 
@@ -1361,7 +1363,7 @@ function setupFilters() {
     const button = event.target.closest("[data-category]");
     if (!button) return;
     itemCategory = button.dataset.category;
-    $("itemFilters").querySelectorAll("[data-category]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("itemFilters"),"[data-category]",button);
     renderItems();
   });
 
@@ -1369,7 +1371,7 @@ function setupFilters() {
     const button = event.target.closest("[data-perk-category]");
     if (!button) return;
     perkCategory = button.dataset.perkCategory;
-    $("perkFilters").querySelectorAll("[data-perk-category]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("perkFilters"),"[data-perk-category]",button);
     renderPerks();
   });
 
@@ -1381,7 +1383,7 @@ function setupFilters() {
     const button = event.target.closest("[data-build-role]");
     if (!button) return;
     buildRoleFilter = button.dataset.buildRole;
-    $("buildFilters").querySelectorAll("[data-build-role]").forEach(b=>b.classList.toggle("active",b===button));
+    syncFilterSelection($("buildFilters"),"[data-build-role]",button);
     renderBuilds();
   });
 }
@@ -1504,7 +1506,7 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     counterpicks: "Контрпики",
     hero: "Профиль героя"
   };
-  document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — MLBB Tactical Database";
+  document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — тактическая база Mobile Legends";
 
   if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
 }
