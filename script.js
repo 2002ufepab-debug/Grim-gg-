@@ -74,6 +74,17 @@ const heroTips = {
   Ling:"Следи за ресурсами и позициями врагов, особенно перед командными боями.",
 };
 
+const comboGuides = [
+  {hero:"Фанни",key:"Fanny",role:"Убийца",difficulty:"Сложно",situation:"Вход и выход",skills:["1","2","2","3"],steps:["Проверь запас энергии и выбери безопасный маршрут.","Используй тросы, чтобы занять угол атаки.","Попади навыками по цели и оцени остаток энергии.","Заверши атаку только при уверенном попадании; оставь путь отхода."],tip:"Главное — точность тросов и контроль энергии. Не продолжай погоню, если теряешь безопасный маршрут.",search:"лес тросы мобильность"},
+  {hero:"Госсен",key:"Gusion",role:"Убийца",difficulty:"Сложно",situation:"Быстрый урон по одной цели",skills:["2","1","1","3","2"],steps:["Начни с метания кинжалов.","Попади первым навыком по выбранной цели и повтори его для сближения.","Используй ультимейт для обновления навыков и смены позиции.","Повтори атаку кинжалами, затем оцени возможность безопасно выйти."],tip:"Не трать сближение вслепую: промах первым навыком сильно усложняет продолжение комбо.",search:"лес кинжалы burst"},
+  {hero:"Вексана",key:"Vexana",role:"Маг",difficulty:"Средне",situation:"Контроль перед командным боем",skills:["1","2","3"],steps:["Попробуй остановить опасную цель первым навыком.","Пока враг ограничен в движении, направь второй навык по области.","Используй ультимейт, когда он поможет закрепить преимущество в бою."],tip:"Играй из-за передней линии. Не расходуй все навыки на танка, если рядом есть доступная уязвимая цель.",search:"мид маг контроль teamfight"},
+  {hero:"Клод",key:"Claude",role:"Стрелок",difficulty:"Средне",situation:"Урон по группе",skills:["1","2","3"],steps:["Попади первым навыком по врагам, чтобы усилить подготовку к атаке.","Поставь вторую способность так, чтобы сохранить возможность вернуться в безопасную позицию.","Входи с ультимейтом, когда противники потратили опасный контроль или не могут быстро остановить тебя."],tip:"Не начинай ультимейт в центре врагов, если у них готовы оглушение или другие способы прервать атаку.",search:"голд стрелок ультимейт позиция"},
+  {hero:"Белерик",key:"Belerick",role:"Танк",difficulty:"Просто",situation:"Защита союзников",skills:["2","1","3"],steps:["Подойди к союзникам и выбери момент, когда противник угрожает задней линии.","Используй навык сближения или замедления, чтобы помешать врагу.","Примени ультимейт, когда несколько противников находятся в зоне действия и команда готова продолжить."],tip:"Не начинай бой далеко от союзников. Твоя задача — создать для команды удобное окно, а не просто ворваться первым.",search:"роум танк защита контроль"},
+  {hero:"Хуфра",key:"Khufra",role:"Танк",difficulty:"Средне",situation:"Инициация и контроль",skills:["2","1","3"],steps:["Используй второй навык, если нужно мешать мобильным противникам.","Выбери безопасную траекторию для входа первым навыком.","Собери противников ультимейтом у стены или в удобной для команды позиции, если ситуация позволяет."],tip:"Согласуй вход с союзниками: контроль без последующего урона редко приносит пользу.",search:"роум танк мобильные герои инициировать"},
+  {hero:"Эудора",key:"Eudora",role:"Маг",difficulty:"Просто",situation:"Поймать одиночную цель",skills:["2","3","1"],steps:["Подойди на безопасную дистанцию и начни с оглушения.","Используй ультимейт, пока цель не может сразу ответить.","Заверши комбо первым навыком и отойди, пока навыки перезаряжаются."],tip:"Выбирай одиночную цель и следи за мини-картой: после комбо у тебя может не остаться способов защититься.",search:"мид маг оглушение burst"},
+  {hero:"Лейла",key:"Layla",role:"Стрелок",difficulty:"Просто",situation:"Безопасный урон с дистанции",skills:["2","1","3"],steps:["Замедли или задень противника вторым навыком, если он подходит на опасную дистанцию.","Используй первый навык для урона и поддержания дистанции.","Применяй ультимейт по подходящей линии атаки, не выходя вперёд команды."],tip:"Для Лейлы позиция важнее сложной комбинации: атакуй сзади и заранее ищи путь отхода.",search:"голд стрелок дальность позиция"}
+];
+
 const items = [
 {
  id:"bod",name:"Blade of Despair",ru:"Клинок отчаяния",cat:"Attack",
@@ -1046,7 +1057,50 @@ function showCounterpick() {
   </div>`;
 }
 
+let activeComboRole = "Все";
+function renderComboGuides() {
+  const grid = $("comboGrid");
+  if (!grid) return;
+  const query = ($("comboSearch")?.value || "").trim().toLocaleLowerCase();
+  const filtered = comboGuides.filter(combo => {
+    const roleMatch = activeComboRole === "Все" || combo.role === activeComboRole;
+    const haystack = [combo.hero,combo.key,combo.role,combo.situation,combo.difficulty,combo.tip,combo.search,...combo.steps].join(" ").toLocaleLowerCase();
+    return roleMatch && (!query || haystack.includes(query));
+  });
+  const count = $("comboCount");
+  if (count) count.textContent = `Показано комбо: ${filtered.length} из ${comboGuides.length}`;
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="combo-empty"><strong>Ничего не найдено</strong><p>Попробуй другое имя героя или сбрось фильтр роли.</p><button class="filter" type="button" data-combo-reset>Сбросить фильтры</button></div>';
+    return;
+  }
+  grid.innerHTML = filtered.map((combo,index) => `
+    <article class="combo-card">
+      <div class="combo-card-top">
+        <span class="combo-code">COMBO_${String(index+1).padStart(2,"0")}</span>
+        <span class="combo-difficulty difficulty-${combo.difficulty==="Сложно"?"hard":combo.difficulty==="Средне"?"medium":"easy"}">${escapeHTML(combo.difficulty)}</span>
+      </div>
+      <div class="combo-card-heading"><div class="combo-avatar" aria-hidden="true">${escapeHTML(combo.hero.slice(0,1).toUpperCase())}</div><div><h3>${escapeHTML(combo.hero)}</h3><span class="combo-role">${escapeHTML(combo.role)} · ${escapeHTML(combo.situation)}</span></div></div>
+      <div class="combo-sequence" aria-label="Порядок навыков">${combo.skills.map((skill,i)=>`<span class="combo-step"><b>${escapeHTML(skill)}</b><small>${i===combo.skills.length-1?"Финиш":"Шаг "+(i+1)}</small></span>`).join('<span class="combo-arrow" aria-hidden="true">›</span>')}</div>
+      <details class="combo-details"><summary>Показать объяснение комбо</summary><ol>${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><div class="combo-tip"><strong>Совет Grim_gg</strong><p>${escapeHTML(combo.tip)}</p></div></details>
+    </article>`).join("");
+}
+
 function setupFilters() {
+  $("comboSearch")?.addEventListener("input",renderComboGuides);
+  $("comboFilters")?.addEventListener("click",event=>{
+    const button = event.target.closest("[data-combo-role]");
+    if (!button) return;
+    activeComboRole = button.dataset.comboRole;
+    $("comboFilters").querySelectorAll("[data-combo-role]").forEach(b=>b.classList.toggle("active",b===button));
+    renderComboGuides();
+  });
+  $("comboGrid")?.addEventListener("click",event=>{
+    if (!event.target.closest("[data-combo-reset]")) return;
+    activeComboRole = "Все";
+    if ($("comboSearch")) $("comboSearch").value = "";
+    $("comboFilters")?.querySelectorAll("[data-combo-role]").forEach(b=>b.classList.toggle("active",b.dataset.comboRole==="Все"));
+    renderComboGuides();
+  });
   $("roleFilters")?.addEventListener("click",event=>{
     const button = event.target.closest("[data-role]");
     if (!button) return;
@@ -1205,6 +1259,7 @@ function init() {
   renderHeroes();
   renderItems();
   renderBuilds();
+  renderComboGuides();
   renderCounterpicks();
   renderFavorites();
 
