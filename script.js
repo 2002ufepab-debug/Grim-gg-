@@ -1544,16 +1544,20 @@ function setupMenu() {
   const nav = $("nav");
   if (!toggle || !nav) return;
 
-  toggle.addEventListener("click",()=>{
-    const open = toggle.getAttribute("aria-expanded")!=="true";
+  const setMenuOpen = open => {
     toggle.setAttribute("aria-expanded",String(open));
+    toggle.setAttribute("aria-label",open ? "Закрыть меню" : "Открыть меню");
     nav.classList.toggle("open",open);
+  };
+
+  toggle.addEventListener("click",()=>{
+    setMenuOpen(toggle.getAttribute("aria-expanded")!=="true");
   });
 
-  nav.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>{
-    nav.classList.remove("open");
-    toggle.setAttribute("aria-expanded","false");
-  }));
+  nav.querySelectorAll("a").forEach(link=>link.addEventListener("click",()=>setMenuOpen(false)));
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape") setMenuOpen(false);
+  });
 }
 
 function setupBackToTop() {
