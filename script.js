@@ -153,8 +153,19 @@ const HERO_HD_IMAGE_FILES = {
   "zilong": "Zilong - Hero161.png"
 };
 const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+// Small quality pilot: original-resolution base-skin splash art for five heroes.
+// Keep the existing portrait source as a fallback if an external art URL fails.
+const HERO_SPLASH_ART_OVERRIDES = {
+  "aamon": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Aamon/Duke%20of%20Shards.png",
+  "layla": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Layla/Classic%20Malefic%20Gunner.png",
+  "miya": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Miya/Moonlight%20Archer.png",
+  "alucard": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Alucard/Demon%20Hunter.png",
+  "chou": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Chou/Kung%20Fu%20Boy.png"
+};
 const heroHDImageUrl = name => {
-  const file = HERO_HD_IMAGE_FILES[heroImageKey(name)];
+  const key = heroImageKey(name);
+  if (HERO_SPLASH_ART_OVERRIDES[key]) return HERO_SPLASH_ART_OVERRIDES[key];
+  const file = HERO_HD_IMAGE_FILES[key];
   return file ? "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file) : "";
 };
 
