@@ -238,6 +238,60 @@ const items = [
  stats:"Командная роль · Эффект роумера",
  desc:"Обозначает систему роум-экипировки и командных эффектов; доступные варианты зависят от текущей версии игры.",
  tip:"Проверь доступные эффекты роумера в клиенте. Не путай это название с отдельным универсальным предметом."
+},
+{
+ id:"gs",name:"Golden Staff",ru:"Золотой посох",cat:"Attack",
+ stats:"Скорость атаки · Эффекты обычных атак",
+ desc:"Предмет для некоторых сборок на скорость атаки и усиленные обычные атаки.",
+ tip:"Проверяй совместимость пассивного эффекта с другими предметами в текущем патче."
+},
+{
+ id:"lt",name:"Lightning Truncheon",ru:"Молниеносный трезубец",cat:"Magic",
+ stats:"Магическая сила · Урон навыков",
+ desc:"Магический предмет для некоторых сборок с частым использованием навыков.",
+ tip:"Сверяй текущую механику эффекта и подбирай к набору навыков конкретного мага."
+},
+{
+ id:"ch",name:"Cursed Helmet",ru:"Проклятый шлем",cat:"Defense",
+ stats:"Здоровье · Магическая защита",
+ desc:"Защитный предмет с дополнительным эффектом урона вокруг владельца.",
+ tip:"Рассматривай для танков, которые долго находятся рядом с противниками; проверь параметры в игре."
+},
+{
+ id:"gh",name:"Guardian Helmet",ru:"Шлем стража",cat:"Defense",
+ stats:"Здоровье · Восстановление",
+ desc:"Защитный предмет с акцентом на большой запас здоровья и восстановление вне боя.",
+ tip:"Оцени, нужен ли дополнительный запас здоровья или лучше взять защиту от конкретного типа урона."
+},
+{
+ id:"ba",name:"Blade Armor",ru:"Клинок брони",cat:"Defense",
+ stats:"Физическая защита",
+ desc:"Защитный предмет, который рассматривают против героев, полагающихся на обычные атаки.",
+ tip:"Сравни с другими защитными предметами и проверяй актуальный эффект."
+},
+{
+ id:"wa",name:"War Axe",ru:"Боевой топор",cat:"Attack",
+ stats:"Физический урон · Бой на продолжительной дистанции",
+ desc:"Атакующий предмет для некоторых бойцов и героев, которым выгодны затяжные столкновения.",
+ tip:"Проверь, подходит ли его пассивный эффект темпу боя выбранного героя."
+},
+{
+ id:"rgm",name:"Rose Gold Meteor",ru:"Метеор из розового золота",cat:"Attack",
+ stats:"Физический урон · Защитный эффект",
+ desc:"Атакующий предмет с дополнительной защитой в определённых ситуациях.",
+ tip:"Рассматривай как ситуационный слот, если важен дополнительный запас на выживание."
+},
+{
+ id:"qw",name:"Queen's Wings",ru:"Крылья королевы",cat:"Defense",
+ stats:"Выживаемость в бою",
+ desc:"Ситуативный предмет для некоторых бойцов, которым нужно переживать затяжной бой.",
+ tip:"Проверь актуальные характеристики и пассивный эффект в клиенте игры."
+},
+{
+ id:"sp",name:"Sky Piercer",ru:"Небесный пронзатель",cat:"Attack",
+ stats:"Добивание целей",
+ desc:"Ситуативный атакующий предмет, ориентированный на добивание противников.",
+ tip:"Покупай только если текущая механика предмета и состояние матча оправдывают этот слот."
 }
 ];
 
@@ -484,19 +538,23 @@ function renderItems() {
 
 
 const roleBuildTemplates = {
-  "Убийца": {role:"Убийца", goal:"Быстрый урон по приоритетной цели", items:["Blade of the Heptaseas","Malefic Roar","Blade of Despair","Immortality"], emblem:"Эмблема убийцы — как отправная точка; подстрой таланты под героя.", spell:"Возмездие для леса или Вспышка для подходящего лайнера.", note:"Шаблон по классу, а не проверенная мета-сборка именно этого героя."},
-  "Маг": {role:"Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага; таланты выбирай под урон или сокращение перезарядки.", spell:"Вспышка — частый универсальный вариант, если она подходит герою.", note:"Шаблон по классу. Меняй предметы в зависимости от магической защиты и состава врага."},
-  "Стрелок": {role:"Стрелок", goal:"Стабильный урон обычными атаками", items:["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Berserker's Fury","Malefic Roar","Immortality"], emblem:"Эмблема стрелка; выбирай таланты под скорость атаки или критический урон.", spell:"Вдохновение или Вспышка — в зависимости от героя и угроз.", note:"Не каждый стрелок играет через скорость атаки: проверь механику персонажа."},
-  "Боец": {role:"Боец", goal:"Баланс урона и выживаемости", items:["Tough Boots","Endless Battle","Antique Cuirass","Malefic Roar","Immortality"], emblem:"Эмблема бойца; таланты зависят от роли и стиля боя.", spell:"Возмездие для леса, Вспышка или Исполнение для подходящей линии.", note:"Подбирай защиту под главный источник урона соперника."},
-  "Танк": {role:"Танк", goal:"Выживаемость и помощь команде", items:["Tough Boots","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality"], emblem:"Эмблема танка; защитные таланты — базовая отправная точка.", spell:"Исцеление или Вспышка — по навыкам героя и задаче команды.", note:"Не покупай все защитные предметы автоматически: оцени физический и магический урон врагов."},
+  "Убийца": {role:"Убийца", goal:"Быстрый урон по приоритетной цели", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Blade of Despair","Immortality"], emblem:"Эмблема убийцы; таланты под темп и урон — отправная точка.", spell:"Возмездие для леса; другой навык — если герой играет не в лесу.", note:"Шаблон по классу, а не индивидуальная мета-сборка для каждого убийцы."},
+  "Маг": {role:"Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Glowing Wand","Lightning Truncheon","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага; подбирай таланты под урон, перезарядку и стиль героя.", spell:"Вспышка — частый вариант для мобильности, если она подходит герою.", note:"Шаблон по классу. Меняй предметы в зависимости от магической защиты и состава врага."},
+  "Стрелок": {role:"Стрелок", goal:"Стабильный урон обычными атаками", items:["Swift Boots","Demon Hunter Sword","Golden Staff","Corrosion Scythe","Malefic Roar","Immortality"], emblem:"Эмблема стрелка; таланты под скорость атаки или критический урон.", spell:"Вдохновение или Вспышка — в зависимости от героя и угроз.", note:"Не каждый стрелок играет через скорость атаки: проверь механику персонажа."},
+  "Боец": {role:"Боец", goal:"Баланс урона и выживаемости", items:["Tough Boots","Endless Battle","War Axe","Antique Cuirass","Malefic Roar","Immortality"], emblem:"Эмблема бойца; таланты зависят от роли и стиля боя.", spell:"Возмездие для леса, Вспышка или Исполнение для подходящей линии.", note:"Подбирай защиту под главный источник урона соперника."},
+  "Танк": {role:"Танк", goal:"Выживаемость и помощь команде", items:["Tough Boots","Cursed Helmet","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality"], emblem:"Эмблема танка; защитные таланты — базовая отправная точка.", spell:"Возмездие для леса или Вспышка/Возмездие духа по ситуации и набору навыков.", note:"Не покупай все защитные предметы автоматически: оцени физический и магический урон врагов."},
   "Поддержка": {role:"Поддержка", goal:"Помощь союзникам и выживаемость", items:["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Immortality"], emblem:"Эмблема поддержки или подходящая защитная эмблема.", spell:"Исцеление или Вспышка — в зависимости от набора навыков.", note:"Состав предметов зависит от того, лечит герой, даёт щиты, контроль или начинает бой."}
 };
 const featuredHeroBuilds = {
-  "Fanny": {role:"Лес · Убийца", goal:"Мобильность и физический урон", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","Blade of Despair","Immortality"], emblem:"Эмблема убийцы; таланты под взрывной урон и темп.", spell:"Возмездие для игры в лесу.", note:"Пример для ориентира. Фанни требовательна к энергии и механике; корректируй сборку под матч."},
-  "Vexana": {role:"Мид · Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага с упором на магический урон.", spell:"Вспышка — для дополнительной мобильности.", note:"Пример сборки, не гарантия актуальной меты. Меняй защитный слот под угрозы."},
-  "Claude": {role:"Голд · Стрелок", goal:"Скорость атаки и урон по выносливым целям", items:["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Golden Staff","Immortality"], emblem:"Эмблема стрелка с подходящими талантами на скорость атаки.", spell:"Вдохновение или Вспышка — выбирай по ситуации.", note:"Проверь доступность и текущие параметры предметов в игре; порядок покупки зависит от матча."},
-  "Belerick": {role:"Роум · Танк", goal:"Защита команды и выживаемость", items:["Tough Boots","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality"], emblem:"Эмблема танка с защитными талантами.", spell:"Исцеление или Вспышка — по составу команд.", note:"Собирай магическую или физическую защиту по реальным угрозам соперника."}
+  "Fanny": {role:"Лес · Убийца", goal:"Мобильность и физический урон", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Rose Gold Meteor","Immortality"], emblem:"Эмблема убийцы — один из возможных вариантов; сверяй таланты с актуальной версией.", spell:"Возмездие для игры в лесу.", note:"Пример для ориентира. Фанни требовательна к энергии и механике; корректируй сборку под матч."},
+  "Vexana": {role:"Мид · Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Glowing Wand","Lightning Truncheon","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага с талантами под урон и выбранный стиль.", spell:"Вспышка — для дополнительной мобильности.", note:"Пример на основе доступных сборочных ориентиров; меняй защитный слот под угрозы."},
+  "Claude": {role:"Голд · Стрелок", goal:"Скорость атаки и урон по выносливым целям", items:["Swift Boots","Demon Hunter Sword","Golden Staff","Corrosion Scythe","Malefic Roar","Immortality"], emblem:"Эмблема стрелка с талантами под скорость атаки.", spell:"Вдохновение или Вспышка — выбирай по ситуации.", note:"Порядок покупки зависит от матча; проверяй текущие параметры и доступность предметов."},
+  "Belerick": {role:"Роум · Танк", goal:"Защита команды и выживаемость", items:["Tough Boots","Cursed Helmet","Dominance Ice","Antique Cuirass","Immortality","Guardian Helmet"], emblem:"Эмблема танка или поддержки с подходящими защитными талантами.", spell:"Возмездие духа или Вспышка — по составу команд и твоей задаче.", note:"Сборка ориентирована на выживаемость; меняй защиту по реальным угрозам соперника."}
 };
+let activeBuildHeroName = "";
+let activeBuildRoles = [];
+let activeBuildVariant = "standard";
+
 function getHeroBuild(heroName, roles) {
   const featured = featuredHeroBuilds[heroName];
   if (featured) return {...featured, personalized:true};
@@ -504,22 +562,48 @@ function getHeroBuild(heroName, roles) {
   const role = classes.find(value=>roleBuildTemplates[value]) || "Боец";
   return {...roleBuildTemplates[role], personalized:false};
 }
-function openHeroBuild(heroName, rolesText) {
+function getVariantItems(build, variant) {
+  if (variant === "standard") return build.items;
+  const roleText = String(build.role || "");
+  if (variant === "antiTank") {
+    if (roleText.includes("Маг")) return ["Arcane Boots","Glowing Wand","Divine Glaive","Holy Crystal","Lightning Truncheon","Immortality"];
+    if (roleText.includes("Стрелок")) return ["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Malefic Roar","Rose Gold Meteor","Immortality"];
+    if (roleText.includes("Танк") || roleText.includes("Поддержка")) return ["Tough Boots","Dominance Ice","Antique Cuirass","Cursed Helmet","Athena's Shield","Immortality"];
+    return ["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Blade of Despair","Immortality"];
+  }
+  if (roleText.includes("Танк") || roleText.includes("Поддержка")) return ["Tough Boots","Cursed Helmet","Dominance Ice","Athena's Shield","Antique Cuirass","Guardian Helmet"];
+  return ["Tough Boots","Athena's Shield","Antique Cuirass","Rose Gold Meteor","Immortality","Oracle"];
+}
+function renderHeroBuildModal() {
   const modal = $("buildModal");
   const content = $("buildModalContent");
-  if (!modal || !content) return;
-  const roles = String(rolesText || "").split(",").map(value=>value.trim()).filter(Boolean);
-  const build = getHeroBuild(heroName, roles);
-  const itemRows = build.items.map((name,index)=>{
+  if (!modal || !content || !activeBuildHeroName) return;
+  const build = getHeroBuild(activeBuildHeroName, activeBuildRoles);
+  const selectedItems = getVariantItems(build, activeBuildVariant);
+  const itemRows = selectedItems.map((name,index)=>{
     const item = items.find(entry=>entry.name===name);
     return `<div class="build-item-row"><span class="build-slot">0${index+1}</span><div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в клиенте игры.")}</span></div></div>`;
   }).join("");
-  content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(heroName)} <span class="red">/ СБОРКА</span></h2>
+  const variantLabel = activeBuildVariant === "standard" ? "Основная" : activeBuildVariant === "antiTank" ? "Против танков" : "Защитная";
+  content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(activeBuildHeroName)} <span class="red">/ СБОРКА</span></h2>
     <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${escapeHTML(build.goal)}</p>
-    <div class="build-modal-section"><h3>Рекомендуемый набор предметов</h3><div class="build-item-list">${itemRows}</div></div>
+    <div class="build-variant-tabs" role="group" aria-label="Вариант сборки">
+      <button type="button" class="build-variant ${activeBuildVariant==="standard"?"active":""}" data-build-variant="standard" aria-pressed="${activeBuildVariant==="standard"}">Основная</button>
+      <button type="button" class="build-variant ${activeBuildVariant==="antiTank"?"active":""}" data-build-variant="antiTank" aria-pressed="${activeBuildVariant==="antiTank"}">Против танков</button>
+      <button type="button" class="build-variant ${activeBuildVariant==="defense"?"active":""}" data-build-variant="defense" aria-pressed="${activeBuildVariant==="defense"}">Защитная</button>
+    </div>
+    <div class="build-modal-section"><h3>${escapeHTML(variantLabel)} · предметы</h3><div class="build-item-list">${itemRows}</div></div>
     <div class="build-advice"><strong>Эмблема</strong><p>${escapeHTML(build.emblem)}</p><strong>Боевой навык</strong><p>${escapeHTML(build.spell)}</p></div>
     <p class="build-modal-note">${build.personalized ? "Персональный пример для героя. " : "Базовый шаблон по классу: это не индивидуальная мета-сборка. "}${escapeHTML(build.note)}</p>
-    <p class="fine-print">Mobile Legends обновляется: сверяй предметы, эмблемы и навыки с текущей версией игры и меняй сборку под состав соперника.</p>`;
+    <p class="fine-print">Сборки — ориентир, а не автоматическая покупка предметов. Меняй слоты по составу врагов и проверяй баланс после обновлений игры.</p>`;
+}
+function openHeroBuild(heroName, rolesText) {
+  const modal = $("buildModal");
+  if (!modal) return;
+  activeBuildHeroName = String(heroName || "");
+  activeBuildRoles = String(rolesText || "").split(",").map(value=>value.trim()).filter(Boolean);
+  activeBuildVariant = "standard";
+  renderHeroBuildModal();
   modal.hidden = false;
   document.body.classList.add("modal-open");
   const closeButton = modal.querySelector(".build-modal-close");
@@ -745,6 +829,12 @@ function init() {
     const openBuildButton = event.target.closest("[data-open-build]");
     if (openBuildButton) {
       openHeroBuild(openBuildButton.dataset.openBuild, openBuildButton.dataset.buildRoles);
+      return;
+    }
+    const variantButton = event.target.closest("[data-build-variant]");
+    if (variantButton) {
+      activeBuildVariant = variantButton.dataset.buildVariant;
+      renderHeroBuildModal();
       return;
     }
     if (event.target.closest("[data-close-build]")) {
