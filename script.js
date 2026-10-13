@@ -437,6 +437,7 @@ function renderHeroes() {
         <h3>${escapeHTML(hero.name)}</h3>
         <p class="hero-role">${escapeHTML(hero.role || getHeroClasses(hero).join(" / "))}</p>
         <div class="hero-tags">${heroClasses.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
+        <button type="button" class="btn btn-red hero-build-btn" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(heroClasses.join(","))}">Сборка героя ↗</button>
         <details><summary>Игровой совет ↗</summary><p>${escapeHTML(tip)}</p></details>
         ${favoriteButton("hero",id,saved)}
       </div>
@@ -479,6 +480,56 @@ function renderItems() {
       </div>
     </article>`;
   }).join("");
+}
+
+
+const roleBuildTemplates = {
+  "Убийца": {role:"Убийца", goal:"Быстрый урон по приоритетной цели", items:["Blade of the Heptaseas","Malefic Roar","Blade of Despair","Immortality"], emblem:"Эмблема убийцы — как отправная точка; подстрой таланты под героя.", spell:"Возмездие для леса или Вспышка для подходящего лайнера.", note:"Шаблон по классу, а не проверенная мета-сборка именно этого героя."},
+  "Маг": {role:"Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага; таланты выбирай под урон или сокращение перезарядки.", spell:"Вспышка — частый универсальный вариант, если она подходит герою.", note:"Шаблон по классу. Меняй предметы в зависимости от магической защиты и состава врага."},
+  "Стрелок": {role:"Стрелок", goal:"Стабильный урон обычными атаками", items:["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Berserker's Fury","Malefic Roar","Immortality"], emblem:"Эмблема стрелка; выбирай таланты под скорость атаки или критический урон.", spell:"Вдохновение или Вспышка — в зависимости от героя и угроз.", note:"Не каждый стрелок играет через скорость атаки: проверь механику персонажа."},
+  "Боец": {role:"Боец", goal:"Баланс урона и выживаемости", items:["Tough Boots","Endless Battle","Antique Cuirass","Malefic Roar","Immortality"], emblem:"Эмблема бойца; таланты зависят от роли и стиля боя.", spell:"Возмездие для леса, Вспышка или Исполнение для подходящей линии.", note:"Подбирай защиту под главный источник урона соперника."},
+  "Танк": {role:"Танк", goal:"Выживаемость и помощь команде", items:["Tough Boots","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality"], emblem:"Эмблема танка; защитные таланты — базовая отправная точка.", spell:"Исцеление или Вспышка — по навыкам героя и задаче команды.", note:"Не покупай все защитные предметы автоматически: оцени физический и магический урон врагов."},
+  "Поддержка": {role:"Поддержка", goal:"Помощь союзникам и выживаемость", items:["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Immortality"], emblem:"Эмблема поддержки или подходящая защитная эмблема.", spell:"Исцеление или Вспышка — в зависимости от набора навыков.", note:"Состав предметов зависит от того, лечит герой, даёт щиты, контроль или начинает бой."}
+};
+const featuredHeroBuilds = {
+  "Fanny": {role:"Лес · Убийца", goal:"Мобильность и физический урон", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","Blade of Despair","Immortality"], emblem:"Эмблема убийцы; таланты под взрывной урон и темп.", spell:"Возмездие для игры в лесу.", note:"Пример для ориентира. Фанни требовательна к энергии и механике; корректируй сборку под матч."},
+  "Vexana": {role:"Мид · Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага с упором на магический урон.", spell:"Вспышка — для дополнительной мобильности.", note:"Пример сборки, не гарантия актуальной меты. Меняй защитный слот под угрозы."},
+  "Claude": {role:"Голд · Стрелок", goal:"Скорость атаки и урон по выносливым целям", items:["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Golden Staff","Immortality"], emblem:"Эмблема стрелка с подходящими талантами на скорость атаки.", spell:"Вдохновение или Вспышка — выбирай по ситуации.", note:"Проверь доступность и текущие параметры предметов в игре; порядок покупки зависит от матча."},
+  "Belerick": {role:"Роум · Танк", goal:"Защита команды и выживаемость", items:["Tough Boots","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality"], emblem:"Эмблема танка с защитными талантами.", spell:"Исцеление или Вспышка — по составу команд.", note:"Собирай магическую или физическую защиту по реальным угрозам соперника."}
+};
+function getHeroBuild(heroName, roles) {
+  const featured = featuredHeroBuilds[heroName];
+  if (featured) return {...featured, personalized:true};
+  const classes = Array.isArray(roles) ? roles : [String(roles || "")];
+  const role = classes.find(value=>roleBuildTemplates[value]) || "Боец";
+  return {...roleBuildTemplates[role], personalized:false};
+}
+function openHeroBuild(heroName, rolesText) {
+  const modal = $("buildModal");
+  const content = $("buildModalContent");
+  if (!modal || !content) return;
+  const roles = String(rolesText || "").split(",").map(value=>value.trim()).filter(Boolean);
+  const build = getHeroBuild(heroName, roles);
+  const itemRows = build.items.map((name,index)=>{
+    const item = items.find(entry=>entry.name===name);
+    return `<div class="build-item-row"><span class="build-slot">0${index+1}</span><div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в клиенте игры.")}</span></div></div>`;
+  }).join("");
+  content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(heroName)} <span class="red">/ СБОРКА</span></h2>
+    <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${escapeHTML(build.goal)}</p>
+    <div class="build-modal-section"><h3>Рекомендуемый набор предметов</h3><div class="build-item-list">${itemRows}</div></div>
+    <div class="build-advice"><strong>Эмблема</strong><p>${escapeHTML(build.emblem)}</p><strong>Боевой навык</strong><p>${escapeHTML(build.spell)}</p></div>
+    <p class="build-modal-note">${build.personalized ? "Персональный пример для героя. " : "Базовый шаблон по классу: это не индивидуальная мета-сборка. "}${escapeHTML(build.note)}</p>
+    <p class="fine-print">Mobile Legends обновляется: сверяй предметы, эмблемы и навыки с текущей версией игры и меняй сборку под состав соперника.</p>`;
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+  const closeButton = modal.querySelector(".build-modal-close");
+  if (closeButton) closeButton.focus();
+}
+function closeHeroBuild() {
+  const modal = $("buildModal");
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.classList.remove("modal-open");
 }
 
 function renderBuilds() {
@@ -691,6 +742,15 @@ function init() {
   });
 
   document.addEventListener("click",event=>{
+    const openBuildButton = event.target.closest("[data-open-build]");
+    if (openBuildButton) {
+      openHeroBuild(openBuildButton.dataset.openBuild, openBuildButton.dataset.buildRoles);
+      return;
+    }
+    if (event.target.closest("[data-close-build]")) {
+      closeHeroBuild();
+      return;
+    }
     const button = event.target.closest("[data-favorite-type]");
     if (!button) return;
     updateFavorite(button.dataset.favoriteType,button.dataset.favoriteId);
@@ -698,6 +758,7 @@ function init() {
 
   setupFilters();
   setupMenu();
+  document.addEventListener("keydown",event=>{ if(event.key==="Escape") closeHeroBuild(); });
   renderHeroes();
   renderItems();
   renderBuilds();
