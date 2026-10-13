@@ -572,6 +572,18 @@ function favoriteButton(type,id,saved) {
   return `<button type="button" class="favorite-btn ${saved?"saved":""}" data-favorite-type="${type}" data-favorite-id="${escapeHTML(id)}" aria-pressed="${saved}">${saved?"★ В избранном":"☆ В избранное"}</button>`;
 }
 
+function hero3DModelUrl(hero) {
+  const slug = String(hero?.name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase()
+    .replace(/&/g, "-and-")
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return "https://mlbb.tools/heroes/" + slug + "/model";
+}
+
 let activeDetailHeroId = "";
 
 function getHeroById(id) {
@@ -607,6 +619,7 @@ function renderHeroDetailContent(hero, target) {
         <div class="hero-detail-actions">
           ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
           <button type="button" class="btn btn-ghost" data-open-hero-full="${escapeHTML(hero.name)}">Полная страница ↗</button>
+          <a class="btn btn-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель ↗</a>
           <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
           <a class="btn btn-ghost" href="?page=counterpicks">Контрпики ↗</a>
         </div>
