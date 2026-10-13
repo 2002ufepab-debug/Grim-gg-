@@ -119,6 +119,58 @@
     "Поддержка":["Ангела","Эстес","Флорин","Дигги","Матильда","Рафаэль"]
   };
 
+
+  const heroEnglishNames = {
+    "Клинт":"Clint","Лесли":"Lesley","Кэрри":"Karrie","Клод":"Claude","Броуди":"Brody","Мия":"Miya","Лейла":"Layla","Беатрис":"Beatrix","Мелисса":"Melissa","Иксия":"Ixia","Москов":"Moskov","Ванван":"Wanwan","Ханаби":"Hanabi","Бруно":"Bruno",
+    "Фанни":"Fanny","Госсен":"Gusion","Линг":"Ling","Сейбер":"Saber","Ланселот":"Lancelot","Хаябуса":"Hayabusa","Аамон":"Aamon","Наталья":"Natalia","Хелкарт":"Helcurt","Ли Сун Син":"Yi Sun-shin",
+    "Кадита":"Kadita","Вексана":"Vexana","Кагура":"Kagura","Лилия":"Lylia","Люнокс":"Lunox","Сесилион":"Cecilion","Ксавьер":"Xavier","Фарса":"Pharsa","Аврора":"Aurora","Одэтт":"Odette","Нана":"Nana","Эудора":"Eudora","Ло Йи":"Luo Yi",
+    "Руби":"Ruby","Теризла":"Terizla","Сан":"Sun","Эсмеральда":"Esmeralda","Юй Чжун":"Yu Zhong","Диррот":"Dyrroth","Чу":"Chou","Пакито":"Paquito","Альфа":"Alpha","Джулиан":"Julian","Икс Борг":"X.Borg",
+    "Белерик":"Belerick","Хуфра":"Khufra","Тигрил":"Tigreal","Атлас":"Atlas","Лолита":"Lolita","Франко":"Franco","Хилос":"Hylos","Грок":"Grock","Джонсон":"Johnson","Акай":"Akai","Фредринн":"Fredrinn",
+    "Ангела":"Angela","Эстес":"Estes","Флорин":"Floryn","Дигги":"Diggie","Матильда":"Mathilda","Рафаэль":"Rafaela"
+  };
+  const heroArtByName = new Map();
+  let heroArtLoaded = false;
+  async function loadHeroArt() {
+    if (heroArtLoaded) return;
+    heroArtLoaded = true;
+    try {
+      const response = await fetch("https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/hero.json", {cache:"force-cache"});
+      if (!response.ok) throw new Error("hero catalog unavailable");
+      const rows = await response.json();
+      rows.forEach(row => {
+        const english = String(row.name_hero || row.name || "").trim().toLowerCase();
+        const file = String(row["images-hero"] || "").trim().replace(/^images-hero\//, "");
+        if (english && file) heroArtByName.set(english, "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/" + file.split("/").map(part => encodeURIComponent(part)).join("/"));
+      });
+    } catch (_) {
+      // The planner remains usable when the optional portrait catalog is offline.
+    }
+    renderHeroPortrait();
+  }
+  function renderHeroPortrait() {
+    const portrait = document.getElementById("talentHeroPortrait");
+    const select = document.getElementById("talentHero");
+    if (!portrait || !select) return;
+    const english = heroEnglishNames[select.value];
+    const url = english ? heroArtByName.get(english.toLowerCase()) : "";
+    if (!url) {
+      portrait.innerHTML = '<span class="talent-portrait-placeholder" aria-hidden="true">GG</span>';
+      portrait.setAttribute("aria-label", "Портрет героя временно недоступен");
+      return;
+    }
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.addEventListener("error", () => {
+      portrait.innerHTML = '<span class="talent-portrait-placeholder" aria-hidden="true">GG</span>';
+      portrait.setAttribute("aria-label", "Портрет героя временно недоступен");
+    }, {once:true});
+    portrait.replaceChildren(img);
+    portrait.setAttribute("aria-label", "Портрет героя " + select.value);
+  }
+
   function init() {
     const perks = document.getElementById("perks");
     if (!perks || document.getElementById("talentLab")) return;
@@ -137,7 +189,7 @@
         <div class="talent-control"><label for="talentStyle">Стиль игры</label><select id="talentStyle"><option>Агрессивно</option><option>Командные бои</option><option>Выживаемость</option></select></div>
       </div>
       <div class="talent-result" aria-live="polite">
-        <div class="talent-result-head"><div><h3 id="talentResultTitle">Таланты для Клинта</h3><p id="talentResultDesc" class="talent-intro">Рекомендуемая стартовая комбинация.</p></div><span class="talent-chip" id="talentRoleChip">СТРЕЛОК</span></div>
+        <div class="talent-result-head"><div class="talent-hero-heading"><div class="talent-hero-portrait" id="talentHeroPortrait" role="img" aria-label="Портрет героя"><span class="talent-portrait-placeholder">GG</span></div><div><h3 id="talentResultTitle">Таланты для Клинта</h3><p id="talentResultDesc" class="talent-intro">Рекомендуемая стартовая комбинация.</p></div></div><span class="talent-chip" id="talentRoleChip">СТРЕЛОК</span></div>
         <div class="talent-slots" id="talentSlots"></div>
         <p class="talent-note" id="talentNote">Проверь доступность и эффекты в текущем клиенте MLBB перед использованием.</p>
         <div class="talent-actions"><button type="button" id="talentCopy">Копировать комбинацию</button><button type="button" class="secondary" id="talentReset">Сбросить выбор</button></div>
@@ -169,6 +221,7 @@
         <article class="talent-slot"><span class="talent-slot-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][i]}</span><span class="talent-icon" aria-hidden="true">${["I","II","III"][i]}</span><div><h4>${t[1]}</h4><p>${t[2]}</p></div></article>`).join("");
       section.querySelector("#talentNote").textContent = "Проверяй названия, уровни и эффекты талантов в актуальном клиенте. Подбор примерный: он не учитывает патч, ранг, состав соперника и конкретные игровые условия.";
       section.querySelector("#talentStatus").textContent = "";
+      renderHeroPortrait();
     }
     roleSelect.addEventListener("change", () => { fillHeroes(); render(); });
     heroSelect.addEventListener("change", render);
@@ -188,6 +241,7 @@
     });
     fillHeroes("Клинт");
     render();
+    loadHeroArt();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
