@@ -72,8 +72,6 @@ const heroTips = {
   Khufra:"Сохраняй контроль против мобильных противников и согласовывай начало боя с союзниками.",
   Gusion:"Тренируй комбинации навыков и сохраняй возможность отступить после атаки.",
   Ling:"Следи за ресурсами и позициями врагов, особенно перед командными боями.",
-  Fanny:"Следи за энергией и маршрутами тросов.",
-  Claude:"Не вступай в бой без плана отхода."
 };
 
 const items = [
@@ -470,12 +468,16 @@ function normalizeRemoteHero(hero,index) {
   const name = hero.name_hero || hero.name || hero.nameHero || hero.hero_name;
   if (!name) return null;
 
-  const roles = Array.isArray(hero.role)
+  const sourceRoles = Array.isArray(hero.role)
     ? hero.role
     : Array.isArray(hero.roles) ? hero.roles
     : typeof hero.role === "string" ? [hero.role] : [];
 
-  const roleText = roles.map(r=>String(r).toLowerCase());
+  // Некоторые внешние записи объединяют несколько классов в одну строку.
+  const roleText = sourceRoles
+    .flatMap(role => String(role).split(/[\\/,|]/))
+    .map(role => role.trim().toLowerCase())
+    .filter(Boolean);
   const translatedRoles = roleText.map(role=>roleTranslations[role] || role);
   const fallbackMatch = fallbackHeroes.find(h=>h.name.toLowerCase()===String(name).toLowerCase());
   const filename = hero["images-hero"] || hero.image || hero.image_url || "";
@@ -818,7 +820,7 @@ function renderHeroBuildModal() {
       <button type="button" class="build-variant ${activeBuildVariant==="antiTank"?"active":""}" data-build-variant="antiTank" aria-pressed="${activeBuildVariant==="antiTank"}">Против танков</button>
       <button type="button" class="build-variant ${activeBuildVariant==="defense"?"active":""}" data-build-variant="defense" aria-pressed="${activeBuildVariant==="defense"}">Защитная</button>
     </div>
-    <div class="build-modal-section"><h3>${escapeHTML(variantLabel)} · предметы по порядку</h3><p class="fine-print">Нажимай на картинки глазами как на подсказку: это порядок покупки, а не обязательная очередь для каждой ситуации.</p><div class="build-item-list">${itemRows}</div></div>
+    <div class="build-modal-section"><h3>${escapeHTML(variantLabel)} · предметы по порядку</h3><p class="fine-print">Порядок покупки — ориентир, а не обязательная последовательность для каждого матча.</p><div class="build-item-list">${itemRows}</div></div>
     <div class="build-advice">
       <div class="build-advice-card"><span class="build-advice-icon">✦</span><div><strong>Эмблема</strong><p>${escapeHTML(build.emblem)}</p></div></div>
       <div class="build-advice-card"><span class="build-advice-icon">◆</span><div><strong>Таланты / перки</strong><p>${escapeHTML(talentText)}</p></div></div>
@@ -943,8 +945,17 @@ function inferHeroRole(name) {
 }
 
 function getCounterPicks(enemy, enemyRole) {
-  const exact = counters[enemy] || Object.entries(counters).find(([name])=>name.toLocaleLowerCase()===String(enemy).toLocaleLowerCase())?.[1];
-  if (exact) return {picks:exact.picks,reason:exact.reason};
+  const exactEntry = Object.entries(counters).find(([name]) =>
+    name.toLocaleLowerCase() === String(enemy).toLocaleLowerCase()
+  );
+  const availableNames = new Set(heroes.map(hero=>hero.name.toLocaleLowerCase()));
+  if (exactEntry) {
+    const [ , exact ] = exactEntry;
+    return {
+      picks: exact.picks.filter(name=>availableNames.has(name.toLocaleLowerCase())),
+      reason: exact.reason
+    };
+  }
   const rolePicks = {
     "Убийца":["Khufra","Franco","Saber"],
     "Маг":["Lolita","Chou","Saber"],
@@ -953,12 +964,9 @@ function getCounterPicks(enemy, enemyRole) {
     "Танк":["Karrie","Claude","Dyrroth"],
     "Поддержка":["Saber","Franco","Chou"]
   };
-  const availableNames = new Set(heroes.map(hero=>hero.name.toLocaleLowerCase()));
   const suggested = rolePicks[enemyRole] || ["Khufra","Franco","Saber"];
   const picks = suggested.filter(name=>availableNames.has(name.toLocaleLowerCase()));
-  const reason = exact
-    ? exact.reason
-    : `Для героя «${enemy}» нет отдельной проверенной записи. Это предварительные варианты по классу «${enemyRole || "неизвестная роль"}». Учитывай способности, составы команд и текущий патч.`;
+  const reason = `Для героя «${enemy}» нет отдельной проверенной записи. Это предварительные варианты по классу «${enemyRole || "неизвестная роль"}». Учитывай способности, составы команд и текущий патч.`;
   return {picks,reason};
 }
 
