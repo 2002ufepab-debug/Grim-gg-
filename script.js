@@ -1128,6 +1128,7 @@ function renderFavorites() {
         <div class="hero-image-wrap">${heroImageMarkup(hero)}</div>
         <div class="hero-card-content"><h3>${escapeHTML(hero.name)}</h3>
         <p class="hero-role">${escapeHTML(getHeroClasses(hero).join(" / "))}</p>
+        <a class="btn btn-3d hero-card-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель героя ↗</a>
         ${favoriteButton("hero",String(hero.id),true)}</div>
       </article>`).join("") :
       '<p class="empty-state">Ты пока не добавил героев. Нажми ☆ в карточке героя.</p>';
