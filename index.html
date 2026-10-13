@@ -8,7 +8,7 @@
   <meta name="description" content="Grim_gg — справочник Mobile Legends: Bang Bang: герои, контрпики, предметы, сборки, комбо навыков и гайды.">
   <title>Grim_gg — MLBB Tactical Database</title>
   <link rel="stylesheet" href="styles.css?v=10">
-  <script src="script.js?v=19" defer></script>
+  <script src="script.js?v=20" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -63,13 +63,13 @@
   </div>
   <input class="search" id="heroSearch" type="search" placeholder="Поиск героя..." aria-label="Поиск героя">
   <div class="filter-row" id="roleFilters">
-    <button class="filter active" data-role="Все">Все роли</button>
-    <button class="filter" data-role="Убийца">Убийцы</button>
-    <button class="filter" data-role="Маг">Маги</button>
-    <button class="filter" data-role="Стрелок">Стрелки</button>
-    <button class="filter" data-role="Боец">Бойцы</button>
-    <button class="filter" data-role="Танк">Танки</button>
-    <button class="filter" data-role="Поддержка">Поддержка</button>
+    <button class="filter active" data-role="Все" data-role-count="Все">Все роли <span class="role-count">0</span></button>
+    <button class="filter" data-role="Убийца" data-role-count="Убийца">Убийцы <span class="role-count">0</span></button>
+    <button class="filter" data-role="Маг" data-role-count="Маг">Маги <span class="role-count">0</span></button>
+    <button class="filter" data-role="Стрелок" data-role-count="Стрелок">Стрелки <span class="role-count">0</span></button>
+    <button class="filter" data-role="Боец" data-role-count="Боец">Бойцы <span class="role-count">0</span></button>
+    <button class="filter" data-role="Танк" data-role-count="Танк">Танки <span class="role-count">0</span></button>
+    <button class="filter" data-role="Поддержка" data-role-count="Поддержка">Поддержка <span class="role-count">0</span></button>
   </div>
   <p class="count" id="heroCount" aria-live="polite"></p>
   <div class="hero-grid" id="heroGrid"><p class="loading">Загружаем базу героев...</p></div>
