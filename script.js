@@ -1,207 +1,308 @@
 
-const heroes = [
-  {name:'Фанни',role:'Лес',difficulty:'Сложная',mark:'F',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Fanny.jpg',tip:'Следи за энергией и маршрутами тросов. Входи в бой, когда контроль соперника уже потрачен.',counters:['Хуфра','Минситтар','Кая']},
-  {name:'Вексана',role:'Мид',difficulty:'Средняя',mark:'V',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Vexana.jpg',tip:'Используй дальность навыков и контроль для помощи боковым линиям. Не трать все умения без обзора карты.',counters:['Кагура','Лунокс','Харли']},
-  {name:'Белерик',role:'Роум',difficulty:'Лёгкая',mark:'B',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Belerick.jpg',tip:'Принимай урон, когда команда рядом, и защищай союзников.',counters:['Валир','Кимми','Карри']},
-  {name:'Теризла',role:'EXP',difficulty:'Средняя',mark:'T',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Terizla.jpg',tip:'Используй контроль, чтобы начинать командные бои.',counters:['Джулиан','Даш','Валир']},
-  {name:'Кэрри',role:'Голд',difficulty:'Средняя',mark:'K',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Karrie.jpg',tip:'Фарми безопасно и выбирай хорошую позицию в бою.',counters:['Лолита','Наталья','Харли']},
-  {name:'Хуфра',role:'Роум',difficulty:'Средняя',mark:'H',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Khufra.jpg',tip:'Останавливай мобильных героев соперника в подходящий момент.',counters:['Валир','Эсмеральда','Дигги']},
-  {name:'Ланселот',role:'Лес',difficulty:'Сложная',mark:'L',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Lancelot.jpg',tip:'Сохраняй рывки для выхода из боя и следи за контролем соперника.',counters:['Хуфра','Минситтар','Кая']},
-  {name:'Лунокс',role:'Мид',difficulty:'Сложная',mark:'L',image:'https://mobile-legends.fandom.com/wiki/Special:FilePath/Lunox.jpg',tip:'Переключай формы под ситуацию и выбирай момент для нанесения урона.',counters:['Кагура','Харли','Селена']}
-];
+const DATA_URL = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/hero.json";
+const IMAGE_BASE = "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/";
 
-const builds = [
-  {hero:'Фанни',role:'ЛЕС · УРОН',tags:['Охотничий удар','Урон от атаки','Пробивание','Скорость передвижения'],desc:'Играй от темпа и преимущества по золоту.',note:'Подстраивай защитный слот под угрозу врага.'},
-  {hero:'Вексана',role:'МИД · МАГИЯ',tags:['Магическая сила','Сокращение перезарядки','Пробивание магии','Выживаемость'],desc:'Контроль и магический урон в командных боях.',note:'Покупай предметы с учётом ситуации.'},
-  {hero:'Белерик',role:'РОУМ · ЗАЩИТА',tags:['Физическая защита','Магическая защита','Устойчивость','Командная аура'],desc:'Защищай союзников и мешай соперникам добраться до задней линии.',note:'Меняй защиту в зависимости от состава врага.'}
-];
+const $ = (id) => document.getElementById(id);
+let heroes = [];
+let activeRole = "Все";
+let searchText = "";
 
-const guides = {
-  team:{title:'Как собрать сбалансированную команду',body:'Перед матчем проверь, есть ли у команды:',items:['Надёжный герой на передней линии.','Контроль для начала боя или остановки врыва.','Физический и магический урон.','Герой для давления на башни.','Синергия навыков и распределение ролей.']},
-  items:{title:'Когда покупать защитные предметы',body:'Подбирай предметы под главную угрозу:',items:['Против физического урона рассмотри физическую защиту.','Против магического взрыва — магическую защиту.','При сильном лечении соперника рассмотри антихил.','Проверяй характеристики предметов в текущем патче.']},
-  map:{title:'Карта важнее лишнего убийства',body:'Хорошее решение начинается с информации:',items:['Проверяй мини-карту перед входом во вражеский лес.','После успешного боя забирай цель или башню.','Не уходи далеко от команды без информации.','Следи за волнами миньонов.']}
+const roleNames = {
+  assassin: "Убийца",
+  mage: "Маг",
+  marksman: "Стрелок",
+  fighter: "Боец",
+  tank: "Танк",
+  support: "Поддержка"
 };
 
-const $ = selector => document.querySelector(selector);
-const heroGrid = $('#heroGrid');
-const enemySelect = $('#enemySelect');
-const result = $('#counterResult');
-const toast = $('#toast');
+const laneMap = {
+  assassin: "Лес",
+  mage: "Мид",
+  marksman: "Голд",
+  fighter: "EXP",
+  tank: "Роум",
+  support: "Роум"
+};
 
-function renderHeroes(role = 'Все') {
-  if (!heroGrid) return;
+const advice = {
+  Fanny: "Следи за энергией и маршрутами тросов. Ищи момент, когда контроль врагов уже потрачен.",
+  Vexana: "Держись за передней линией и используй контроль, чтобы помогать команде начинать бой.",
+  Claude: "Накапливай ресурсы, следи за позициями врагов и выбирай безопасный момент для ультимейта.",
+  Belerick: "Прикрывай союзников и старайся принимать на себя атаки противников.",
+  Khufra: "Сохраняй навыки контроля для мобильных врагов и согласовывай атаки с командой.",
+  Gusion: "Тренируй комбинации навыков и не трать все способности до начала командного боя."
+};
 
-  const list = role === 'Все'
-    ? heroes
-    : heroes.filter(hero => hero.role === role);
-
-  heroGrid.innerHTML = list.map(hero => `
-    <article class="hero-card" data-mark="${hero.mark}">
-      <div class="hero-art">
-        <img
-          src="${hero.image}"
-          alt="${hero.name}"
-          loading="lazy"
-          onerror="this.style.display='none';this.parentElement.classList.add('image-missing')"
-        >
-        <span class="hero-art-mark">${hero.mark}</span>
-      </div>
-      <div class="hero-info">
-        <span class="hero-role">${hero.role.toUpperCase()} / ${hero.difficulty.toUpperCase()}</span>
-        <h3>${hero.name}</h3>
-        <p>${hero.tip}</p>
-        <div class="card-bottom">
-          <span>GRIM DATABASE</span>
-          <button type="button" data-hero="${hero.name}">Совет ↗</button>
-        </div>
-      </div>
-    </article>
-  `).join('');
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[char]);
 }
 
-function showToast(message) {
-  if (!toast) return;
-  toast.textContent = message;
-  toast.classList.add('show');
-  clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
+function getRoles(hero) {
+  return Array.isArray(hero.role) ? hero.role : [];
 }
 
-function pickCounter() {
-  if (!enemySelect || !result) return;
+function getLanes(hero) {
+  return [...new Set(getRoles(hero).map(role => laneMap[role]).filter(Boolean))];
+}
 
-  const name = enemySelect.value;
-  if (!name) {
-    showToast('Сначала выбери героя соперника.');
+function getImage(hero) {
+  return IMAGE_BASE + encodeURIComponent(hero["images-hero"] || "");
+}
+
+function getAdvice(hero) {
+  return advice[hero.name_hero] ||
+    "Изучай дальность навыков, следи за мини-картой и подстраивай тактику под состав соперника.";
+}
+
+function addSearch() {
+  const filters = $("roleFilters");
+  if (!filters || $("heroSearch")) return;
+
+  const search = document.createElement("input");
+  search.id = "heroSearch";
+  search.type = "search";
+  search.placeholder = "Поиск героя...";
+  search.setAttribute("aria-label", "Поиск героя");
+  search.autocomplete = "off";
+  search.addEventListener("input", event => {
+    searchText = event.target.value.trim().toLocaleLowerCase();
+    renderHeroes();
+  });
+
+  filters.insertAdjacentElement("afterend", search);
+}
+
+function renderHeroes() {
+  const grid = $("heroGrid");
+  if (!grid) return;
+
+  const filtered = heroes.filter(hero => {
+    const name = hero.name_hero.toLocaleLowerCase();
+    const roleMatch = activeRole === "Все" || getLanes(hero).includes(activeRole);
+    const searchMatch = name.includes(searchText);
+    return roleMatch && searchMatch;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = '<p class="empty-state">Герои не найдены. Попробуй другой запрос.</p>';
     return;
   }
 
-  const enemy = heroes.find(hero => hero.name === name);
-  if (!enemy) return;
+  grid.innerHTML = filtered.map(hero => {
+    const name = escapeHTML(hero.name_hero);
+    const roles = getRoles(hero).map(role => roleNames[role] || role);
+    const lanes = getLanes(hero);
+    const image = escapeHTML(getImage(hero));
+    const tip = escapeHTML(getAdvice(hero));
+    const initials = escapeHTML(hero.name_hero.slice(0, 1).toUpperCase());
 
-  const picks = enemy.counters
-    .map(name => heroes.find(hero => hero.name === name))
-    .filter(Boolean);
+    return `
+      <article class="hero-card">
+        <div class="hero-image-wrap">
+          <img class="hero-image" src="${image}" alt="${name}"
+               loading="lazy" decoding="async"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <div class="hero-image-fallback" style="display:none">${initials}</div>
+          <span class="hero-id">HERO / ${String(hero.id_hero).padStart(3, "0")}</span>
+        </div>
+        <div class="hero-card-content">
+          <h3>${name}</h3>
+          <p class="hero-role">${escapeHTML(roles.join(" / "))}</p>
+          <div class="hero-tags">
+            ${lanes.map(lane => `<span>${escapeHTML(lane)}</span>`).join("")}
+          </div>
+          <details class="hero-details">
+            <summary>Игровой совет <span>↗</span></summary>
+            <p>${tip}</p>
+          </details>
+        </div>
+      </article>`;
+  }).join("");
 
-  const suggestions = picks.length
-    ? picks
-    : heroes.filter(hero => hero.role === 'Роум' || hero.role === 'Мид').slice(0, 2);
-
-  result.innerHTML = `
-    <div class="result-icon">↗</div>
-    <div>
-      <strong>Против ${enemy.name} рассмотри:</strong>
-      <p>${suggestions.map(hero => `<b>${hero.name}</b> — ${hero.role}`).join('; ')}</p>
-      <p>${enemy.tip}</p>
-      <p class="fine-print">Учитывай состав команды, патч и собственный опыт.</p>
-    </div>
-  `;
+  const count = $("heroCount");
+  if (count) count.textContent = `Найдено героев: ${filtered.length}`;
 }
 
-function initSite() {
-  if (enemySelect) {
-    enemySelect.innerHTML = '<option value="">Выбери героя соперника</option>';
-    heroes.forEach(hero => {
-      const option = document.createElement('option');
-      option.value = hero.name;
-      option.textContent = hero.name;
-      enemySelect.appendChild(option);
+function setupFilters() {
+  const filters = $("roleFilters");
+  if (!filters) return;
+
+  filters.addEventListener("click", event => {
+    const button = event.target.closest("[data-role]");
+    if (!button) return;
+
+    activeRole = button.dataset.role;
+    filters.querySelectorAll("[data-role]").forEach(item => {
+      item.classList.toggle("active", item === button);
     });
-    enemySelect.addEventListener('change', pickCounter);
-  }
+    renderHeroes();
+  });
+}
 
-  renderHeroes();
+function setupCounterpicks() {
+  const select = $("enemySelect");
+  const button = $("counterBtn");
+  const result = $("counterResult");
+  if (!select || !button || !result) return;
 
-  const counterBtn = $('#counterBtn');
-  if (counterBtn) counterBtn.addEventListener('click', pickCounter);
+  button.addEventListener("click", () => {
+    const enemy = select.value;
+    if (!enemy) {
+      result.innerHTML = "<div class='result-icon'>!</div><div><strong>Выбери героя</strong><p>Сначала укажи героя соперника.</p></div>";
+      return;
+    }
 
-  const filters = $('#roleFilters');
-  if (filters) {
-    filters.addEventListener('click', event => {
-      const button = event.target.closest('[data-role]');
-      if (!button) return;
+    const picks = {
+      Fanny: ["Khufra", "Minsitthar", "Kaja"],
+      Claude: ["Kaja", "Franco", "Saber"],
+      Gusion: ["Khufra", "Franco", "Kaja"],
+      Ling: ["Khufra", "Minsitthar", "Kaja"],
+      Miya: ["Lolita", "Saber", "Natalia"],
+      Layla: ["Lolita", "Saber", "Natalia"],
+      Hanzo: ["Natalia", "Saber", "Franco"]
+    };
 
-      document.querySelectorAll('.filter').forEach(item => {
-        item.classList.toggle('active', item === button);
-      });
+    const suggestions = picks[enemy] || ["Khufra", "Franco", "Kaja"];
+    result.innerHTML = `
+      <div class="result-icon">↗</div>
+      <div><strong>Кого рассмотреть против ${escapeHTML(enemy)}?</strong>
+      <p>${suggestions.map(escapeHTML).join(" · ")}</p>
+      <p>Это ориентир, а не гарантированный контрпик. Учитывай роли, навыки игроков и состав команд.</p></div>`;
+  });
 
-      renderHeroes(button.dataset.role);
-    });
-  }
+  select.addEventListener("change", () => {
+    const chosen = select.value;
+    if (chosen) {
+      const hero = heroes.find(item => item.name_hero === chosen);
+      if (hero) select.dataset.selectedHero = hero.name_hero;
+    }
+  });
+}
 
-  if (heroGrid) {
-    heroGrid.addEventListener('click', event => {
-      const button = event.target.closest('[data-hero]');
-      if (!button || !enemySelect) return;
+function setupBuilds() {
+  const grid = $("buildGrid");
+  if (!grid) return;
 
-      enemySelect.value = button.dataset.hero;
-      $('#counterpicks')?.scrollIntoView({behavior:'smooth'});
-      pickCounter();
-    });
-  }
+  const builds = [
+    { name: "Фанни", role: "Лес · Убийца", items: "Урон · Пробивание · Ситуативная защита", tip: "Следи за энергией и выбирай удобные маршруты входа и отхода." },
+    { name: "Вексана", role: "Мид · Маг", items: "Магическая сила · Пробивание · Сокращение перезарядки", tip: "Держи дистанцию и помогай команде контролем." },
+    { name: "Клод", role: "Голд · Стрелок", items: "Скорость атаки · Критический урон · Защита по ситуации", tip: "Фарми безопасно и выбирай момент для командного боя." },
+    { name: "Белерик", role: "Роум · Танк", items: "Защита · Устойчивость · Предметы против состава врага", tip: "Защищай союзников и принимай атаки в подходящий момент." }
+  ];
 
-  const buildGrid = $('#buildGrid');
-  if (buildGrid) {
-    buildGrid.innerHTML = builds.map(build => `
-      <article class="build-card">
-        <div class="build-top">
-          <h3>${build.hero}</h3>
-          <span class="pill">${build.role}</span>
-        </div>
-        <p>${build.desc}</p>
-        <div class="item-list">
-          ${build.tags.map(tag => `<span class="item-chip">${tag}</span>`).join('')}
-        </div>
-        <p class="build-note">${build.note}</p>
-      </article>
-    `).join('');
-  }
+  grid.innerHTML = builds.map(build => `
+    <article class="build-card">
+      <span class="build-label">BUILD LAB</span>
+      <h3>${escapeHTML(build.name)}</h3>
+      <p class="build-role">${escapeHTML(build.role)}</p>
+      <p>${escapeHTML(build.items)}</p>
+      <p class="build-tip">${escapeHTML(build.tip)}</p>
+    </article>`).join("");
+}
 
-  const guideArea = $('#guides');
-  if (guideArea) {
-    guideArea.addEventListener('click', event => {
-      const button = event.target.closest('[data-guide]');
-      if (!button) return;
+function setupGuides() {
+  const detail = $("guideDetail");
+  if (!detail) return;
 
+  const guides = {
+    team: ["Баланс команды", "Сочетай переднюю линию, магический и физический урон, контроль и героя, который наносит урон по целям. Обсуждай выбор с командой."],
+    items: ["Выбор предметов", "Против сильного физического урона рассматривай физическую защиту, против магического — магическую. Учитывай лечение и особенности соперников."],
+    map: ["Контроль карты", "Проверяй мини-карту, помогай с важными целями и не начинай бой, если союзники далеко."]
+  };
+
+  document.querySelectorAll(".guide-open").forEach(button => {
+    button.addEventListener("click", () => {
       const guide = guides[button.dataset.guide];
-      const box = $('#guideDetail');
-      if (!guide || !box) return;
-
-      box.hidden = false;
-      box.innerHTML = `
-        <h3>${guide.title}</h3>
-        <p>${guide.body}</p>
-        <ul>${guide.items.map(item => `<li>${item}</li>`).join('')}</ul>
-      `;
-      box.scrollIntoView({behavior:'smooth', block:'nearest'});
+      if (!guide) return;
+      detail.hidden = false;
+      detail.innerHTML = `<h3>${escapeHTML(guide[0])}</h3><p>${escapeHTML(guide[1])}</p>`;
+      detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
+  });
+}
+
+function setupMenu() {
+  const toggle = $("menuToggle");
+  const nav = $("nav");
+  if (!toggle || !nav) return;
+
+  toggle.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") !== "true";
+    toggle.setAttribute("aria-expanded", String(open));
+    nav.classList.toggle("open", open);
+  });
+
+  nav.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    });
+  });
+}
+
+async function loadHeroes() {
+  const grid = $("heroGrid");
+  if (grid) grid.innerHTML = "<p>Загружаем каталог героев...</p>";
+
+  try {
+    const response = await fetch(DATA_URL);
+    if (!response.ok) throw new Error("Не удалось загрузить каталог");
+
+    const data = await response.json();
+    if (!Array.isArray(data) || !data.length) throw new Error("Каталог пуст");
+
+    heroes = data
+      .filter(hero => hero.name_hero && hero["images-hero"])
+      .sort((a, b) => a.name_hero.localeCompare(b.name_hero));
+
+    const select = $("enemySelect");
+    if (select) {
+      select.innerHTML = '<option value="">Выбери героя...</option>' +
+        heroes.map(hero =>
+          `<option value="${escapeHTML(hero.name_hero)}">${escapeHTML(hero.name_hero)}</option>`
+        ).join("");
+    }
+
+    const filters = $("roleFilters");
+    if (filters) {
+      filters.querySelectorAll("[data-role]").forEach(button => {
+        button.classList.toggle("active", button.dataset.role === "Все");
+      });
+    }
+
+    const count = $("heroCount");
+    if (count) count.textContent = `Всего героев: ${heroes.length}`;
+
+    renderHeroes();
+  } catch (error) {
+    if (grid) {
+      grid.innerHTML = `<p class="empty-state">Не удалось загрузить каталог героев. Проверь интернет-соединение и обнови страницу.</p>`;
+    }
+    console.error("Grim_gg:", error);
   }
+}
 
-  const menuToggle = $('#menuToggle');
-  const nav = $('#nav');
-
-  if (menuToggle && nav) {
-    menuToggle.addEventListener('click', () => {
-      const open = nav.classList.toggle('open');
-      menuToggle.setAttribute('aria-expanded', String(open));
-      menuToggle.textContent = open ? '✕' : '☰';
-    });
-
-    nav.addEventListener('click', event => {
-      if (event.target.closest('a')) {
-        nav.classList.remove('open');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        menuToggle.textContent = '☰';
-      }
-    });
-  }
-
-  const year = $('#year');
+document.addEventListener("DOMContentLoaded", () => {
+  const year = $("year");
   if (year) year.textContent = new Date().getFullYear();
-}
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initSite);
-} else {
-  initSite();
-}
+  const heading = $("heroGrid");
+  if (heading && ! $("heroCount")) {
+    const count = document.createElement("p");
+    count.id = "heroCount";
+    count.className = "hero-count";
+    heading.insertAdjacentElement("beforebegin", count);
+  }
+
+  addSearch();
+  setupFilters();
+  setupCounterpicks();
+  setupBuilds();
+  setupGuides();
+  setupMenu();
+  loadHeroes();
+});
