@@ -264,6 +264,7 @@ select,.search {
   transition:border-color .2s,transform .2s;
 }
 .hero-card:hover,.item-card:hover { border-color:var(--red); transform:translateY(-2px); }
+.hero-card:focus-within { border-color:var(--red); }
 .hero-image-wrap {
   position:relative;
   display:grid;
@@ -272,7 +273,13 @@ select,.search {
   overflow:hidden;
   background:radial-gradient(ellipse,#48202d,#171319 75%);
 }
-.hero-image { width:100%; height:100%; object-fit:contain; object-position:center bottom; }
+.hero-image { width:100%; height:100%; object-fit:contain; object-position:center bottom; image-rendering:auto; }
+.hero-image-open { position:relative; display:grid; place-items:center; width:100%; height:100%; padding:0; border:0; background:transparent; cursor:pointer; }
+.hero-image-open .hero-image { transition:transform .25s ease; }
+.hero-image-open:hover .hero-image { transform:scale(1.035); }
+.hero-image-hint { position:absolute; right:8px; bottom:8px; padding:5px 7px; color:#fff; background:#09070bdc; border:1px solid #6b3545; border-radius:4px; font-size:9px; opacity:.9; }
+.hero-name-open { padding:0; border:0; background:transparent; color:inherit; font:inherit; font-weight:800; text-align:left; cursor:pointer; }
+.hero-name-open:hover,.hero-name-open:focus-visible { color:#ff7b8b; }
 .hero-image-fallback { color:var(--red); font:900 42px Orbitron,sans-serif; }
 .hero-id {
   position:absolute;
@@ -441,6 +448,26 @@ details p { line-height:1.7; }
   *,*::before,*::after { scroll-behavior:auto!important; animation:none!important; transition:none!important; }
 }
 
+/* Hero profile modal and full-page profile */
+.hero-detail-modal[hidden] { display:none; }
+.hero-detail-modal { position:fixed; inset:0; z-index:110; display:grid; place-items:center; padding:16px; }
+.hero-detail-backdrop { position:absolute; inset:0; background:#050407e8; backdrop-filter:blur(6px); }
+.hero-detail-modal-card { position:relative; width:min(760px,100%); max-height:92dvh; overflow:auto; padding:24px; background:#100d12; border:1px solid #6a293b; border-radius:12px; box-shadow:0 20px 80px #000b; }
+.hero-detail-close { position:sticky; z-index:2; top:0; float:right; width:38px; height:38px; margin:-8px -8px 4px 12px; color:#fff; background:#251820; border:1px solid #654052; border-radius:6px; font-size:27px; line-height:1; cursor:pointer; }
+.hero-detail-layout { display:grid; grid-template-columns:minmax(160px,.8fr) minmax(0,1.2fr); gap:22px; align-items:start; }
+.hero-detail-art { height:300px; overflow:hidden; display:grid; place-items:center; background:radial-gradient(ellipse,#48202d,#171319 75%); border:1px solid var(--border); border-radius:8px; }
+.hero-detail-art .hero-image { object-fit:contain; }
+.hero-detail-copy h2 { margin:8px 0; font-size:clamp(24px,5vw,36px); overflow-wrap:anywhere; }
+.hero-detail-tip { margin:18px 0; padding:14px; background:#1a141b; border:1px solid var(--border); border-radius:8px; }
+.hero-detail-tip strong { color:#ff7b8b; }
+.hero-detail-tip p { margin:6px 0 0; color:#d0c4d1; font-size:13px; line-height:1.8; }
+.hero-detail-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.hero-detail-actions .favorite-btn { margin:0; }
+#heroDetailPage { min-width:0; }
+#heroDetailPage .hero-detail-layout { max-width:980px; margin:0 auto; }
+#heroDetailPage .hero-detail-art { height:420px; }
+#heroDetailPage .hero-detail-copy h2 { font-size:clamp(30px,5vw,46px); }
+.hero-detail-actions a { display:flex; align-items:center; justify-content:center; text-align:center; }
 /* Individual hero build modal */
 .hero-build-btn { width:100%; margin:7px 0 2px; padding:9px 10px; font-size:10px; }
 .build-modal[hidden] { display:none; }
@@ -461,6 +488,12 @@ details p { line-height:1.7; }
 .build-modal-note { color:#f1d4a1; font-size:12px; line-height:1.8; }
 body.modal-open { overflow:hidden; }
 @media(max-width:650px) {
+ .hero-detail-modal { padding:8px; }
+ .hero-detail-modal-card { padding:17px; max-height:94dvh; }
+ .hero-detail-layout { grid-template-columns:1fr; gap:14px; }
+ .hero-detail-art { height:230px; }
+ #heroDetailPage .hero-detail-art { height:300px; }
+ .hero-detail-actions { grid-template-columns:1fr; }
  .build-modal { padding:8px; }
  .build-modal-card { padding:17px; max-height:94dvh; }
  .hero-build-btn { font-size:10px; }
