@@ -1,8 +1,26 @@
 {
   "source": "MOONTON Games official news",
   "sourceUrl": "https://en.moonton.com/news/index.html",
-  "updatedAt": "2026-10-14T15:00:00Z",
+  "updatedAt": "2026-10-13T21:15:00Z",
   "articles": [
+    {
+      "title": "Malaysia's MLBB community takes centre stage at the 10th Anniversary Carnival in Kuching",
+      "description": "На юбилейном событии в Кучинге прошли фан-встречи и показательные матчи с участием Selangor Red Giants, Team Saiyan и Bigetron MY by VIT.",
+      "published": "2026-10-13",
+      "url": "https://en.moonton.com/news/381.html"
+    },
+    {
+      "title": "MOONTON Games Brings MLBB's 10-Year Milestone to Surabaya as It Looks to the Next Decade",
+      "description": "MOONTON Games отметила 10-летие MLBB в Сурабае; разработчики встретились с игроками и сообществом.",
+      "published": "2026-10-13",
+      "url": "https://en.moonton.com/news/380.html"
+    },
+    {
+      "title": "MLBB goes ALL IN with Filipino players to celebrate 10 years together—and look ahead to the next chapter",
+      "description": "В рамках юбилейного события на Филиппинах прошли активности с участием игроков MPL, создателей контента и фанатов MLBB.",
+      "published": "2026-10-11",
+      "url": "https://en.moonton.com/news/379.html"
+    },
     {
       "title": "Mobile Legends: Bang Bang successfully concludes historic Asian Games debut as Myanmar claims inaugural gold at Aichi-Nagoya 2026",
       "description": "Мьянма победила Индонезию в финале со счётом 4:0 и завоевала первую золотую медаль MLBB на Азиатских играх.",
@@ -11,27 +29,33 @@
     },
     {
       "title": "MPL Philippines Season 18 Playoffs heads to PhilSports Arena, marking a major milestone in MLBB's 10th anniversary",
-      "description": "Плей-офф MPL Philippines Season 18 запланирован на 21–25 октября 2026 года.",
+      "description": "Плей-офф MPL Philippines Season 18 запланирован на 21–25 октября 2026 года; результаты определят представителей Филиппин на M8.",
       "published": "2026-09-26",
       "url": "https://en.moonton.com/news/377.html"
     },
     {
       "title": "Visa, MOONTON Games extend collaboration with new three-year partnership for Mobile Legends: Bang Bang's M Series",
-      "description": "MOONTON Games объявила о продлении партнёрства для следующих чемпионатов M Series.",
+      "description": "Visa станет глобальным платёжным партнёром M8, M9 и M10; партнёрство рассчитано на три чемпионата.",
       "published": "2026-09-21",
       "url": "https://en.moonton.com/news/376.html"
     },
     {
-      "title": "Thailand's time to rise continues: MSL TH Season 2 opens the road to the MCT SEA and the M8",
-      "description": "MSL Thailand Season 2 проходит с 11 сентября по 18 октября 2026 года.",
-      "published": "2026-09-09",
-      "url": "https://en.moonton.com/news/373.html"
+      "title": "MLBB Continental Championships Season 8 steps into global spotlight following Team Spirit's historic MSC triumph",
+      "description": "MCC Season 8 проходит с 28 августа по 31 октября; Team Spirit защищает региональный титул после победы на MSC 2026.",
+      "published": "2026-08-26",
+      "url": "https://en.moonton.com/news/368.html"
     },
     {
-      "title": "From Paris to Istanbul! MLBB unveils M8 World Championship slot allocation after historic Esports World Cup three-peat",
-      "description": "MOONTON Games объявила распределение слотов для M8 World Championship, который пройдёт в Стамбуле.",
-      "published": "2026-08-26",
-      "url": "https://en.moonton.com/news/370.html"
+      "title": "Team Spirit validates Mobile Legends: Bang Bang's global expansion strategy with historic Mid Season Cup win at the 2026 Esports World Cup in Paris",
+      "description": "Team Spirit победила Yangon Galacticos 4:3 в финале MSC 2026 и стала первой командой вне Юго-Восточной Азии, выигравшей крупный международный титул MLBB.",
+      "published": "2026-08-02",
+      "url": "https://en.moonton.com/news/360.html"
+    },
+    {
+      "title": "Thailand's time to rise continues: MSL TH Season 2 opens the road to the MCT SEA and the M8",
+      "description": "MSL Thailand Season 2 формирует путь команд к MCT SEA и Wild Card M8; сезон проходит осенью 2026 года.",
+      "published": "2026-09-09",
+      "url": "https://en.moonton.com/news/373.html"
     }
   ]
 }
