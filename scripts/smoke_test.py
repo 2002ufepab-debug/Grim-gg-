@@ -18,7 +18,7 @@ script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
-for asset in ("styles.css?v=41", "talents.css?v=2", "script.js?v=44", "talents.js?v=4"):
+for asset in ("styles.css?v=41", "talents.css?v=2", "script.js?v=45", "talents.js?v=4"):
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
 
 for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports"):
