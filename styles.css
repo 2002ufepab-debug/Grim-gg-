@@ -497,6 +497,18 @@ details p { line-height:1.7; }
 .hero-detail-tip { margin:18px 0; padding:14px; background:#1a141b; border:1px solid var(--border); border-radius:8px; }
 .hero-detail-tip strong { color:#ff7b8b; }
 .hero-detail-tip p { margin:6px 0 0; color:#d0c4d1; font-size:13px; line-height:1.8; }
+
+.hero-talents-section { margin:22px 0; }
+.hero-talent-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:12px; }
+.hero-talent-card { min-width:0; padding:14px; background:linear-gradient(145deg,#211820,#151116); border:1px solid #49303d; border-radius:10px; }
+.hero-talent-label { display:block; margin-bottom:7px; color:#ff8192; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.hero-talent-card p { margin:0; color:#e1d6df; font-size:12px; line-height:1.75; overflow-wrap:anywhere; }
+.hero-talents-section > .fine-print { margin-top:12px; }
+@media(max-width:640px) {
+  .hero-talent-grid { grid-template-columns:1fr; gap:8px; }
+  .hero-talent-card { padding:12px; }
+}
+
 .hero-detail-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
 .hero-detail-actions .favorite-btn { margin:0; }
 #heroDetailPage { min-width:0; }
