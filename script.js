@@ -653,13 +653,13 @@ function renderHeroDetailContent(hero, target) {
     <div class="hero-detail-layout">
       <div class="hero-detail-left">
         <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
+        ${buildSection}
       </div>
       <div class="hero-detail-copy">
         <span class="eyebrow">GRIM_GG / HERO PROFILE</span>
         <h2 id="${headingId}">${escapeHTML(hero.name)}</h2>
         <p class="hero-role">${escapeHTML(hero.role || roles.join(" / "))}</p>
         <div class="hero-tags">${roles.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
-        ${buildSection}
         <div class="hero-detail-actions">
           ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
           <button type="button" class="btn btn-ghost" data-open-hero-full="${escapeHTML(hero.name)}">Полная страница ↗</button>
