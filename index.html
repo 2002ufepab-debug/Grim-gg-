@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b090c">
+  <meta name="description" content="Grim_gg — гайды, сборки и контрпики героев Mobile Legends: Bang Bang.">
+  <title>Grim_gg — Mobile Legends гайды</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="scanline" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Grim gg — главная"><span class="brand-mark">G<span>_</span></span><span>GRIM<span class="red">_GG</span><small>MLBB COMPANION</small></span></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
+    <nav class="nav" id="nav"><a href="#heroes">Герои</a><a href="#counterpicks">Контрпики</a><a href="#builds">Сборки</a><a href="#guides">Гайды</a></nav>
+    <a class="header-cta" href="#counterpicks">Найти контрпик <span>↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero-section" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> ТВОЯ ТАКТИЧЕСКАЯ БАЗА MLBB</div>
+        <h1>ИГРАЙ<br>УМНЕЕ<span class="red">.</span><br><span class="outline">ПОБЕЖДАЙ</span></h1>
+        <p class="hero-desc">Контрпики, сборки и тактики, которые помогают принимать лучшие решения ещё до начала матча.</p>
+        <div class="hero-actions"><a class="btn btn-red" href="#counterpicks">Найти контрпик <span>→</span></a><a class="btn btn-ghost" href="#heroes">Изучить героев</a></div>
+        <div class="hero-stats"><div><strong>01</strong><span>Выбери героя</span></div><div><strong>02</strong><span>Подбери сборку</span></div><div><strong>03</strong><span>Играй с планом</span></div></div>
+      </div>
+      <div class="hero-art" aria-label="Абстрактная красная игровая эмблема">
+        <div class="art-ring ring-one"></div><div class="art-ring ring-two"></div><div class="art-cross">✕</div>
+        <div class="art-core"><span>G</span><i>_GG</i></div><div class="art-label label-top">TACTICAL DATABASE <b>/// 001</b></div><div class="art-label label-bottom"><span>WIN WITH A PLAN</span><b>GRIM_GG</b></div>
+        <div class="art-coordinate">27° 11' GG</div>
+      </div>
+      <div class="hero-bottom-line"><span>МЕНЬШЕ СЛУЧАЙНОСТИ — БОЛЬШЕ ТАКТИКИ</span><span>SCROLL TO EXPLORE ↓</span></div>
+    </section>
+
+    <section class="section" id="counterpicks">
+      <div class="section-heading"><div><div class="eyebrow">01 / PICK SMART</div><h2>НАЙДИ <span class="red">КОНТРПИК</span></h2></div><p>Выбери вражеского героя — получи стартовую подсказку, кого рассмотреть в ответ.</p></div>
+      <div class="counter-box">
+        <label for="enemySelect">Кого выбрал соперник?</label>
+        <div class="counter-controls"><select id="enemySelect"><option value="">Выбери героя...</option></select><button class="btn btn-red" id="counterBtn">Подобрать ↗</button></div>
+        <div class="counter-result" id="counterResult" aria-live="polite"><div class="result-icon">?</div><div><strong>Твой следующий ход</strong><p>Подсказка появится после выбора героя. Контрпик зависит от состава команды и умения играть на герое.</p></div></div>
+        <p class="fine-print">Подсказки — стартовая рекомендация сообщества, а не гарантированный результат. Учитывай патч, роли и состав обеих команд.</p>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="heroes">
+      <div class="section-heading"><div><div class="eyebrow">02 / HERO DATABASE</div><h2>ВЫБЕРИ СВОЕГО <span class="red">ГЕРОЯ</span></h2></div><p>Быстрый справочник по ролям. Фильтруй героев и открывай краткие игровые советы.</p></div>
+      <div class="filter-row" id="roleFilters"><button class="filter active" data-role="Все">Все роли</button><button class="filter" data-role="Лес">Лес</button><button class="filter" data-role="Мид">Мид</button><button class="filter" data-role="Голд">Голд</button><button class="filter" data-role="EXP">EXP</button><button class="filter" data-role="Роум">Роум</button></div>
+      <div class="hero-grid" id="heroGrid"></div>
+    </section>
+
+    <section class="section" id="builds">
+      <div class="section-heading"><div><div class="eyebrow">03 / BUILD LAB</div><h2>СБОРКИ ДЛЯ <span class="red">МАТЧА</span></h2></div><p>Примеры базовых сборок. Проверяй актуальность предметов после обновлений игры.</p></div>
+      <div class="build-grid" id="buildGrid"></div>
+    </section>
+
+    <section class="section guides-section" id="guides">
+      <div class="section-heading"><div><div class="eyebrow">04 / LEVEL UP</div><h2>БИБЛИОТЕКА <span class="red">ГАЙДОВ</span></h2></div><p>Короткие практические советы, которые можно применить в следующем матче.</p></div>
+      <div class="guide-grid">
+        <article class="guide-card"><span class="guide-num">GUIDE_001</span><div class="guide-symbol">⌖</div><h3>КАК СОБРАТЬ СБАЛАНСИРОВАННУЮ КОМАНДУ</h3><p>Урон — это важно, но команде также нужны контроль, передняя линия и возможность начинать бой.</p><button class="text-link guide-open" data-guide="team">Читать советы <span>↗</span></button></article>
+        <article class="guide-card"><span class="guide-num">GUIDE_002</span><div class="guide-symbol">◈</div><h3>КОГДА ПОКУПАТЬ ЗАЩИТНЫЕ ПРЕДМЕТЫ</h3><p>Подстраивай предметы под главную угрозу соперника, а не копируй одну сборку каждый матч.</p><button class="text-link guide-open" data-guide="items">Читать советы <span>↗</span></button></article>
+        <article class="guide-card"><span class="guide-num">GUIDE_003</span><div class="guide-symbol">⌁</div><h3>КАРТА ВАЖНЕЕ ЛИШНЕГО УБИЙСТВА</h3><p>Следи за мини-картой, волнами миньонов и целями. Не каждый бой стоит риска.</p><button class="text-link guide-open" data-guide="map">Читать советы <span>↗</span></button></article>
+      </div>
+      <div class="guide-detail" id="guideDetail" hidden aria-live="polite"></div>
+    </section>
+
+    <section class="join-banner"><div><div class="eyebrow">YOUR NEXT MATCH STARTS HERE</div><h2>ТАКТИКА — ТВОЁ <span class="red">ПРЕИМУЩЕСТВО.</span></h2><p>Сохрани Grim_gg и возвращайся перед следующим матчем.</p></div><a class="btn btn-red" href="#home">Наверх ↑</a></section>
+  </main>
+
+  <footer class="footer"><a class="brand brand-small" href="#home"><span class="brand-mark">G<span>_</span></span><span>GRIM<span class="red">_GG</span><small>MLBB COMPANION</small></span></a><p>Неофициальный фанатский проект для игроков Mobile Legends: Bang Bang.</p><span class="footer-copy">© <span id="year"></span> GRIM_GG · СОЗДАНО ДЛЯ ИГРОКОВ</span></footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
