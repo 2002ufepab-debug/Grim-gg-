@@ -3220,3 +3220,19 @@ img.hero-image,
  .hero-talent-pick-num,.build-talent-index { min-width:34px; font-size:8px; }
  .hero-talent-pick p,.build-talent-row p { font-size:10px; }
 }
+
+
+/* Build fixes: visible Retribution icon and consistent talent emblems across views. */
+.build-spell-display { display:flex; align-items:center; gap:10px; min-width:0; margin-top:9px; color:#e8dce8; font-size:12px; line-height:1.55; }
+.build-spell-display > span:last-child { min-width:0; }
+.build-spell-icon { display:block; flex:0 0 48px; width:48px; height:48px; object-fit:contain; border:1px solid #7e3448; border-radius:8px; background:#171019; box-shadow:0 0 14px #ff30481c; }
+.build-spell-placeholder { display:grid; flex:0 0 42px; width:42px; height:42px; place-items:center; border:1px solid #6c3547; border-radius:8px; background:#21131d; color:#ff9cab; font-size:20px; }
+.hero-talent-pick .talent-icon,
+.build-talent-row .talent-icon { display:grid; place-items:center; width:30px; height:30px; margin:0; padding:0; overflow:hidden; border:0; border-radius:6px; background:transparent; }
+.hero-talent-pick .talent-icon svg,
+.build-talent-row .talent-icon svg { display:block; width:100%; height:100%; }
+.hero-talent-pick-icon,.build-talent-glyph { width:32px; height:32px; padding:0; overflow:hidden; }
+@media(max-width:520px) {
+  .build-spell-display { align-items:flex-start; font-size:11px; }
+  .build-spell-icon { flex-basis:42px; width:42px; height:42px; }
+}
