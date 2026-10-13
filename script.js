@@ -714,8 +714,12 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const saved = favoriteItems.has(item.id);
     const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
-    const iconMarkup = iconSlug
-      ? `<img class="item-image" src="${escapeHTML(ITEM_IMAGE_BASE + iconSlug + ".png")}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
+    // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
+    const iconSource = item.id === "retribution"
+      ? "assets/retribution.svg"
+      : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const iconMarkup = iconSource
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
       : `<div class="item-symbol" aria-label="Иконка предмета недоступна">${symbol}</div>`;
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
