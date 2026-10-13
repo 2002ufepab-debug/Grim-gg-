@@ -415,6 +415,12 @@ function getHeroClasses(hero) {
 }
 
 function itemIconSlug(name) {
+  const overrides = {
+    "Magic Shoes":"magic_boots",
+    "Retribution":null,
+    "Roaming Blessing":null
+  };
+  if (Object.prototype.hasOwnProperty.call(overrides,name)) return overrides[name];
   return String(name)
     .toLowerCase()
     .replace(/['’]/g, "")
@@ -519,10 +525,13 @@ function renderItems() {
   grid.innerHTML = filtered.map(item=>{
     const saved = favoriteItems.has(item.id);
     const symbol = escapeHTML(item.ru.slice(0,1).toUpperCase());
-    const iconUrl = ITEM_IMAGE_BASE + itemIconSlug(item.name) + ".png";
+    const iconSlug = itemIconSlug(item.name);
+    const iconMarkup = iconSlug
+      ? `<img class="item-image" src="${escapeHTML(ITEM_IMAGE_BASE + iconSlug + ".png")}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
+      : `<div class="item-symbol" aria-label="Иконка предмета недоступна">${symbol}</div>`;
 
     return `<article class="item-card">
-      <div class="item-image-wrap"><img class="item-image" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))"></div>
+      <div class="item-image-wrap">${iconMarkup}</div>
       <div class="item-content">
         <span class="item-category">${escapeHTML(categories[item.cat] || item.cat)}</span>
         <h3>${escapeHTML(item.ru)}</h3>
