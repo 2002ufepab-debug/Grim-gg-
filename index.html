@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b090c">
   <meta name="description" content="Grim_gg — справочник героев, контрпиков, предметов и сборок Mobile Legends: Bang Bang.">
   <title>Grim_gg — MLBB Tactical Database</title>
-  <link rel="stylesheet" href="styles.css?v=4">
-  <script src="script.js?v=6" defer></script>
+  <link rel="stylesheet" href="styles.css?v=5">
+  <script src="script.js?v=7" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -79,12 +79,13 @@
 <section class="section section-muted" id="tierlist">
   <div class="section-heading">
     <div><div class="eyebrow">02 / HERO TIER LIST</div><h2>ТИР-ЛИСТ <span class="red">ГЕРОЕВ</span></h2></div>
-    <p>Сравнивай героев по предварительной оценке Grim_gg и фильтруй список по роли.</p>
+    <p>Полный список доступных в базе героев: ищи по имени, сортируй по уровню и отбирай по ролям.</p>
   </div>
   <div class="tier-disclaimer">
     <strong>Черновой рейтинг Grim_gg</strong>
     <p>Это редакционная оценка для ориентира, а не официальная статистика винрейта. Сила героев меняется от патча, ранга, состава команды и навыков игрока.</p>
   </div>
+  <input class="search tier-search" id="tierSearch" type="search" placeholder="Найти героя в тир-листе..." aria-label="Поиск героя в тир-листе">
   <div class="filter-row tier-filters" id="tierFilters" aria-label="Фильтр по уровню">
     <button class="filter active" data-tier="Все">Все уровни</button>
     <button class="filter" data-tier="S">S — сильные</button>
@@ -103,7 +104,7 @@
   </div>
   <p class="count" id="tierCount" aria-live="polite"></p>
   <div class="tier-grid" id="tierGrid"><p class="loading">Подготавливаем тир-лист...</p></div>
-  <p class="fine-print">Список включает примеры героев и может быть неполным. Перед ранговой игрой сверяйся с текущим патчем и собственным опытом.</p>
+  <p class="fine-print">В тир-листе показываются все герои, которые удалось загрузить в базу на этом устройстве. Герои без отдельной редакционной оценки временно получают нейтральный уровень B. Это не официальная статистика винрейта; рейтинг стоит пересматривать после патчей.</p>
 </section>
 
 <section class="section" id="counterpicks">
