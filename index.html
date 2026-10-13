@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b090c">
   <meta name="description" content="Grim_gg — справочник героев, контрпиков, предметов и сборок Mobile Legends: Bang Bang.">
   <title>Grim_gg — MLBB Tactical Database</title>
-  <link rel="stylesheet" href="styles.css?v=3">
-  <script src="script.js?v=5" defer></script>
+  <link rel="stylesheet" href="styles.css?v=4">
+  <script src="script.js?v=6" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -19,6 +19,7 @@
   <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
   <nav class="nav" id="nav">
     <a href="#heroes">Герои</a>
+    <a href="#tierlist">Тир-лист</a>
     <a href="#counterpicks">Контрпики</a>
     <a href="#items">Предметы</a>
     <a href="#builds">Сборки</a>
@@ -72,6 +73,37 @@
   <p class="count" id="heroCount" aria-live="polite"></p>
   <div class="hero-grid" id="heroGrid"><p class="loading">Загружаем базу героев...</p></div>
   <p class="fine-print" id="heroSourceNote">Каталог героев и изображения предоставлены сторонним сообществом, не являются официальными данными игры и могут отставать от текущего патча.</p>
+</section>
+
+
+<section class="section section-muted" id="tierlist">
+  <div class="section-heading">
+    <div><div class="eyebrow">02 / HERO TIER LIST</div><h2>ТИР-ЛИСТ <span class="red">ГЕРОЕВ</span></h2></div>
+    <p>Сравнивай героев по предварительной оценке Grim_gg и фильтруй список по роли.</p>
+  </div>
+  <div class="tier-disclaimer">
+    <strong>Черновой рейтинг Grim_gg</strong>
+    <p>Это редакционная оценка для ориентира, а не официальная статистика винрейта. Сила героев меняется от патча, ранга, состава команды и навыков игрока.</p>
+  </div>
+  <div class="filter-row tier-filters" id="tierFilters" aria-label="Фильтр по уровню">
+    <button class="filter active" data-tier="Все">Все уровни</button>
+    <button class="filter" data-tier="S">S — сильные</button>
+    <button class="filter" data-tier="A">A — надёжные</button>
+    <button class="filter" data-tier="B">B — ситуативные</button>
+    <button class="filter" data-tier="C">C — требуют условий</button>
+  </div>
+  <div class="filter-row tier-role-filters" id="tierRoleFilters" aria-label="Фильтр по роли">
+    <button class="filter active" data-tier-role="Все">Все роли</button>
+    <button class="filter" data-tier-role="Убийца">Убийцы</button>
+    <button class="filter" data-tier-role="Маг">Маги</button>
+    <button class="filter" data-tier-role="Стрелок">Стрелки</button>
+    <button class="filter" data-tier-role="Боец">Бойцы</button>
+    <button class="filter" data-tier-role="Танк">Танки</button>
+    <button class="filter" data-tier-role="Поддержка">Поддержка</button>
+  </div>
+  <p class="count" id="tierCount" aria-live="polite"></p>
+  <div class="tier-grid" id="tierGrid"><p class="loading">Подготавливаем тир-лист...</p></div>
+  <p class="fine-print">Список включает примеры героев и может быть неполным. Перед ранговой игрой сверяйся с текущим патчем и собственным опытом.</p>
 </section>
 
 <section class="section" id="counterpicks">
