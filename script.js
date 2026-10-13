@@ -556,7 +556,6 @@ const roleBuildTemplates = {
 };
 const featuredHeroBuilds = {
   "Fanny": {role:"Лес · Убийца", goal:"Мобильность и физический урон", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Rose Gold Meteor","Immortality"], emblem:"Эмблема убийцы — один из возможных вариантов; сверяй таланты с актуальной версией.", spell:"Возмездие для игры в лесу.", note:"Пример для ориентира. Фанни требовательна к энергии и механике; корректируй сборку под матч."},
-  "Vexana": {role:"Мид · Маг", goal:"Магический урон и пробивание", items:["Arcane Boots","Glowing Wand","Lightning Truncheon","Holy Crystal","Divine Glaive","Immortality"], emblem:"Эмблема мага с талантами под урон и выбранный стиль.", spell:"Вспышка — для дополнительной мобильности.", note:"Пример на основе доступных сборочных ориентиров; меняй защитный слот под угрозы."},
   "Claude": {role:"Голд · Стрелок", goal:"Скорость атаки и урон по выносливым целям", items:["Swift Boots","Demon Hunter Sword","Golden Staff","Corrosion Scythe","Malefic Roar","Immortality"], emblem:"Эмблема стрелка с талантами под скорость атаки.", spell:"Вдохновение или Вспышка — выбирай по ситуации.", note:"Порядок покупки зависит от матча; проверяй текущие параметры и доступность предметов."},
   "Belerick": {role:"Роум · Танк", goal:"Защита команды и выживаемость", items:["Tough Boots","Cursed Helmet","Dominance Ice","Antique Cuirass","Immortality","Guardian Helmet"], emblem:"Эмблема танка или поддержки с подходящими защитными талантами.", talents:"Упор на стойкость и контроль; выбирай таланты на выживаемость, а последний — под начало боя.", spell:"Возмездие духа или Вспышка — по составу команд и твоей задаче.", note:"Сборка ориентирована на выживаемость; меняй защиту по реальным угрозам соперника."},
   "Miya": {role:"Голд · Стрелок",goal:"Скорость атаки и критический урон",items:["Swift Boots","Berserker's Fury","Windtalker","Haas's Claws","Malefic Roar","Immortality"],emblem:"Эмблема стрелка.",talents:"Таланты на скорость атаки/криты; последний талант — на урон обычных атак.",spell:"Вспышка против угроз или Вдохновение для усиления атак.",note:"Следи за безопасной позицией; меняй предметы под защиту соперника."},
@@ -596,9 +595,9 @@ let activeBuildVariant = "standard";
 
 const magicDamageHeroNames = new Set([
   "Alice","Aurora","Cecilion","Chang'e","Cyclops","Esmeralda","Eudora",
-  "Faramis","Gord","Harith","Harley","Kadita","Kagura","Kimmy","Lylia",
+  "Faramis","Gord","Guinevere","Harith","Harley","Kadita","Kagura","Kimmy","Lylia",
   "Luo Yi","Lunox","Nana","Novaria","Odette","Pharsa","Selena","Valentina",
-  "Vale","Valir","Vexana","Xavier","Yve","Zhask"
+  "Vale","Valir","Vexana","Xavier","Yve","Zhask","Julian","Silvanna"
 ]);
 const roleAliases = {
   "assassin":"Убийца","убийца":"Убийца",
@@ -673,7 +672,7 @@ function renderHeroBuildModal() {
   const variantLabel = activeBuildVariant === "standard" ? "Основная" : activeBuildVariant === "antiTank" ? "Против танков" : "Защитная";
   const talentText = build.talents || "Первый талант: под стиль героя и выбранную линию. Второй талант: урон/выживаемость по ситуации. Третий талант: основной талант эмблемы, подходящий механике героя.";
   content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(activeBuildHeroName)} <span class="red">/ СБОРКА</span></h2>
-    <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${build.isMagicBuild ? "Магический урон" : "Физический / смешанный урон"} · ${escapeHTML(build.goal)}</p>
+    <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${build.isMagicBuild ? "МАГИЧЕСКАЯ СБОРКА" : "СБОРКА ПО РОЛИ"} · ${escapeHTML(build.goal)}</p>
     <div class="build-variant-tabs" role="group" aria-label="Вариант сборки">
       <button type="button" class="build-variant ${activeBuildVariant==="standard"?"active":""}" data-build-variant="standard" aria-pressed="${activeBuildVariant==="standard"}">Основная</button>
       <button type="button" class="build-variant ${activeBuildVariant==="antiTank"?"active":""}" data-build-variant="antiTank" aria-pressed="${activeBuildVariant==="antiTank"}">Против танков</button>
