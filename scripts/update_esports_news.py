@@ -31,7 +31,7 @@ def extract_page(url: str, html: str) -> list[dict]:
     for anchor in soup.find_all("a", href=True):
         absolute = urljoin(url, anchor["href"])
         parsed = urlparse(absolute)
-        if parsed.netloc.lower() != "en.moonton.com" or not NEWS_PATH.search(parsed.path) or re.fullmatch(r"index\\d*\\.html", parsed.path.rsplit("/", 1)[-1], re.I):
+        if parsed.netloc.lower() != "en.moonton.com" or not NEWS_PATH.search(parsed.path) or re.fullmatch(r"index\d*\.html", parsed.path.rsplit("/", 1)[-1], re.I):
             continue
         title = clean(anchor.get_text(" ", strip=True))
         if not title or title.lower() in {"view more", "read more", "more"}:
