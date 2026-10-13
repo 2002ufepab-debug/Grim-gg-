@@ -589,6 +589,9 @@ let activeTier = "Все";
 let activeTierRole = "Все";
 let itemQuery = "";
 let itemCategory = "Все";
+let itemPurpose = "Все";
+let itemSort = "default";
+let itemOnlyFavorites = false;
 let perkQuery = "";
 let perkCategory = "Все";
 let buildFilter = "Все";
@@ -991,6 +994,23 @@ function effectIconMarkup(item) {
   return `<svg class="item-image item-image-vector" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(item.ru)}" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="effect-bg-${escapeHTML(item.id)}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${glow}"/><stop offset="1" stop-color="#100d13"/></linearGradient></defs><rect x="3" y="3" width="90" height="90" rx="18" fill="url(#effect-bg-${escapeHTML(item.id)})" stroke="#765065" stroke-width="2"/><circle cx="48" cy="48" r="35" fill="#ffffff08" stroke="#ffffff18"/>${art}</svg>`;
 }
 
+function itemFallbackIconMarkup(item) {
+  const cat = item.cat;
+  const icon = cat === "Attack"
+    ? '<path d="M15 3l6 6-3 3-6-6 3-3Z"/><path d="M12 6 4 14l-1 7 7-1 8-8M7 17l-2-2"/>'
+    : cat === "Magic"
+      ? '<path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/>'
+      : cat === "Defense"
+        ? '<path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6l8-3Z"/><path d="m8 12 2.5 2.5L16 9"/>'
+        : cat === "Movement"
+          ? '<path d="M4 5h6l2 7 6 2 2 4H4V5Z"/><path d="M8 8h3M9 11h3M11 14h3"/>'
+          : cat === "Jungle"
+            ? '<path d="M12 3 5 7v6c0 4 3 6.5 7 8 4-1.5 7-4 7-8V7l-7-4Z"/><path d="m9 12 2 2 4-5"/>'
+            : '<path d="M12 3 21 12 12 21 3 12 12 3Z"/><path d="M8 12h8M12 8v8"/>';
+  const label = categories[cat] || cat || "Предмет";
+  return `<div class="item-symbol item-symbol-fallback" role="img" aria-label="Иконка: ${escapeHTML(label)}"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icon}</g></svg></div>`;
+}
+
 function renderItemCards(filtered, grid, emptyMessage) {
   if (!grid) return;
   if (!filtered.length) {
@@ -999,8 +1019,8 @@ function renderItemCards(filtered, grid, emptyMessage) {
   }
   grid.innerHTML = filtered.map(item=>{
     const saved = favoriteItems.has(item.id);
-    const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
+    const fallbackIcon = itemFallbackIconMarkup(item);
     // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
     // Используем исходные PNG-иконки предметов и усилений там, где они доступны.
     // Для общего роум-благословения оставляем собственную векторную пиктограмму:
@@ -1014,8 +1034,8 @@ function renderItemCards(filtered, grid, emptyMessage) {
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = vectorIcon || (iconSource
-      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : ""))}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))}">`
-      : `<div class="item-symbol" aria-label="Иконка предмета недоступна">${symbol}</div>`);
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : ""))}" data-fallback="${escapeHTML(fallbackIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
+      : fallbackIcon);
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
       <div class="item-content">
@@ -1031,17 +1051,37 @@ function renderItemCards(filtered, grid, emptyMessage) {
   }).join("");
 }
 
+function itemMatchesPurpose(item) {
+  if (itemPurpose === "Все") return true;
+  const text = `${item.name} ${item.ru} ${item.stats} ${item.desc} ${item.tip}`.toLocaleLowerCase();
+  const rules = {
+    "Крит": /крит|critical|berserker|windtalker|критическ/,
+    "Скорость атаки": /скорост.{0,8}атак|attack speed|swift boots|corrosion scythe|demon hunter sword|golden staff|windtalker/,
+    "Пробивание": /пробиван|penetration|malefic roar|divine glaive|arcane boots|hunter strike/,
+    "Антихил": /противодействие лечению|анти.?хил|anti.?heal|восстановлени.{0,12}здоров|sea halberd|dominance ice/,
+    "Выживаемость": /выживаем|защит|здоров|щит|health|defen|immortality|athena|radiant armor|antique cuirass/,
+    "Лечение и щиты": /лечен|восстановлен|щит|healing|shield|oracle|flask of the oasis|favor|благословение/,
+    "Перезарядка": /перезарядк|cooldown|magic shoes|enchanted talisman/
+  };
+  return (rules[itemPurpose] || /$a/).test(text);
+}
+
 function renderItems() {
   const grid = $("itemGrid");
   if (!grid) return;
-  const filtered = items.filter(item=>{
+  let filtered = items.filter(item=>{
     if (item.cat==="Jungle" || item.cat==="Roam") return false;
     const matchesCategory = itemCategory==="Все" || item.cat===itemCategory;
     const haystack = `${item.name} ${item.ru} ${item.desc} ${item.stats} ${item.tip}`.toLocaleLowerCase();
-    return matchesCategory && haystack.includes(itemQuery);
+    const matchesQuery = haystack.includes(itemQuery);
+    const matchesFavorites = !itemOnlyFavorites || favoriteItems.has(item.id);
+    return matchesCategory && matchesQuery && matchesFavorites && itemMatchesPurpose(item);
   });
-  $("itemCount").textContent = `Предметов в справочнике: ${filtered.length}`;
-  renderItemCards(filtered,grid,"Предметы не найдены.");
+  if (itemSort === "name") filtered.sort((a,b)=>a.ru.localeCompare(b.ru,"ru"));
+  if (itemSort === "favorites") filtered.sort((a,b)=>Number(favoriteItems.has(b.id))-Number(favoriteItems.has(a.id)) || a.ru.localeCompare(b.ru,"ru"));
+  const count = $("itemCount");
+  if (count) count.textContent = `Предметов в справочнике: ${filtered.length}${itemOnlyFavorites ? " · только избранное" : ""}`;
+  renderItemCards(filtered,grid,"Ничего не найдено. Измени поиск или фильтры.");
 }
 
 function renderPerks() {
@@ -1556,6 +1596,24 @@ function setupFilters() {
     if (!button) return;
     itemCategory = button.dataset.category;
     syncFilterSelection($("itemFilters"),"[data-category]",button);
+    renderItems();
+  });
+
+  $("itemPurposeFilters")?.addEventListener("click",event=>{
+    const button = event.target.closest("[data-item-purpose]");
+    if (!button) return;
+    itemPurpose = button.dataset.itemPurpose;
+    syncFilterSelection($("itemPurposeFilters"),"[data-item-purpose]",button);
+    renderItems();
+  });
+
+  $("itemSort")?.addEventListener("change",event=>{
+    itemSort = event.target.value;
+    renderItems();
+  });
+
+  $("itemOnlyFavorites")?.addEventListener("change",event=>{
+    itemOnlyFavorites = event.target.checked;
     renderItems();
   });
 
