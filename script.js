@@ -1307,6 +1307,15 @@ function renderComboGuides() {
     </article>`).join("");
 }
 
+function syncFilterSelection(container, selector, activeButton) {
+  if (!container) return;
+  container.querySelectorAll(selector).forEach(button => {
+    const selected = button === activeButton;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-pressed", String(selected));
+  });
+}
+
 function setupFilters() {
   $("comboSearch")?.addEventListener("input",renderComboGuides);
   $("comboFilters")?.addEventListener("click",event=>{
@@ -1585,6 +1594,11 @@ function init() {
 
   favoriteHeroes = new Set(safeRead("grimgg-favorite-heroes").map(String));
   favoriteItems = new Set(safeRead("grimgg-favorite-items").map(String));
+  
+  // Keep the selected filter state available to assistive technology.
+  document.querySelectorAll("[data-role],[data-tier],[data-tier-role],[data-category],[data-perk-category],[data-build-role],[data-combo-role]").forEach(button => {
+    button.setAttribute("aria-pressed", String(button.classList.contains("active")));
+  });
 
   $("heroSearch").addEventListener("input",event=>{
     heroQuery = event.target.value.trim().toLocaleLowerCase();
