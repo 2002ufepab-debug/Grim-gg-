@@ -1105,3 +1105,41 @@ body {
   .hero-build-inline-heading { display: block; }
   .hero-build-inline-heading p { margin-top: 6px; text-align: left; }
 }
+
+
+/* Compact multi-column catalogs: zoom artwork out slightly and fit more cards per row. */
+.hero-grid,
+.item-grid {
+  align-items: stretch;
+}
+@media (min-width: 1200px) {
+  .hero-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .item-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (min-width: 651px) and (max-width: 1199px) {
+  .hero-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .item-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+.hero-image-wrap .hero-image {
+  transform: scale(.88);
+  transform-origin: center center;
+}
+.hero-card:hover .hero-image-wrap .hero-image {
+  transform: scale(.92);
+}
+@media (max-width: 650px) {
+  .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .item-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .hero-image-wrap { height: 118px; }
+  .hero-card-content, .item-content { padding: 8px; }
+  .hero-card h3, .item-card h3 { font-size: 12px; }
+  .hero-image-wrap .hero-image { transform: scale(.84); }
+  .hero-card:hover .hero-image-wrap .hero-image { transform: scale(.88); }
+  .item-image, .item-symbol { width: 50px; height: 50px; }
+}
+@media (max-width: 380px) {
+  .hero-grid, .item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-image-wrap { height: 142px; }
+  .hero-image-wrap .hero-image { transform: scale(.9); }
+  .hero-card:hover .hero-image-wrap .hero-image { transform: scale(.94); }
+}
