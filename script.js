@@ -711,7 +711,10 @@ function renderHeroes() {
         <h3><button type="button" class="hero-name-open" data-open-hero="${escapeHTML(id)}">${escapeHTML(hero.name)}</button></h3>
         <p class="hero-role">${escapeHTML(hero.role || getHeroClasses(hero).join(" / "))}</p>
         <div class="hero-tags">${heroClasses.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
-        <button type="button" class="btn btn-red hero-build-btn" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(heroClasses.join(","))}">Сборка героя ↗</button>
+        <div class="hero-card-actions">
+          <button type="button" class="btn btn-red hero-build-btn" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(heroClasses.join(","))}">Сборка ↗</button>
+          <a class="btn btn-3d hero-card-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель</a>
+        </div>
         <details><summary>Игровой совет ↗</summary><p>${escapeHTML(tip)}</p></details>
         ${favoriteButton("hero",id,saved)}
       </div>
