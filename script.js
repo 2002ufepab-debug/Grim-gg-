@@ -626,7 +626,12 @@ function renderTierList() {
   );
   count.textContent = `Показано ${filtered.length} из ${heroes.length} героев · сортировка по уровню и имени`;
   if (!filtered.length) {
-    grid.innerHTML = '<div class="tier-empty"><strong>Ничего не найдено</strong><p>Измени поиск или сбрось фильтры.</p><button class="btn btn-ghost" type="button" data-tier-reset>Сбросить фильтры</button></div>';
+    const tierHasNoAssignedHeroes = activeTier === "C" && !query && activeTierRole === "Все";
+    const emptyTitle = tierHasNoAssignedHeroes ? "Уровень C пока не назначен" : "Ничего не найдено";
+    const emptyMessage = tierHasNoAssignedHeroes
+      ? "В текущей редакционной оценке герои уровня C не указаны. Герои без отдельной оценки временно отображаются на уровне B."
+      : "Измени поиск или сбрось фильтры.";
+    grid.innerHTML = `<div class="tier-empty"><strong>${emptyTitle}</strong><p>${emptyMessage}</p><button class="btn btn-ghost" type="button" data-tier-reset>Сбросить фильтры</button></div>`;
     return;
   }
   const tierNames = {S:"Высокий приоритет",A:"Надёжный выбор",B:"Ситуативный выбор",C:"Требует условий"};
