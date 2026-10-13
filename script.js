@@ -1502,7 +1502,7 @@ async function loadExternalHeroes() {
 
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
-  const pageIds = ["home","heroes","tierlist","items","perks","builds","favorites","guides","counterpicks","hero"];
+  const pageIds = ["home","heroes","tierlist","items","perks","builds","favorites","guides","counterpicks","esports","hero"];
   const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
   const visibleSection = page === "hero" ? "hero-detail" : page;
 
@@ -1530,6 +1530,7 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     favorites: "Избранное",
     guides: "Комбо и гайды",
     counterpicks: "Контрпики",
+    esports: "Киберспорт",
     hero: "Профиль героя"
   };
   document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — тактическая база Mobile Legends";
