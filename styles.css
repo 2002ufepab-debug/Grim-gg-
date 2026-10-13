@@ -357,16 +357,16 @@ details p { line-height:1.7; }
 .item-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 .item-image {
   display:block;
-  width:57px;
-  height:57px;
+  width:72px;
+  height:72px;
   object-fit:contain;
   filter:drop-shadow(0 4px 10px #0008);
 }
 .item-symbol {
   display:grid;
   place-items:center;
-  width:57px;
-  height:57px;
+  width:72px;
+  height:72px;
   margin:0 auto;
   color:#ff7788;
   background:linear-gradient(145deg,#46202d,#171319);
@@ -377,8 +377,8 @@ details p { line-height:1.7; }
 .item-image-wrap {
   display:grid;
   place-items:center;
-  min-height:95px;
-  padding:16px;
+  min-height:112px;
+  padding:12px;
   background:radial-gradient(ellipse,#2e1a27,#171319 75%);
   border-bottom:1px solid var(--border);
 }
