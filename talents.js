@@ -105,10 +105,15 @@
     }
   };
 
+  // Shared read-only presets let each hero profile display the same talent choices as the Talent Lab.
+  window.GrimGGTalentData = { recommendations, emblemNames: null };
+
   const emblemNames = {
     "Стрелок":"Эмблема стрелка", "Убийца":"Эмблема убийцы", "Маг":"Эмблема мага",
     "Боец":"Эмблема бойца", "Танк":"Эмблема танка", "Поддержка":"Эмблема поддержки"
   };
+
+  window.GrimGGTalentData.emblemNames = emblemNames;
 
   const heroesByRole = {
     "Стрелок":["Клинт","Лесли","Кэрри","Клод","Броуди","Мия","Лейла","Беатрис","Мелисса","Иксия","Москов","Ванван","Ханаби","Бруно"],
