@@ -2642,3 +2642,59 @@ button:active, .btn:active, .filter:active { transform:scale(.985); }
 @media (prefers-reduced-motion: reduce) {
   .hero-card .hero-image-wrap .hero-image { transition: none; }
 }
+
+
+/* Item and perk artwork: clear source icons, consistent sizing, responsive build rows */
+.item-image {
+  width:68px;
+  height:68px;
+  object-fit:contain;
+  image-rendering:auto;
+  filter:drop-shadow(0 5px 12px #0009);
+  transition:transform .18s ease,filter .18s ease;
+}
+.item-card:hover .item-image {
+  transform:scale(1.06);
+  filter:drop-shadow(0 7px 14px #000b);
+}
+.item-image-wrap {
+  min-height:108px;
+  padding:14px;
+}
+.build-item-row {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+.build-item-row > div {
+  display:grid;
+  gap:3px;
+  flex:1 1 auto;
+  min-width:0;
+}
+.build-item-row > .build-slot {
+  flex:0 0 30px;
+}
+.build-item-icon,.build-item-icon-fallback {
+  flex:0 0 44px;
+  width:44px;
+  height:44px;
+  object-fit:contain;
+  padding:3px;
+  image-rendering:auto;
+  filter:drop-shadow(0 3px 7px #0008);
+}
+.build-item-row strong,.build-item-row span {
+  overflow-wrap:anywhere;
+}
+@media(max-width:420px) {
+  .item-image { width:60px; height:60px; }
+  .item-image-wrap { min-height:92px; padding:10px; }
+  .build-item-icon,.build-item-icon-fallback {
+    flex-basis:38px;
+    width:38px;
+    height:38px;
+  }
+  .build-item-row > .build-slot { flex-basis:24px; }
+}
