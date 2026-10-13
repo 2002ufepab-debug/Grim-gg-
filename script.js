@@ -25,6 +25,19 @@ const roleTranslations = {
   fighter:"Боец", tank:"Танк", support:"Поддержка"
 };
 
+const HERO_IMAGE_OVERRIDES = {
+  "chang'e":"chang27e.png",
+  "x.borg":"xborg.png",
+  "luo yi":"luo_yi.png",
+  "yi sun-shin":"yi_sun-shin.png",
+  "yu zhong":"yu_zhong.png",
+  "popol and kupa":"popol_and_kupa.png",
+  "lapu-lapu":"lapu-lapu.png"
+};
+const heroImageFilename = name => HERO_IMAGE_OVERRIDES[String(name || "").toLowerCase()]
+  || (String(name || "").toLowerCase().replace(/[^a-z0-9]/g, "") + ".png");
+const heroImageUrl = name => HERO_IMAGE_BASE + encodeURIComponent(heroImageFilename(name));
+
 const fallbackHeroes = [
   ["Fanny","Лес","Убийца"],["Vexana","Мид","Маг"],
   ["Claude","Голд","Стрелок"],["Belerick","Роум","Танк"],
@@ -63,7 +76,7 @@ const fallbackHeroes = [
   lane:h[1],
   role:h[2],
   roles:[h[2]],
-  image:HERO_IMAGE_BASE + h[0].toLowerCase().replace(/[^a-z0-9]/g,"") + ".png"
+  image:heroImageUrl(h[0])
 }));
 
 const heroTips = {
@@ -555,7 +568,8 @@ function normalizeRemoteHero(hero,index) {
     role:translatedRoles.join(" / ") || "Роль не указана",
     image:filename && /^https?:\/\//i.test(filename)
       ? filename
-      : filename ? HERO_IMAGE_BASE + String(filename).split("/").map(part => encodeURIComponent(part)).join("/") : "",
+      : filename ? HERO_IMAGE_BASE + String(filename).replace(/^images-hero\//, "").split("/").map(part => encodeURIComponent(part)).join("/")
+      : heroImageUrl(name),
     roles:roleText
   };
 }
@@ -1531,7 +1545,7 @@ async function loadExternalHeroes() {
 
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
-  const pageIds = ["home","heroes","tierlist","items","perks","builds","favorites","guides","counterpicks","esports","hero"];
+  const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","counterpicks","esports","hero"];
   const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
   const visibleSection = page === "hero" ? "hero-detail" : page;
 
@@ -1555,6 +1569,7 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     tierlist: "Тир-лист",
     items: "Предметы",
     perks: "Перки и заклинания",
+    talents: "Таланты и эмблемы",
     builds: "Сборки",
     favorites: "Избранное",
     guides: "Комбо и гайды",
