@@ -390,7 +390,8 @@ const categories = {
   Defense:"Защита",
   Movement:"Передвижение",
   Jungle:"Лес",
-  Roam:"Роум"
+  Roam:"Роум",
+  Other:"Прочее"
 };
 
 const builds = [
@@ -1400,7 +1401,7 @@ async function loadExternalItems() {
       if (/armor|shield|helmet|breastplate|guardian|immortality|oracle|wings|belt|cloak|jerkin|legplates|vitality|healing necklace|rock potion|black ice|dreadnaught|molten essence|silence robe|chastise|thunder belt|dominance|athena|antique|radiant|cursed|queen's wings/.test(value)) return "Defense";
       if (/potion/.test(value)) return "Attack";
       if (/dagger|spear|sword|bow|glove|scythe|malefic|fury|corrosion|despair|heptaseas|hunter strike|wind of nature|windtalker|sky piercer|hunting bow|knife|crossbow|vampire mallet|ogre tomahawk|regular spear|rogue meteor|hass's claws|berserker/.test(value)) return "Attack";
-      return index < 34 ? "Attack" : index < 63 ? "Magic" : index < 88 ? "Defense" : index < 97 ? "Movement" : "Roam";
+      return "Other";
     };
     data.forEach((entry,index)=>{
       const name = String(entry["name-equipment"] || "").trim();
