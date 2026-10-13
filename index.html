@@ -7,8 +7,8 @@
   <meta name="theme-color" content="#0b090c">
   <meta name="description" content="Grim_gg — справочник Mobile Legends: Bang Bang: герои, контрпики, предметы, сборки, комбо навыков и гайды.">
   <title>Grim_gg — MLBB Tactical Database</title>
-  <link rel="stylesheet" href="styles.css?v=13">
-  <script src="script.js?v=25" defer></script>
+  <link rel="stylesheet" href="styles.css?v=14">
+  <script src="script.js?v=26" defer></script>
 </head>
 <body>
 <header class="site-header">
@@ -76,6 +76,14 @@
   <p class="fine-print" id="heroSourceNote">Каталог героев и изображения предоставлены сторонним сообществом, не являются официальными данными игры и могут отставать от текущего патча.</p>
 </section>
 
+
+<section class="section section-muted page-hidden" id="hero-detail" aria-live="polite">
+  <div class="section-heading">
+    <div><div class="eyebrow">HERO INTELLIGENCE / PROFILE</div><h2>ПРОФИЛЬ <span class="red">ГЕРОЯ</span></h2></div>
+    <a class="btn btn-ghost" href="?page=heroes">← Все герои</a>
+  </div>
+  <div id="heroDetailPage"></div>
+</section>
 
 <section class="section section-muted" id="tierlist">
   <div class="section-heading">
@@ -239,6 +247,13 @@
   <p>Неофициальный фанатский справочник для игроков Mobile Legends: Bang Bang.</p>
   <span>© <span id="year"></span> GRIM_GG</span>
 </footer>
+<div class="hero-detail-modal" id="heroDetailModal" hidden>
+  <div class="hero-detail-backdrop" data-close-hero></div>
+  <section class="hero-detail-modal-card" role="dialog" aria-modal="true" aria-labelledby="heroDetailModalTitle">
+    <button class="hero-detail-close" type="button" data-close-hero aria-label="Закрыть профиль героя">×</button>
+    <div id="heroDetailModalContent"></div>
+  </section>
+</div>
 <div class="build-modal" id="buildModal" hidden>
   <div class="build-modal-backdrop" data-close-build></div>
   <section class="build-modal-card" role="dialog" aria-modal="true" aria-labelledby="buildModalTitle">
