@@ -3202,3 +3202,21 @@ img.hero-image,
 @media (prefers-reduced-motion: reduce) {
   .hero-grid .hero-image-wrap .hero-image { transition: none; }
 }
+
+
+/* Hero build talent picks: visible alongside the equipment list */
+.hero-talent-card-picks { min-width:0; }
+.hero-talent-picks,.build-talent-list { display:grid; gap:9px; margin-top:10px; }
+.hero-talent-pick,.build-talent-row { display:grid; grid-template-columns:auto auto minmax(0,1fr); align-items:start; gap:10px; padding:10px; border:1px solid #49303f; border-radius:8px; background:#120d14; }
+.hero-talent-pick-num,.build-talent-index { display:inline-flex; align-items:center; justify-content:center; min-width:40px; min-height:28px; border-radius:5px; background:#32131f; color:#ffb3c0; font-size:9px; font-weight:900; letter-spacing:.04em; }
+.hero-talent-pick-icon,.build-talent-glyph { display:flex; align-items:center; justify-content:center; width:30px; height:30px; border:1px solid #8f465b; border-radius:7px; background:#26121d; color:#ffdce3; font-size:17px; }
+.hero-talent-pick strong,.build-talent-row strong { display:block; margin:1px 0 4px; color:#fff; font-size:12px; }
+.hero-talent-pick p,.build-talent-row p { margin:0; color:#cbbdca; font-size:11px; line-height:1.55; }
+.build-advice-talents { align-items:start; }
+.build-advice-talents > div { min-width:0; width:100%; }
+.build-advice-talents .build-talent-list { margin-top:10px; }
+@media(max-width:520px) {
+ .hero-talent-pick,.build-talent-row { grid-template-columns:auto auto minmax(0,1fr); gap:7px; padding:8px; }
+ .hero-talent-pick-num,.build-talent-index { min-width:34px; font-size:8px; }
+ .hero-talent-pick p,.build-talent-row p { font-size:10px; }
+}
