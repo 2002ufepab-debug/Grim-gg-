@@ -544,52 +544,89 @@ function renderHeroes() {
 }
 
 
-const tierListData = [
-  {name:"Fanny",tier:"S",role:"Убийца",reason:"Высокая мобильность и сильный потенциал при хорошем владении тросами."},
-  {name:"Ling",tier:"S",role:"Убийца",reason:"Мобильность помогает выбирать цели и менять позицию, но важны тайминг и ресурсы."},
-  {name:"Vexana",tier:"S",role:"Маг",reason:"Контроль и урон по области могут быть полезны в командных столкновениях."},
-  {name:"Claude",tier:"S",role:"Стрелок",reason:"Сильный потенциал в затяжных боях при безопасной позиции и подходящих предметах."},
-  {name:"Khufra",tier:"S",role:"Танк",reason:"Контроль и ограничения мобильности могут мешать героям, полагающимся на рывки."},
-  {name:"Belerick",tier:"A",role:"Танк",reason:"Может хорошо выдерживать давление и мешать героям, часто использующим обычные атаки."},
-  {name:"Ruby",tier:"A",role:"Боец",reason:"Контроль и выживаемость полезны в затяжных боях, если правильно выбирать момент входа."},
-  {name:"Xavier",tier:"A",role:"Маг",reason:"Дальнобойные способности дают возможность помогать команде с безопасной позиции."},
-  {name:"Karrie",tier:"A",role:"Стрелок",reason:"Может быть эффективна против выносливых целей при подходящей сборке."},
-  {name:"Diggie",tier:"A",role:"Поддержка",reason:"Способности поддержки могут помочь команде против определённых эффектов контроля."},
-  {name:"Terizla",tier:"A",role:"Боец",reason:"Полезен в боях вокруг целей благодаря выносливости и контролю по области."},
-  {name:"Tigreal",tier:"B",role:"Танк",reason:"Сильное начало боя зависит от позиции, обзора и согласованности команды."},
-  {name:"Chou",tier:"B",role:"Боец",reason:"Может изолировать цель, но многое зависит от механики игрока и выбора момента."},
-  {name:"Miya",tier:"B",role:"Стрелок",reason:"Может наносить высокий урон при безопасном фарме и защите команды."},
-  {name:"Layla",tier:"B",role:"Стрелок",reason:"Сильна на дистанции, но ей особенно важны позиция и прикрытие союзников."},
-  {name:"Eudora",tier:"B",role:"Маг",reason:"Опасна при удачной комбинации, но зависит от попадания контролем и выбора цели."},
-  {name:"Nana",tier:"B",role:"Маг",reason:"Может мешать соперникам контролем, но результат зависит от состава и таймингов."},
-  {name:"Saber",tier:"C",role:"Убийца",reason:"Способен быстро угрожать отдельной цели, но может быть менее удобен против сгруппированной команды."},
-  {name:"Alucard",tier:"C",role:"Боец",reason:"Нуждается в хорошем выборе момента входа и подходящей ситуации для сближения."},
-  {name:"Hanabi",tier:"C",role:"Стрелок",reason:"Может раскрыться в подходящем составе, но нуждается в защите и безопасной позиции."}
-];
+const tierHighlights = {
+  Fanny:{tier:"S",reason:"Очень высокий потенциал при точном управлении тросами и хорошем понимании карты."},
+  Ling:{tier:"S",reason:"Мобильность позволяет выбирать цели и менять направление атаки; важны ресурсы и тайминг."},
+  Vexana:{tier:"S",reason:"Контроль и урон по области могут заметно влиять на командные сражения."},
+  Claude:{tier:"S",reason:"Силен при хорошем фарме, подходящих предметах и безопасной позиции в бою."},
+  Khufra:{tier:"S",reason:"Контроль и противодействие рывкам полезны против мобильных героев."},
+  Belerick:{tier:"A",reason:"Выносливость и ответ на частые обычные атаки помогают против определённых составов."},
+  Ruby:{tier:"A",reason:"Контроль и восстановление помогают в затяжных боях при правильном выборе момента."},
+  Xavier:{tier:"A",reason:"Дальность навыков помогает наносить урон и поддерживать команду из безопасной позиции."},
+  Karrie:{tier:"A",reason:"Может хорошо справляться с выносливыми целями при подходящих предметах."},
+  Diggie:{tier:"A",reason:"Полезен против составов, которые полагаются на контроль, если вовремя использовать поддержку."},
+  Terizla:{tier:"A",reason:"Выносливость и контроль по области полезны в боях за ключевые цели."},
+  Tigreal:{tier:"B",reason:"Сильное начало боя требует обзора, позиции и согласованных действий команды."},
+  Chou:{tier:"B",reason:"Может изолировать важную цель, но многое зависит от механики и точного тайминга."},
+  Miya:{tier:"B",reason:"Раскрывается при безопасном фарме и надёжном прикрытии союзников."},
+  Layla:{tier:"B",reason:"Высокая дальность помогает наносить урон, но позиция и защита команды особенно важны."},
+  Eudora:{tier:"B",reason:"Опасна при удачной комбинации, однако зависит от возможности добраться до цели."},
+  Nana:{tier:"B",reason:"Контроль мешает соперникам, а эффективность зависит от таймингов и состава команд."},
+  Saber:{tier:"B",reason:"Опасен для одиночных целей, но ему сложнее против слаженной и сгруппированной команды."},
+  Alucard:{tier:"B",reason:"Нуждается в хорошем выборе момента входа и подходящих условиях для сближения."},
+  Hanabi:{tier:"B",reason:"Может наносить урон в командных боях, если получает время и защиту."},
+  Gusion:{tier:"A",reason:"Высокий потенциал быстрого урона при хорошем исполнении комбинаций."},
+  Faramis:{tier:"A",reason:"Командная поддержка и своевременное использование ультимейта могут изменить ход боя."},
+  Lolita:{tier:"A",reason:"Защитные способности особенно ценны против подходящих снарядов и атак соперника."},
+  Karrie:{tier:"A",reason:"Может хорошо справляться с выносливыми целями при подходящих предметах."}
+};
+
+function tierReason(hero, tier) {
+  const custom = tierHighlights[hero.name];
+  if (custom) return custom.reason;
+  const role = getHeroClasses(hero)[0] || "героя";
+  const defaults = {
+    S:"Предварительно высокий приоритет. Проверь, подходит ли герой под состав команды и текущий патч.",
+    A:"Надёжный вариант во многих ситуациях; результат зависит от матчапа, сборки и исполнения.",
+    B:"Ситуативный выбор. Оцени составы команд, контрпики и собственный опыт игры на герое.",
+    C:"Выбор требует подходящих условий или хорошего владения героем; учитывай контрпики и план команды."
+  };
+  return `${defaults[tier]} Роль в каталоге: ${role}.`;
+}
+
+function getTierEntries() {
+  const knownNames = new Map(Object.entries(tierHighlights).map(([name, data]) => [name.toLocaleLowerCase(), data]));
+  return heroes.map(hero => {
+    const custom = knownNames.get(hero.name.toLocaleLowerCase());
+    const tier = custom?.tier || "B";
+    return {
+      hero,
+      tier,
+      role: getHeroClasses(hero),
+      reason: custom?.reason || tierReason(hero, tier)
+    };
+  }).sort((a,b) => {
+    const order = {S:0,A:1,B:2,C:3};
+    return order[a.tier]-order[b.tier] || a.hero.name.localeCompare(b.hero.name);
+  });
+}
 
 function renderTierList() {
   const grid = $("tierGrid");
   const count = $("tierCount");
   if (!grid || !count) return;
-  const filtered = tierListData.filter(entry =>
+  const query = ($("tierSearch")?.value || "").trim().toLocaleLowerCase();
+  const filtered = getTierEntries().filter(entry =>
     (activeTier === "Все" || entry.tier === activeTier) &&
-    (activeTierRole === "Все" || entry.role === activeTierRole)
+    (activeTierRole === "Все" || entry.role.includes(activeTierRole)) &&
+    entry.hero.name.toLocaleLowerCase().includes(query)
   );
-  count.textContent = `Героев в подборке: ${filtered.length}. Оценка — ориентировочная.`;
+  count.textContent = `Показано ${filtered.length} из ${heroes.length} героев · сортировка по уровню и имени`;
   if (!filtered.length) {
-    grid.innerHTML = '<p class="empty-state">В этой категории пока нет героев.</p>';
+    grid.innerHTML = '<div class="tier-empty"><strong>Ничего не найдено</strong><p>Измени поиск или сбрось фильтры.</p><button class="btn btn-ghost" type="button" data-tier-reset>Сбросить фильтры</button></div>';
     return;
   }
-  const tierNames = {S:"Сильные",A:"Надёжные",B:"Ситуативные",C:"Требуют условий"};
+  const tierNames = {S:"Высокий приоритет",A:"Надёжный выбор",B:"Ситуативный выбор",C:"Требует условий"};
   grid.innerHTML = filtered.map(entry => {
-    const hero = heroes.find(item => item.name.toLowerCase() === entry.name.toLowerCase());
-    const art = hero ? heroImageMarkup(hero) : `<div class="hero-image-fallback">${escapeHTML(entry.name.slice(0,1))}</div>`;
+    const art = heroImageMarkup(entry.hero);
+    const roles = entry.role.map(role => `<span>${escapeHTML(role)}</span>`).join("");
     return `<article class="tier-card">
       <div class="tier-card-art">${art}<span class="tier-rank tier-${entry.tier.toLowerCase()}">${entry.tier}</span></div>
       <div class="tier-card-content">
-        <span class="tier-role">${escapeHTML(entry.role)} · ${escapeHTML(tierNames[entry.tier])}</span>
-        <h3>${escapeHTML(entry.name)}</h3>
-        <p>${escapeHTML(entry.reason)}</p>
+        <div class="tier-card-meta"><span class="tier-role">${escapeHTML(tierNames[entry.tier])}</span><span class="tier-level-label">${entry.tier} TIER</span></div>
+        <h3>${escapeHTML(entry.hero.name)}</h3>
+        <div class="tier-role-tags">${roles}</div>
+        <details class="tier-details"><summary>Почему этот уровень?</summary><p>${escapeHTML(entry.reason)}</p></details>
       </div>
     </article>`;
   }).join("");
@@ -1003,6 +1040,18 @@ function setupFilters() {
     activeRole = button.dataset.role;
     $("roleFilters").querySelectorAll("[data-role]").forEach(b=>b.classList.toggle("active",b===button));
     renderHeroes();
+  });
+
+  $("tierSearch")?.addEventListener("input",renderTierList);
+
+  $("tierGrid")?.addEventListener("click",event=>{
+    if (!event.target.closest("[data-tier-reset]")) return;
+    activeTier = "Все";
+    activeTierRole = "Все";
+    if ($("tierSearch")) $("tierSearch").value = "";
+    $("tierFilters")?.querySelectorAll("[data-tier]").forEach(b=>b.classList.toggle("active",b.dataset.tier==="Все"));
+    $("tierRoleFilters")?.querySelectorAll("[data-tier-role]").forEach(b=>b.classList.toggle("active",b.dataset.tierRole==="Все"));
+    renderTierList();
   });
 
   $("tierFilters")?.addEventListener("click",event=>{
