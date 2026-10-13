@@ -603,6 +603,27 @@ function renderHeroDetailContent(hero, target) {
     const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
     return `<div class="build-item-row">${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
   }).join("");
+  const talentRoleDefaults = {
+    "Убийца": "Приоритет: физический урон и пробивание; дополнительный талант — под быстрое устранение тонких целей. Для леса выбирай настройки, усиливающие темп фарма и ранние ганги.",
+    "Маг": "Приоритет: магическое пробивание и урон навыков; дополнительный талант — под перезарядку или устойчивость, если часто ловят.",
+    "Стрелок": "Приоритет: усиление обычных атак и подходящие характеристики (скорость атаки или критический урон). Выбирай последний талант под конкретного стрелка.",
+    "Боец": "Приоритет: урон в продолжительном бою и устойчивость. Для взрывного героя смещай выбор в сторону физического урона и пробивания.",
+    "Танк": "Приоритет: выживаемость и командная польза; выбирай дополнительный талант под контроль, начало боя или восстановление.",
+    "Поддержка": "Приоритет: командная польза, восстановление и сокращение перезарядки; подстраивай выбор под лечение, щиты и контроль героя."
+  };
+  const talentText = build.talents || talentRoleDefaults[resolveBuildRole(roles)] || talentRoleDefaults["Боец"];
+  const emblemText = build.emblem || roleBuildTemplates[resolveBuildRole(roles)]?.emblem || "Выбери эмблему под роль и механику героя.";
+  const spellText = build.spell || roleBuildTemplates[resolveBuildRole(roles)]?.spell || "Боевой навык выбирай под роль и состав соперника.";
+  const talentSection = `<div class="hero-detail-section hero-talents-section">
+    <span class="eyebrow">GRIM_GG / EMBLEM & TALENTS</span>
+    <h3>Эмблема, таланты и боевой навык</h3>
+    <div class="hero-talent-grid">
+      <div class="hero-talent-card"><span class="hero-talent-label">Эмблема</span><p>${escapeHTML(emblemText)}</p></div>
+      <div class="hero-talent-card"><span class="hero-talent-label">Таланты</span><p>${escapeHTML(talentText)}</p></div>
+      <div class="hero-talent-card"><span class="hero-talent-label">Боевой навык</span><p>${escapeHTML(spellText)}</p></div>
+    </div>
+    <p class="fine-print">Это рекомендации по роли и герою, а не подтверждённый пресет трёх конкретных талантов. Точные названия и иконки добавим после проверки данных актуального патча, чтобы не показывать неверные перки.</p>
+  </div>`;
   const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
   const skillsSection = combo
     ? `<div class="hero-detail-section"><h3>Навыки и комбо</h3><p class="fine-print">Комбо: ${combo.skills.map(escapeHTML).join(" → ")}</p><ol class="hero-skill-steps">${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><p>${escapeHTML(combo.tip)}</p></div>`
@@ -626,6 +647,7 @@ function renderHeroDetailContent(hero, target) {
       </div>
     </div>
     ${skillsSection}
+    ${talentSection}
     <div class="hero-detail-section hero-build-inline">
       <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
       <div class="build-item-list">${buildRows}</div>
