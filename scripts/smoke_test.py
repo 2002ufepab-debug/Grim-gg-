@@ -18,7 +18,7 @@ script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
-for asset in ("styles.css?v=42", "talents.css?v=2", "script.js?v=45", "talents.js?v=5"):
+for asset in ("styles.css?v=42", "talents.css?v=3", "script.js?v=45", "talents.js?v=5"):
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
 
 for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports"):
@@ -30,6 +30,8 @@ require('knownPages.includes(requestedPage)' in talents && 'section.classList.ad
 require('"perks","talents","builds"' in script, "Talent route is missing from the page router")
 require('page === "talents" ? "talentLab"' in script, "Talent route must reveal the dynamically created talent section")
 require('talents: "Таланты и эмблемы"' in script, "Talent route title is missing")
+require('id="talentHeroPortrait"' in talents and "heroArtByName" in talents,
+        "Talent planner must render the selected hero portrait when the source is available")
 require('id="talentRole"' in talents and 'id="talentHero"' in talents and 'id="talentStyle"' in talents,
         "Talent planner must expose role, hero and playstyle selectors")
 require('id="talentCopy"' in talents and 'id="talentReset"' in talents,
