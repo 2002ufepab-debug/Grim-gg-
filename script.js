@@ -600,7 +600,7 @@ function renderHeroDetailContent(hero, target) {
     const item = items.find(entry=>entry.name===name);
     const iconSlug = item ? itemIconSlug(item.name) : null;
     const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
-    const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
+    const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
     return `<div class="build-item-row">${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
   }).join("");
   const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
@@ -843,14 +843,15 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
     // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
-    const vectorIcon = item.id !== "retribution" && (item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle")
-      ? effectIconMarkup(item)
-      : "";
+    // Используем исходные PNG-иконки предметов и усилений там, где они доступны.
+    // Для общего роум-благословения оставляем собственную векторную пиктограмму:
+    // в наборе нет отдельного файла с таким названием.
+    const vectorIcon = item.id === "roam-boots" ? effectIconMarkup(item) : "";
     const iconSource = item.imageFile
       ? ITEM_IMAGE_BASE + item.imageFile
       : item.id === "retribution"
         ? "assets/retribution.svg"
-        : item.id === "roam-boots" || item.cat === "Roam" || item.cat === "Jungle"
+        : item.id === "roam-boots"
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = vectorIcon || (iconSource
@@ -1028,8 +1029,9 @@ function renderHeroBuildModal() {
   const itemRows = selectedItems.map((name,index)=>{
     const item = items.find(entry=>entry.name===name);
     const iconSlug = item ? itemIconSlug(item.name) : null;
-    const icon = iconSlug
-      ? `<img class="build-item-icon" src="${escapeHTML(ITEM_IMAGE_BASE + iconSlug + ".png")}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">`
+    const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const icon = iconUrl
+      ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">`
       : `<span class="build-item-icon-fallback">⚔</span>`;
     return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в клиенте игры.")}</span></div></div>`;
   }).join("");
@@ -1095,7 +1097,12 @@ function renderBuilds() {
     const build = getHeroBuild(hero.name, roles);
     const rows = build.items.map((name,index) => {
       const item = items.find(entry => entry.name === name);
-      return `<div class="build-item-row"><span class="build-slot">0${index+1}</span><strong>${escapeHTML(item ? item.ru : name)}</strong><span>${escapeHTML(item ? item.stats : "Проверь предмет в актуальной версии игры.")}</span></div>`;
+      const iconSlug = item ? itemIconSlug(item.name) : null;
+      const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+      const icon = iconUrl
+        ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">`
+        : `<span class="build-item-icon-fallback">⚔</span>`;
+      return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item ? item.ru : name)}</strong><span>${escapeHTML(item ? item.stats : "Проверь предмет в актуальной версии игры.")}</span></div></div>`;
     }).join("");
 
     return `<article class="build-card">
