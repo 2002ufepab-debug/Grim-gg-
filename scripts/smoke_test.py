@@ -18,14 +18,14 @@ script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
-for asset in ("styles.css?v=42", "talents.css?v=3", "script.js?v=45", "talents.js?v=6"):
+for asset in ("styles.css?v=48", "talents.css?v=3", "layout-wide.css?v=2", "script.js?v=49", "talents.js?v=6"):
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
 
 for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports"):
     require(f'id="{section_id}"' in html, f"Missing core section #{section_id}")
 
 require('href="?page=talents"' in html, "Talent page must be reachable from the main navigation")
-require('knownPages.includes(requestedPage)' in talents && 'section.classList.add("page-hidden")' in talents,
+require('knownPages.includes(requestedPage)' in talents and 'section.classList.add("page-hidden")' in talents,
         "Talent section must respect the initial page route")
 require('"perks","talents","builds"' in script, "Talent route is missing from the page router")
 require('page === "talents" ? "talentLab"' in script, "Talent route must reveal the dynamically created talent section")
