@@ -562,36 +562,49 @@ body.modal-open { overflow:hidden; }
 }
 
 
-/* Standalone Grim_gg tier-list tab */
+
+/* Grim_gg tier-list: searchable full roster, responsive compact cards */
 .tier-disclaimer {
-  max-width: 850px;
-  margin: 0 0 18px;
-  padding: 15px 17px;
-  background: #171219;
-  border: 1px solid #53303c;
-  border-left: 3px solid var(--red);
-  border-radius: 7px;
+  max-width: 900px; margin: 0 0 18px; padding: 15px 17px;
+  background: #171219; border: 1px solid #53303c; border-left: 3px solid var(--red); border-radius: 7px;
 }
 .tier-disclaimer strong { color: #ff7b8b; font-size: 12px; }
 .tier-disclaimer p { margin: 6px 0 0; color: #d0c4d1; font-size: 11px; line-height: 1.8; }
-.tier-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 13px; }
-.tier-card { min-width: 0; overflow: hidden; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; transition: border-color .2s,transform .2s; }
-.tier-card:hover { border-color: var(--red); transform: translateY(-2px); }
-.tier-card-art { position: relative; display: grid; place-items: center; height: 150px; overflow: hidden; background: radial-gradient(ellipse,#48202d,#171319 75%); }
-.tier-card-art .hero-image { width: 100%; height: 100%; object-fit: contain; }
-.tier-rank { position: absolute; top: 9px; left: 9px; display: grid; place-items: center; width: 34px; height: 34px; color: #fff; background: #3b1723; border: 1px solid #ff5269; border-radius: 6px; font: 900 18px Orbitron,sans-serif; box-shadow: 0 4px 18px #0008; }
-.tier-s { background: #7c1e31; border-color: #ff7184; }
-.tier-a { background: #513024; border-color: #e5a56d; }
-.tier-b { background: #2b304b; border-color: #8998ff; }
-.tier-c { background: #302a35; border-color: #8c7d91; }
-.tier-card-content { padding: 12px; }
-.tier-card-content h3 { margin: 5px 0 7px; font-size: 14px; }
-.tier-card-content p { margin: 0; color: #c5b8c7; font-size: 11px; line-height: 1.7; }
-.tier-role { color: #ff7b8b; font-size: 10px; }
-@media(max-width:950px) { .tier-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+.tier-search { max-width: 680px; margin-bottom: 12px; }
+.tier-filters { margin: 12px 0 8px; }
+.tier-filters .filter.active[data-tier="S"] { background:#a8213c; border-color:#ff5269; }
+.tier-filters .filter.active[data-tier="A"] { background:#674126; border-color:#e5a56d; }
+.tier-filters .filter.active[data-tier="B"] { background:#35395c; border-color:#8998ff; }
+.tier-filters .filter.active[data-tier="C"] { background:#45384a; border-color:#b29bbb; }
+.tier-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; align-items:stretch; }
+.tier-card { display:flex; min-width:0; overflow:hidden; flex-direction:column; background:var(--panel); border:1px solid var(--border); border-radius:8px; transition:border-color .2s,transform .2s; }
+.tier-card:hover { border-color:var(--red); transform:translateY(-2px); }
+.tier-card-art { position:relative; display:grid; place-items:center; height:145px; overflow:hidden; background:radial-gradient(ellipse,#48202d,#171319 75%); }
+.tier-card-art .hero-image { width:100%; height:100%; object-fit:contain; }
+.tier-rank { position:absolute; top:9px; left:9px; display:grid; place-items:center; width:34px; height:34px; color:#fff; background:#3b1723; border:1px solid #ff5269; border-radius:6px; font:900 18px Orbitron,sans-serif; box-shadow:0 4px 18px #0008; }
+.tier-s { background:#7c1e31; border-color:#ff7184; }
+.tier-a { background:#513024; border-color:#e5a56d; }
+.tier-b { background:#2b304b; border-color:#8998ff; }
+.tier-c { background:#302a35; border-color:#8c7d91; }
+.tier-card-content { display:flex; flex:1; flex-direction:column; padding:12px; }
+.tier-card-meta { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:5px; }
+.tier-card-content h3 { margin:7px 0; font-size:14px; overflow-wrap:anywhere; }
+.tier-role { color:#ff7b8b; font-size:10px; }
+.tier-level-label { color:#9d909e; font:9px Orbitron,sans-serif; letter-spacing:.5px; }
+.tier-role-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+.tier-role-tags span { padding:3px 6px; color:#d6cad6; background:#251c27; border-radius:3px; font-size:9px; }
+.tier-details { margin-top:auto; padding-top:8px; font-size:11px; }
+.tier-details summary { display:inline-block; padding:5px 0; color:#ff8292; cursor:pointer; }
+.tier-details p { margin:5px 0 0; color:#c5b8c7; font-size:11px; line-height:1.7; }
+.tier-empty { grid-column:1/-1; padding:24px; text-align:center; background:var(--panel); border:1px solid var(--border); border-radius:8px; }
+.tier-empty p { color:var(--muted); font-size:12px; }
+@media(max-width:950px) { .tier-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
 @media(max-width:650px) {
-  .tier-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
-  .tier-card-art { height: 130px; }
-  .tier-card-content { padding: 10px; }
-  .tier-card-content h3 { font-size: 13px; }
+  .tier-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+  .tier-card-art { height:125px; }
+  .tier-card-content { padding:10px; }
+  .tier-card-content h3 { font-size:13px; }
+  .tier-card-meta { align-items:flex-start; flex-direction:column; gap:3px; }
+  .tier-details summary { min-height:30px; }
 }
+@media(max-width:360px) { .tier-grid { grid-template-columns:1fr; } .tier-card-art { height:160px; } }
