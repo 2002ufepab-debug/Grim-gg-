@@ -19,10 +19,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <meta name="description" content="Grim_gg — неофициальная тактическая база Mobile Legends: герои по ролям, предметы, сборки, таланты, комбо, гайды и контрпики.">
   <title>Grim_gg — тактическая база Mobile Legends</title>
-  <link rel="stylesheet" href="styles.css?v=46">
+  <link rel="stylesheet" href="styles.css?v=47">
   <link rel="stylesheet" href="talents.css?v=3">
   <link rel="stylesheet" href="layout-wide.css?v=2">
-  <script src="script.js?v=48" defer></script>
+  <script src="script.js?v=49" defer></script>
   <script src="talents.js?v=6" defer></script>
 </head>
 <body>
@@ -150,13 +150,34 @@
     <p>Изучай назначение предметов и подбирай экипировку с учётом состава соперника.</p>
   </div>
   <input class="search" id="itemSearch" type="search" placeholder="Название или эффект..." aria-label="Поиск предмета">
-  <div class="filter-row" id="itemFilters">
+  <div class="filter-row" id="itemFilters" aria-label="Категория предметов">
     <button class="filter active" data-category="Все">Все</button>
     <button class="filter" data-category="Attack">Физический урон</button>
     <button class="filter" data-category="Magic">Магия</button>
     <button class="filter" data-category="Defense">Защита</button>
     <button class="filter" data-category="Movement">Обувь</button>
     <button class="filter" data-category="Other">Прочее</button>
+  </div>
+  <p class="filter-caption">Быстрый подбор по задаче</p>
+  <div class="filter-row item-purpose-filters" id="itemPurposeFilters" aria-label="Фильтр по назначению предмета">
+    <button class="filter active" data-item-purpose="Все">Любое назначение</button>
+    <button class="filter" data-item-purpose="Крит">Крит</button>
+    <button class="filter" data-item-purpose="Скорость атаки">Скорость атаки</button>
+    <button class="filter" data-item-purpose="Пробивание">Пробивание</button>
+    <button class="filter" data-item-purpose="Антихил">Против лечения</button>
+    <button class="filter" data-item-purpose="Выживаемость">Выживаемость</button>
+    <button class="filter" data-item-purpose="Лечение и щиты">Лечение и щиты</button>
+    <button class="filter" data-item-purpose="Перезарядка">Перезарядка</button>
+  </div>
+  <div class="item-tools">
+    <label class="item-sort-label" for="itemSort">Сортировка
+      <select id="itemSort" class="item-sort">
+        <option value="default">По умолчанию</option>
+        <option value="name">По названию</option>
+        <option value="favorites">Избранное сначала</option>
+      </select>
+    </label>
+    <label class="item-favorites-toggle"><input type="checkbox" id="itemOnlyFavorites"> Только избранное</label>
   </div>
   <p class="count" id="itemCount" aria-live="polite" aria-atomic="true"></p>
   <div class="item-grid" id="itemGrid"></div>
