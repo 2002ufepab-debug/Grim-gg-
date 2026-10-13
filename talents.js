@@ -105,6 +105,11 @@
     }
   };
 
+  const emblemNames = {
+    "Стрелок":"Эмблема стрелка", "Убийца":"Эмблема убийцы", "Маг":"Эмблема мага",
+    "Боец":"Эмблема бойца", "Танк":"Эмблема танка", "Поддержка":"Эмблема поддержки"
+  };
+
   const heroesByRole = {
     "Стрелок":["Клинт","Лесли","Кэрри","Клод","Броуди","Мия","Лейла","Беатрис","Мелисса","Иксия","Москов","Ванван","Ханаби","Бруно"],
     "Убийца":["Фанни","Госсен","Линг","Сейбер","Ланселот","Хаябуса","Аамон","Наталья","Хелкарт","Ли Сун Син"],
@@ -152,10 +157,10 @@
       const role = roleSelect.value, hero = heroSelect.value, style = styleSelect.value;
       const list = recommendations[role][style];
       section.querySelector("#talentResultTitle").textContent = "Таланты: " + hero;
-      section.querySelector("#talentResultDesc").textContent = "Стиль: " + style.toLowerCase() + ". Пример комбинации для дальнейшей настройки.";
+      section.querySelector("#talentResultDesc").textContent = emblemNames[role] + " · стиль: " + style.toLowerCase() + ". Пример комбинации для дальнейшей настройки.";
       section.querySelector("#talentRoleChip").textContent = role.toUpperCase();
       section.querySelector("#talentSlots").innerHTML = list.map((t,i) => `
-        <article class="talent-slot"><span class="talent-slot-num">СЛОТ 0${i+1}</span><span class="talent-icon" aria-hidden="true">${["I","II","III"][i]}</span><div><h4>${t[1]}</h4><p>${t[2]}</p></div></article>`).join("");
+        <article class="talent-slot"><span class="talent-slot-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][i]}</span><span class="talent-icon" aria-hidden="true">${["I","II","III"][i]}</span><div><h4>${t[1]}</h4><p>${t[2]}</p></div></article>`).join("");
       section.querySelector("#talentNote").textContent = "Проверяй названия, уровни и эффекты талантов в актуальном клиенте. Подбор примерный: он не учитывает патч, ранг, состав соперника и конкретные игровые условия.";
       section.querySelector("#talentStatus").textContent = "";
     }
