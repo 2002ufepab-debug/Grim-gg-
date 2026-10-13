@@ -928,3 +928,88 @@ body {
   .section-heading p { max-width: none; }
   .hero-art { border-radius: 14px; }
 }
+
+
+/* GRIM_GG — subtle premium finish, keeping the black/red identity */
+:root {
+  --surface-highlight: #211720;
+  --accent-soft: #ff304818;
+}
+html { scroll-padding-top: 88px; }
+body {
+  background-image:
+    linear-gradient(#ffffff03 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff03 1px, transparent 1px),
+    radial-gradient(ellipse at 12% 0%, #3b142455, transparent 38rem),
+    radial-gradient(ellipse at 92% 30%, #20112644, transparent 34rem);
+  background-size: 34px 34px, 34px 34px, auto, auto;
+  background-attachment: fixed;
+}
+.hero-section {
+  isolation: isolate;
+}
+.hero-section::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 8% auto 14% 0;
+  width: min(38vw, 440px);
+  pointer-events: none;
+  background: linear-gradient(90deg, #ff30480c, transparent);
+  filter: blur(12px);
+}
+.section {
+  position: relative;
+}
+.section + .section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: max(22px, calc((100% - 1180px) / 2));
+  right: max(22px, calc((100% - 1180px) / 2));
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #66304488 18%, #66304488 82%, transparent);
+  pointer-events: none;
+}
+.section-heading h2 {
+  text-wrap: balance;
+}
+.section-heading > div:first-child {
+  position: relative;
+}
+.section-heading > div:first-child::before {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 3px;
+  margin-bottom: 12px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--red), #ff9baa);
+  box-shadow: 0 0 14px #ff304833;
+}
+.hero-card, .item-card, .tier-card, .build-card, .guide-card {
+  background: linear-gradient(155deg, #19141c 0%, #121015 72%);
+}
+.hero-tags span, .item-category {
+  background: #211720;
+}
+.btn:focus-visible, .filter:focus-visible, .favorite-btn:focus-visible {
+  outline: 2px solid #ff8a9a;
+  outline-offset: 3px;
+}
+@media (max-width: 650px) {
+  html { scroll-padding-top: 72px; }
+  body { background-attachment: scroll; background-size: 28px 28px, 28px 28px, auto, auto; }
+  .hero-section::before { width: 72vw; opacity: .7; }
+  .section + .section::before {
+    left: 18px;
+    right: 18px;
+  }
+  .section-heading > div:first-child::before {
+    width: 24px;
+    margin-bottom: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
