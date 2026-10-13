@@ -1607,6 +1607,102 @@ function setupBackToTop() {
   updateVisibility();
 }
 
+
+const ESPORTS_NEWS_URL = "data/esports-news.json";
+let esportsRefreshTimer = null;
+
+function formatEsportsDate(value) {
+  if (!value) return "Дата не указана";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return String(value);
+  return new Intl.DateTimeFormat("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric", timeZone: "Europe/Kyiv" }).format(parsed);
+}
+
+function renderEsportsNews(newsData) {
+  const grid = $("esportsNewsGrid");
+  const feature = $("esportsFeaturedNews");
+  const updated = $("esportsLastUpdated");
+  if (!grid || !Array.isArray(newsData?.articles) || !newsData.articles.length) {
+    if (grid) grid.innerHTML = '<article class="esports-card"><h3>Пока нет свежих публикаций</h3><p>Попробуй обновить страницу позже или открой официальный сайт MOONTON.</p><a class="esports-link" href="https://en.moonton.com/news/index.html" target="_blank" rel="noopener noreferrer">Официальные новости ↗</a></article>';
+    if (updated) updated.textContent = "Источник временно недоступен";
+    return;
+  }
+
+  const articles = newsData.articles.filter(item => item && typeof item.title === "string" && typeof item.url === "string" && /^https:\/\/en\.moonton\.com\/news\/[\w-]+\.html(?:[?#].*)?$/.test(item.url)).slice(0, 18);
+  if (!articles.length) return;
+
+  const makeTag = title => {
+    const text = String(title || "MLBB ESPORTS").toLocaleUpperCase("ru-RU");
+    return text.length > 38 ? text.slice(0, 35) + "…" : text;
+  };
+  const makeLink = (url, label) => {
+    const a = document.createElement("a");
+    a.className = "esports-link";
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = label;
+    return a;
+  };
+
+  if (feature) {
+    const first = articles[0];
+    const tag = feature.querySelector(".esports-tag");
+    const heading = feature.querySelector("h3");
+    const paragraph = feature.querySelector("p");
+    const link = feature.querySelector("a.esports-link");
+    const meta = feature.querySelector(".esports-meta");
+    if (tag) tag.textContent = "ПОСЛЕДНЯЯ НОВОСТЬ";
+    if (heading) heading.textContent = first.title;
+    if (paragraph) paragraph.textContent = first.description || "Открой источник, чтобы прочитать полную новость.";
+    if (link) { link.href = first.url; link.textContent = "Читать новость ↗"; }
+    if (meta) meta.textContent = [formatEsportsDate(first.published), "Официальный источник: MOONTON Games"].filter(Boolean).join(" · ");
+  }
+
+  const fragment = document.createDocumentFragment();
+  articles.slice(1).forEach(item => {
+    const card = document.createElement("article");
+    card.className = "esports-card";
+    const top = document.createElement("div");
+    top.className = "esports-card-top";
+    const tag = document.createElement("span");
+    tag.className = "esports-tag";
+    tag.textContent = "MOONTON / MLBB";
+    const date = document.createElement("span");
+    date.className = "esports-date";
+    date.textContent = formatEsportsDate(item.published);
+    top.append(tag, date);
+    const heading = document.createElement("h3");
+    heading.textContent = item.title;
+    const description = document.createElement("p");
+    description.textContent = item.description || "Открой официальную публикацию для подробностей.";
+    card.append(top, heading, description, makeLink(item.url, "Подробнее ↗"));
+    fragment.append(card);
+  });
+  grid.replaceChildren(fragment);
+  if (updated) {
+    const stamp = newsData.updatedAt ? new Date(newsData.updatedAt) : null;
+    updated.textContent = stamp && !Number.isNaN(stamp.getTime())
+      ? "Лента обновлена " + new Intl.DateTimeFormat("ru-RU", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit", timeZone: "Europe/Kyiv" }).format(stamp) + " · Киев"
+      : "Автоматическая лента MOONTON Games";
+  }
+}
+
+async function loadEsportsNews() {
+  try {
+    const response = await fetch(ESPORTS_NEWS_URL + "?t=" + Date.now(), { cache: "no-store" });
+    if (!response.ok) throw new Error("News feed HTTP " + response.status);
+    const data = await response.json();
+    renderEsportsNews(data);
+  } catch (error) {
+    const updated = $("esportsLastUpdated");
+    if (updated) updated.textContent = "Не удалось обновить ленту — показаны доступные данные";
+    const grid = $("esportsNewsGrid");
+    if (grid && !grid.children.length) grid.innerHTML = '<article class="esports-card"><h3>Лента временно недоступна</h3><p>Проверь подключение к интернету и попробуй позже.</p><a class="esports-link" href="https://en.moonton.com/news/index.html" target="_blank" rel="noopener noreferrer">Открыть MOONTON ↗</a></article>';
+  }
+  if (!esportsRefreshTimer) esportsRefreshTimer = window.setInterval(loadEsportsNews, 5 * 60 * 1000);
+}
+
 function init() {
   $("year").textContent = new Date().getFullYear();
 
@@ -1708,6 +1804,7 @@ function init() {
 
   loadExternalHeroes();
   loadExternalItems();
+  loadEsportsNews();
 }
 
 document.addEventListener("DOMContentLoaded",init);
