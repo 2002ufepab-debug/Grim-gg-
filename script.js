@@ -565,6 +565,16 @@ function renderHeroes() {
   const grid = $("heroGrid");
   if (!grid) return;
 
+  const roleFilters = $("roleFilters");
+  if (roleFilters) {
+    roleFilters.querySelectorAll("[data-role-count]").forEach(button => {
+      const role = button.dataset.roleCount;
+      const count = role === "Все" ? heroes.length : heroes.filter(hero => getHeroClasses(hero).includes(role)).length;
+      const output = button.querySelector(".role-count");
+      if (output) output.textContent = String(count);
+    });
+  }
+
   const filtered = heroes.filter(hero=>
     (activeRole==="Все" || getHeroClasses(hero).includes(activeRole)) &&
     hero.name.toLocaleLowerCase().includes(heroQuery)
