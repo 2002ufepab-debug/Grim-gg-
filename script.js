@@ -436,7 +436,7 @@ function renderHeroes() {
       </div>
       <div class="hero-card-content">
         <h3>${escapeHTML(hero.name)}</h3>
-        <p class="hero-role">${escapeHTML(hero.role || role)}</p>
+        <p class="hero-role">${escapeHTML(hero.role || getHeroClasses(hero).join(" / "))}</p>
         <div class="hero-tags">${heroClasses.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <details><summary>Игровой совет ↗</summary><p>${escapeHTML(tip)}</p></details>
         ${favoriteButton("hero",id,saved)}
@@ -627,9 +627,11 @@ async function loadExternalHeroes() {
     if (!normalized.length) throw new Error("Не удалось прочитать героев");
 
     const remoteIdToFallbackId = new Map();
-    normalized.forEach(hero => {
-      const fallback = fallbackHeroes.find(item => item.name.toLowerCase() === hero.name.toLowerCase());
-      if (fallback) remoteIdToFallbackId.set(String(hero.id), String(fallback.id));
+    data.forEach((sourceHero, index) => {
+      const sourceName = sourceHero.name_hero || sourceHero.name || sourceHero.nameHero || sourceHero.hero_name;
+      const sourceId = String(sourceHero.id_hero ?? sourceHero.id ?? "remote-" + index);
+      const fallback = fallbackHeroes.find(item => item.name.toLowerCase() === String(sourceName || "").toLowerCase());
+      if (fallback) remoteIdToFallbackId.set(sourceId, String(fallback.id));
     });
     favoriteHeroes = new Set([...favoriteHeroes].map(id => remoteIdToFallbackId.get(String(id)) || String(id)));
     safeWrite("grimgg-favorite-heroes", favoriteHeroes);
