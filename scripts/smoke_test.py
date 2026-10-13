@@ -36,6 +36,8 @@ require('id="talentRole"' in talents and 'id="talentHero"' in talents and 'id="t
         "Talent planner must expose role, hero and playstyle selectors")
 require('id="talentCopy"' in talents and 'id="talentReset"' in talents,
         "Talent planner copy/reset actions are missing")
+require("const emblemNames" in talents and "КЛЮЧЕВОЙ" in talents and "Weapon Master" in talents,
+        "Talent planner must include emblem families and talent tiers")
 require("@media(max-width:700px)" in talent_css, "Talent planner needs a mobile layout")
 require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
