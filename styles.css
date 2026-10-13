@@ -2301,3 +2301,30 @@ p { overflow-wrap:anywhere; }
   box-shadow:inset 0 0 22px rgba(255,48,72,.16),0 0 22px rgba(255,48,72,.22);
 }
 @media (prefers-reduced-motion:reduce) { .btn-3d { transition:none; } }
+
+
+/* GRIM_GG // QUICK ACCESS TO 3D HERO MODELS */
+.hero-card-actions {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:7px;
+  margin:7px 0 2px;
+}
+.hero-card-actions .hero-build-btn {
+  width:100%;
+  margin:0;
+  min-width:0;
+}
+.hero-card-3d {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  padding:9px 6px;
+  font-size:10px;
+  text-align:center;
+  border-radius:5px;
+}
+@media(max-width:380px) {
+  .hero-card-actions { grid-template-columns:1fr; }
+}
