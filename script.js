@@ -656,20 +656,33 @@ function getHeroBuild(heroName, roles) {
   const name = String(heroName || "").trim();
   const featured = featuredHeroBuilds[name];
   const role = resolveBuildRole(roles);
-  const roleText = String(featured?.role || role || "");
+  const roleValues = Array.isArray(roles) ? roles : String(roles || "").split(",");
+  const normalizedRoles = roleValues.map(value => {
+    const normalized = String(value).trim().toLowerCase();
+    return roleAliases[normalized] || roleTranslations[normalized] || String(value).trim();
+  });
+  // У части героев несколько классов: проверяем все роли, а не только первую.
+  const hasMagicRole = normalizedRoles.some(value =>
+    /(^|[ ·/])маг($|[ ·/])/i.test(String(value)) ||
+    /(^|[ ·/])mage($|[ ·/])/i.test(String(value))
+  );
+  const roleText = String(featured?.role || "");
   const isMagicBuild = magicDamageHeroNames.has(name) ||
+    hasMagicRole ||
     role === "Маг" ||
-    /(^|[ ·/])маг($|[ ·/])/i.test(roleText);
+    /(^|[ ·/])маг($|[ ·/])/i.test(roleText) ||
+    /(^|[ ·/])mage($|[ ·/])/i.test(roleText);
   const magicTemplate = roleBuildTemplates["Маг"];
   if (featured) {
     const build = {...featured, personalized:true, isMagicBuild};
-    const hasPhysicalAttackItem = build.items.some(itemName =>
-      items.some(item => item.name === itemName && item.cat === "Attack")
-    );
+    const hasPhysicalAttackItem = build.items.some(itemName => {
+      const item = items.find(entry => entry.name === itemName);
+      return item?.cat === "Attack";
+    });
     if (isMagicBuild && hasPhysicalAttackItem) {
       build.items = [...magicTemplate.items];
       build.goal = "Магический урон и пробивание";
-      build.note = "Исправленная базовая магическая сборка. Подстраивай защитный слот и порядок покупки под соперников.";
+      build.note = "Базовая магическая сборка для ориентира. Подстраивай защитный слот и порядок покупки под соперников.";
     }
     return build;
   }
