@@ -671,7 +671,7 @@ function renderItems() {
 
   grid.innerHTML = filtered.map(item=>{
     const saved = favoriteItems.has(item.id);
-    const symbol = escapeHTML(item.ru.slice(0,1).toUpperCase());
+    const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
     const iconMarkup = iconSlug
       ? `<img class="item-image" src="${escapeHTML(ITEM_IMAGE_BASE + iconSlug + ".png")}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
