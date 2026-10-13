@@ -21,7 +21,7 @@ script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
-for asset in ("styles.css?v=49", "talents.css?v=3", "layout-wide.css?v=2", "script.js?v=49", "talents.js?v=6"):
+for asset in ("styles.css?v=50", "talents.css?v=3", "layout-wide.css?v=2", "script.js?v=49", "talents.js?v=6"):
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
 
 # Catch duplicate static IDs and accidentally unbalanced CSS before publishing.
@@ -41,7 +41,7 @@ for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "fa
 
 require('href="?page=talents"' in html, "Talent page must be reachable from the main navigation")
 require('href="favicon.svg"' in html, "Main page favicon reference is missing")
-require('styles.css?v=49' in (ROOT / "404.html").read_text(encoding="utf-8"),
+require('styles.css?v=50' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must use the current main stylesheet cache key")
 require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must use the correct GitHub Pages favicon path")
