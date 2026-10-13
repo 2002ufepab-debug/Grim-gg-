@@ -2,100 +2,178 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b090c">
-<meta name="description" content="Grim_gg — герои, контрпики, сборки и предметы Mobile Legends">
-<title>Grim_gg — MLBB Database</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b090c">
+  <meta name="description" content="Grim_gg — справочник героев, контрпиков, предметов и сборок Mobile Legends: Bang Bang.">
+  <title>Grim_gg — MLBB Tactical Database</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
 <header class="site-header">
-<a class="brand" href="#home">GRIM<span>_GG</span><small>MLBB COMPANION</small></a>
-<button id="menuToggle" aria-label="Меню">☰</button>
-<nav id="nav">
-<a href="#heroes">Герои</a>
-<a href="#counterpicks">Контрпики</a>
-<a href="#items">Предметы</a>
-<a href="#builds">Сборки</a>
-<a href="#guides">Гайды</a>
-</nav>
+  <a class="brand" href="#home" aria-label="Grim GG, главная">
+    <span class="brand-symbol">G<span>_</span></span>
+    <span>GRIM<span class="red">_GG</span><small>MLBB TACTICAL DATABASE</small></span>
+  </a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню" aria-expanded="false">☰</button>
+  <nav class="nav" id="nav">
+    <a href="#heroes">Герои</a>
+    <a href="#counterpicks">Контрпики</a>
+    <a href="#items">Предметы</a>
+    <a href="#builds">Сборки</a>
+    <a href="#favorites">Избранное</a>
+    <a href="#guides">Гайды</a>
+  </nav>
 </header>
 
 <main>
 <section class="hero-section" id="home">
-<div class="eyebrow">● YOUR TACTICAL MLBB DATABASE</div>
-<h1>ИГРАЙ УМНЕЕ<span>.</span><br>ПОБЕЖДАЙ</h1>
-<p>Герои, контрпики, предметы и тактики для твоего следующего матча.</p>
-<div class="hero-actions">
-<a class="btn" href="#heroes">Герои ↗</a>
-<a class="btn btn-outline" href="#items">База предметов</a>
-</div>
-<div class="hero-stats">
-<div><strong>HEROES</strong><small>Герои и роли</small></div>
-<div><strong>ITEMS</strong><small>Эффекты предметов</small></div>
-<div><strong>TACTICS</strong><small>Советы и сборки</small></div>
-</div>
+  <div class="hero-copy">
+    <div class="eyebrow"><span class="live-dot"></span> YOUR TACTICAL MLBB DATABASE</div>
+    <h1>ИГРАЙ<br>УМНЕЕ<span class="red">.</span><br><span class="outline">ПОБЕЖДАЙ</span></h1>
+    <p class="hero-desc">Герои, контрпики, предметы и тактики. Готовься к матчу до того, как появишься на линии.</p>
+    <div class="hero-actions">
+      <a class="btn btn-red" href="#heroes">Изучить героев ↗</a>
+      <a class="btn btn-ghost" href="#items">База предметов</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong>01</strong><span>Изучи героев</span></div>
+      <div><strong>02</strong><span>Подбери предметы</span></div>
+      <div><strong>03</strong><span>Продумай тактику</span></div>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="art-ring ring-one"></div>
+    <div class="art-ring ring-two"></div>
+    <div class="art-cross">✕</div>
+    <div class="art-core">G<span>_GG</span></div>
+    <div class="art-label label-top">TACTICAL DATABASE /// 001</div>
+    <div class="art-label label-bottom">WIN WITH A PLAN</div>
+  </div>
+  <div class="hero-bottom-line"><span>МЕНЬШЕ СЛУЧАЙНОСТИ — БОЛЬШЕ ТАКТИКИ</span><a href="#heroes">ИССЛЕДОВАТЬ ↓</a></div>
 </section>
 
 <section class="section" id="counterpicks">
-<div class="section-heading"><div class="eyebrow">01 / COUNTERPICKS</div><h2>НАЙДИ <span>КОНТРПИК</span></h2></div>
-<div class="panel">
-<label for="enemySelect">Герой соперника</label>
-<select id="enemySelect"><option value="">Выбери героя</option></select>
-<button class="btn" id="counterBtn">Подобрать контрпик ↗</button>
-<div id="counterResult" class="result">Выбери вражеского героя, чтобы получить подсказку.</div>
-</div>
+  <div class="section-heading">
+    <div><div class="eyebrow">01 / PICK SMART</div><h2>НАЙДИ <span class="red">КОНТРПИК</span></h2></div>
+    <p>Выбери вражеского героя и получи тактическую подсказку.</p>
+  </div>
+  <div class="panel counter-panel">
+    <label for="enemySelect">Кого выбрал соперник?</label>
+    <select id="enemySelect"><option value="">Сначала загрузи список героев</option></select>
+    <button class="btn btn-red" id="counterBtn">Подобрать контрпик ↗</button>
+    <div class="counter-result" id="counterResult" aria-live="polite">
+      <div class="result-icon">?</div>
+      <div><strong>Твой следующий ход</strong><p>Выбери героя соперника, чтобы получить рекомендации.</p></div>
+    </div>
+    <p class="fine-print">Контрпик не гарантирует победу. Учитывай состав команды, навыки игроков и текущий патч.</p>
+  </div>
 </section>
 
-<section class="section muted" id="heroes">
-<div class="section-heading"><div class="eyebrow">02 / HERO DATABASE</div><h2>БАЗА <span>ГЕРОЕВ</span></h2></div>
-<input id="heroSearch" class="search" placeholder="Найти героя..." type="search">
-<div class="filter-row" id="roleFilters">
-<button class="filter active" data-role="Все">Все</button>
-<button class="filter" data-role="Лес">Лес</button>
-<button class="filter" data-role="Мид">Мид</button>
-<button class="filter" data-role="Голд">Голд</button>
-<button class="filter" data-role="EXP">EXP</button>
-<button class="filter" data-role="Роум">Роум</button>
-</div>
-<p id="heroCount" class="count"></p>
-<div id="heroGrid" class="hero-grid"><p>Загружаем героев...</p></div>
+<section class="section section-muted" id="heroes">
+  <div class="section-heading">
+    <div><div class="eyebrow">02 / HERO DATABASE</div><h2>БАЗА <span class="red">ГЕРОЕВ</span></h2></div>
+    <p>Ищи персонажей, фильтруй роли и сохраняй любимых.</p>
+  </div>
+  <input class="search" id="heroSearch" type="search" placeholder="Поиск героя..." aria-label="Поиск героя">
+  <div class="filter-row" id="roleFilters">
+    <button class="filter active" data-role="Все">Все роли</button>
+    <button class="filter" data-role="Лес">Лес</button>
+    <button class="filter" data-role="Мид">Мид</button>
+    <button class="filter" data-role="Голд">Голд</button>
+    <button class="filter" data-role="EXP">EXP</button>
+    <button class="filter" data-role="Роум">Роум</button>
+  </div>
+  <p class="count" id="heroCount" aria-live="polite"></p>
+  <div class="hero-grid" id="heroGrid"><p class="loading">Загружаем базу героев...</p></div>
+  <p class="fine-print" id="heroSourceNote">Каталог может зависеть от доступности внешнего источника.</p>
 </section>
 
 <section class="section" id="items">
-<div class="section-heading"><div class="eyebrow">03 / ITEM DATABASE</div><h2>БАЗА <span>ПРЕДМЕТОВ</span></h2></div>
-<p class="muted-text">Что даёт предмет, против кого полезен и когда его покупать.</p>
-<input id="itemSearch" class="search" placeholder="Найти предмет..." type="search">
-<div class="filter-row" id="itemFilters">
-<button class="filter active" data-category="Все">Все</button>
-<button class="filter" data-category="Attack">Физический урон</button>
-<button class="filter" data-category="Magic">Магия</button>
-<button class="filter" data-category="Defense">Защита</button>
-<button class="filter" data-category="Movement">Обувь</button>
-<button class="filter" data-category="Jungle">Лес</button>
-<button class="filter" data-category="Roam">Роум</button>
-</div>
-<p id="itemCount" class="count"></p>
-<div id="itemGrid" class="item-grid"></div>
+  <div class="section-heading">
+    <div><div class="eyebrow">03 / ITEM DATABASE</div><h2>БАЗА <span class="red">ПРЕДМЕТОВ</span></h2></div>
+    <p>Изучай назначение экипировки и выбирай предметы с учётом соперника.</p>
+  </div>
+  <input class="search" id="itemSearch" type="search" placeholder="Название или эффект..." aria-label="Поиск предмета">
+  <div class="filter-row" id="itemFilters">
+    <button class="filter active" data-category="Все">Все</button>
+    <button class="filter" data-category="Attack">Физический урон</button>
+    <button class="filter" data-category="Magic">Магия</button>
+    <button class="filter" data-category="Defense">Защита</button>
+    <button class="filter" data-category="Movement">Обувь</button>
+    <button class="filter" data-category="Jungle">Лес</button>
+    <button class="filter" data-category="Roam">Роум</button>
+  </div>
+  <p class="count" id="itemCount" aria-live="polite"></p>
+  <div class="item-grid" id="itemGrid"></div>
+  <p class="fine-print">Описания объясняют назначение предметов. Точные параметры, цены и эффекты проверяй в клиенте игры после обновлений.</p>
 </section>
 
-<section class="section muted" id="builds">
-<div class="section-heading"><div class="eyebrow">04 / BUILD LAB</div><h2>ПРИМЕРЫ <span>СБОРОК</span></h2></div>
-<div id="buildGrid" class="build-grid"></div>
+<section class="section section-muted" id="builds">
+  <div class="section-heading">
+    <div><div class="eyebrow">04 / BUILD LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">СБОРОК</span></h2></div>
+    <p>Примеры предметов и объяснения, почему они могут пригодиться герою.</p>
+  </div>
+  <div class="filter-row" id="buildFilters">
+    <button class="filter active" data-build="Все">Все сборки</button>
+    <button class="filter" data-build="Фанни">Фанни</button>
+    <button class="filter" data-build="Вексана">Вексана</button>
+    <button class="filter" data-build="Клод">Клод</button>
+    <button class="filter" data-build="Белерик">Белерик</button>
+  </div>
+  <div class="build-grid" id="buildGrid"></div>
 </section>
 
-<section class="section" id="guides">
-<div class="section-heading"><div class="eyebrow">05 / LEVEL UP</div><h2>МИНИ-<span>ГАЙДЫ</span></h2></div>
-<div class="guide-grid">
-<article class="panel"><h3>Баланс команды</h3><p>Команде нужны передняя линия, контроль, магический и физический урон.</p></article>
-<article class="panel"><h3>Покупай с умом</h3><p>Подстраивай предметы под угрозы соперника, а не используй одну сборку каждый матч.</p></article>
-<article class="panel"><h3>Следи за картой</h3><p>Проверяй мини-карту, помогай с важными целями и не рискуй без поддержки.</p></article>
-</div>
+<section class="section" id="favorites">
+  <div class="section-heading">
+    <div><div class="eyebrow">05 / YOUR COLLECTION</div><h2>МОЁ <span class="red">ИЗБРАННОЕ</span></h2></div>
+    <p>Герои и предметы, которые ты сохранил на этом устройстве.</p>
+  </div>
+  <div class="filter-row">
+    <button class="filter active" id="favHeroesTab">Герои</button>
+    <button class="filter" id="favItemsTab">Предметы</button>
+  </div>
+  <div class="hero-grid" id="favoritesGrid"></div>
+  <p class="fine-print">Избранное хранится локально в браузере этого устройства.</p>
+</section>
+
+<section class="section section-muted" id="guides">
+  <div class="section-heading">
+    <div><div class="eyebrow">06 / LEVEL UP</div><h2>БИБЛИОТЕКА <span class="red">ГАЙДОВ</span></h2></div>
+    <p>Практические советы для принятия решений в матче.</p>
+  </div>
+  <div class="guide-grid">
+    <article class="guide-card">
+      <span class="guide-num">GUIDE_001</span><h3>БАЛАНС КОМАНДЫ</h3>
+      <p>Сочетай переднюю линию, контроль, магический и физический урон. Учитывай, кто будет начинать бой и защищать стрелка.</p>
+    </article>
+    <article class="guide-card">
+      <span class="guide-num">GUIDE_002</span><h3>ВЫБОР ПРЕДМЕТОВ</h3>
+      <p>Подстраивай экипировку под угрозы соперника. Одна и та же сборка не всегда подходит каждому матчу.</p>
+    </article>
+    <article class="guide-card">
+      <span class="guide-num">GUIDE_003</span><h3>КОНТРОЛЬ КАРТЫ</h3>
+      <p>Следи за мини-картой, линиями и целями. Не начинай рискованный бой, если союзники далеко.</p>
+    </article>
+    <article class="guide-card">
+      <span class="guide-num">GUIDE_004</span><h3>ИГРА ПРОТИВ КОНТРОЛЯ</h3>
+      <p>Не трать все способности одновременно. Следи за ключевыми умениями соперника и выбирай безопасное время для входа.</p>
+    </article>
+  </div>
+</section>
+
+<section class="join-banner">
+  <div><div class="eyebrow">YOUR NEXT MATCH STARTS HERE</div><h2>ТАКТИКА — ТВОЁ <span class="red">ПРЕИМУЩЕСТВО.</span></h2><p>Возвращайся в Grim_gg перед следующим матчем.</p></div>
+  <a class="btn btn-red" href="#home">Наверх ↑</a>
 </section>
 </main>
 
-<footer class="footer">GRIM<span>_GG</span> · Неофициальный фанатский проект Mobile Legends: Bang Bang · <span id="year"></span></footer>
-<script src="script.js"></script>
+<footer class="footer">
+  <a class="brand brand-small" href="#home">GRIM<span class="red">_GG</span><small>MLBB COMPANION</small></a>
+  <p>Неофициальный фанатский справочник для игроков Mobile Legends: Bang Bang.</p>
+  <span>© <span id="year"></span> GRIM_GG</span>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
