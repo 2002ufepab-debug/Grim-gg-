@@ -1013,3 +1013,30 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+
+/* Responsive catalog density and all-hero build directory */
+@media (min-width: 1200px) {
+  .hero-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (min-width: 651px) and (max-width: 950px) {
+  .hero-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .hero-image-wrap { height: 126px; }
+  .hero-card-content { padding: 9px; }
+  .hero-card h3 { font-size: 12px; }
+  .hero-role { font-size: 9px; }
+  .hero-card .favorite-btn { width: 100%; padding: 7px 4px; font-size: 9px; }
+  .build-search { width: 100%; }
+  #buildFilters { display: flex; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; }
+  #buildFilters .filter { flex: 0 0 auto; white-space: nowrap; }
+}
+@media (max-width: 380px) {
+  .hero-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-image-wrap { height: 150px; }
+}
+.build-open-button { margin-top: 10px; width: 100%; }
+.build-item-row { min-width: 0; }
+.build-item-row > strong, .build-item-row > span:last-child { overflow-wrap: anywhere; }
