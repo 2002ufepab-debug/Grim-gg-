@@ -579,7 +579,8 @@ function heroImageMarkup(hero) {
   if (!hero.image) {
     return `<div class="hero-image-fallback" role="img" aria-label="Изображение героя недоступно">${initial}</div>`;
   }
-  return `<img class="hero-image" src="${escapeHTML(hero.image)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))">`;
+  const retryImage = heroImageUrl(hero.name);
+  return `<img class="hero-image" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
 function favoriteButton(type,id,saved) {
@@ -891,7 +892,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = vectorIcon || (iconSource
-      ? `<img class="item-image" src="${escapeHTML(iconSource)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))">`
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : ""))}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))}">`
       : `<div class="item-symbol" aria-label="Иконка предмета недоступна">${symbol}</div>`);
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
