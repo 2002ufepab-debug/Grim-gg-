@@ -1074,7 +1074,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const iconSource = item.imageFile
       ? ITEM_IMAGE_BASE + item.imageFile
       : item.id === "retribution"
-        ? "assets/retribution.svg"
+        ? new URL("assets/retribution.svg", window.location.href).href
         : item.id === "roam-boots"
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
