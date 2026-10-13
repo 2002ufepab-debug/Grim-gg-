@@ -15,6 +15,13 @@ const HERO_SOURCE =
 
 const HERO_IMAGE_BASE =
   "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/";
+const ITEM_IMAGE_BASE =
+  "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/logo-equipment/";
+
+const roleTranslations = {
+  assassin:"Убийца", mage:"Маг", marksman:"Стрелок",
+  fighter:"Боец", tank:"Танк", support:"Поддержка"
+};
 
 const fallbackHeroes = [
   ["Fanny","Лес","Убийца"],["Vexana","Мид","Маг"],
@@ -53,6 +60,7 @@ const fallbackHeroes = [
   name:h[0],
   lane:h[1],
   role:h[2],
+  roles:[h[2]],
   image:""
 }));
 
@@ -297,6 +305,7 @@ const counters = {
 };
 
 let heroes = fallbackHeroes.map(h=>({...h}));
+let heroDataSource = "fallback";
 let heroQuery = "";
 let activeRole = "Все";
 let itemQuery = "";
@@ -341,17 +350,22 @@ function showToast(message) {
   toastTimer = setTimeout(()=>toast.classList.remove("show"),2600);
 }
 
-function getHeroLane(hero) {
-  const known = ["Лес","Мид","Голд","EXP","Роум"];
-  if (known.includes(hero.lane)) return hero.lane;
-  const roles = Array.isArray(hero.roles) ? hero.roles : [];
-  const joined = roles.join(" ").toLowerCase();
-  if (joined.includes("assassin")) return "Лес";
-  if (joined.includes("marksman")) return "Голд";
-  if (joined.includes("mage")) return "Мид";
-  if (joined.includes("tank") || joined.includes("support")) return "Роум";
-  if (joined.includes("fighter")) return "EXP";
-  return "Другие";
+function getHeroClasses(hero) {
+  const roles = Array.isArray(hero.roles) && hero.roles.length
+    ? hero.roles
+    : String(hero.role || "").split("/");
+  const translated = roles
+    .map(role => roleTranslations[String(role).trim().toLowerCase()] || String(role).trim())
+    .filter(Boolean);
+  return [...new Set(translated.length ? translated : ["Роль не указана"])];
+}
+
+function itemIconSlug(name) {
+  return String(name)
+    .toLowerCase()
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
 
 function normalizeRemoteHero(hero,index) {
@@ -363,25 +377,19 @@ function normalizeRemoteHero(hero,index) {
     : Array.isArray(hero.roles) ? hero.roles
     : typeof hero.role === "string" ? [hero.role] : [];
 
-  const laneMap = {
-    assassin:"Лес", mage:"Мид", marksman:"Голд",
-    fighter:"EXP", tank:"Роум", support:"Роум"
-  };
-
   const roleText = roles.map(r=>String(r).toLowerCase());
-  const lane = laneMap[roleText[0]] || "Другие";
-
+  const translatedRoles = roleText.map(role=>roleTranslations[role] || role);
+  const fallbackMatch = fallbackHeroes.find(h=>h.name.toLowerCase()===String(name).toLowerCase());
   const filename = hero["images-hero"] || hero.image || hero.image_url || "";
 
   return {
-    id:String(hero.id_hero ?? hero.id ?? "remote-"+index),
+    id:fallbackMatch ? String(fallbackMatch.id) : String(hero.id_hero ?? hero.id ?? "remote-"+index),
     name:String(name),
-    lane,
-    role:roles.map(r=>String(r)).join(" / ") || "Роль не указана",
+    role:translatedRoles.join(" / ") || "Роль не указана",
     image:filename && /^https?:\/\//i.test(filename)
       ? filename
       : filename ? HERO_IMAGE_BASE + encodeURIComponent(filename) : "",
-    roles
+    roles:roleText
   };
 }
 
@@ -403,11 +411,11 @@ function renderHeroes() {
 
   const filtered = heroes.filter(hero=>{
     const lane = getHeroLane(hero);
-    return (activeRole==="Все" || lane===activeRole) &&
+    return (activeRole==="Все" || getHeroClasses(hero).includes(activeRole)) &&
       hero.name.toLocaleLowerCase().includes(heroQuery);
   });
 
-  $("heroCount").textContent = `Показано: ${filtered.length}. ${heroes.length === fallbackHeroes.length ? "Используется встроенный список; он не является полным каталогом игры." : "Источник: внешний каталог."}`;
+  $("heroCount").textContent = `Показано: ${filtered.length}. ${heroDataSource === "fallback" ? "Показан сокращённый встроенный список: он не является полным каталогом." : "Роли взяты из стороннего каталога сообщества; это не данные о рекомендуемой линии."}`;
 
   if (!filtered.length) {
     grid.innerHTML = '<p class="empty-state">Герои не найдены. Попробуй другой поиск или роль.</p>';
@@ -417,7 +425,7 @@ function renderHeroes() {
   grid.innerHTML = filtered.map(hero=>{
     const id = String(hero.id);
     const saved = favoriteHeroes.has(id);
-    const role = getHeroLane(hero);
+    const heroClasses = getHeroClasses(hero);
     const tip = heroTips[hero.name] ||
       "Изучай дальность навыков, следи за мини-картой и подстраивай тактику под состав соперника.";
 
@@ -429,7 +437,7 @@ function renderHeroes() {
       <div class="hero-card-content">
         <h3>${escapeHTML(hero.name)}</h3>
         <p class="hero-role">${escapeHTML(hero.role || role)}</p>
-        <div class="hero-tags"><span>${escapeHTML(role)}</span></div>
+        <div class="hero-tags">${heroClasses.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <details><summary>Игровой совет ↗</summary><p>${escapeHTML(tip)}</p></details>
         ${favoriteButton("hero",id,saved)}
       </div>
@@ -457,9 +465,10 @@ function renderItems() {
   grid.innerHTML = filtered.map(item=>{
     const saved = favoriteItems.has(item.id);
     const symbol = escapeHTML(item.ru.slice(0,1).toUpperCase());
+    const iconUrl = ITEM_IMAGE_BASE + itemIconSlug(item.name) + ".png";
 
     return `<article class="item-card">
-      <div class="item-image-wrap"><div class="item-symbol" aria-hidden="true">${symbol}</div></div>
+      <div class="item-image-wrap"><img class="item-image" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'item-symbol',textContent:${JSON.stringify(symbol)}}))"></div>
       <div class="item-content">
         <span class="item-category">${escapeHTML(categories[item.cat] || item.cat)}</span>
         <h3>${escapeHTML(item.ru)}</h3>
@@ -510,7 +519,7 @@ function renderFavorites() {
       <article class="hero-card">
         <div class="hero-image-wrap">${heroImageMarkup(hero)}</div>
         <div class="hero-card-content"><h3>${escapeHTML(hero.name)}</h3>
-        <p class="hero-role">${escapeHTML(getHeroLane(hero))}</p>
+        <p class="hero-role">${escapeHTML(getHeroClasses(hero).join(" / "))}</p>
         ${favoriteButton("hero",String(hero.id),true)}</div>
       </article>`).join("") :
       '<p class="empty-state">Ты пока не добавил героев. Нажми ☆ в карточке героя.</p>';
@@ -617,13 +626,22 @@ async function loadExternalHeroes() {
     const normalized = data.map(normalizeRemoteHero).filter(Boolean);
     if (!normalized.length) throw new Error("Не удалось прочитать героев");
 
+    const remoteIdToFallbackId = new Map();
+    normalized.forEach(hero => {
+      const fallback = fallbackHeroes.find(item => item.name.toLowerCase() === hero.name.toLowerCase());
+      if (fallback) remoteIdToFallbackId.set(String(hero.id), String(fallback.id));
+    });
+    favoriteHeroes = new Set([...favoriteHeroes].map(id => remoteIdToFallbackId.get(String(id)) || String(id)));
+    safeWrite("grimgg-favorite-heroes", favoriteHeroes);
     heroes = normalized;
-    if (note) note.textContent = "Загружен внешний каталог. Изображения отображаются, если доступны по ссылкам источника.";
+    heroDataSource = "external";
+    if (note) note.textContent = "Загружен сторонний каталог сообщества. Он неофициальный и может отставать от текущего патча; роли обозначают классы героев, а не рекомендуемые линии.";
     renderHeroes();
     renderCounterpicks();
     renderFavorites();
   } catch (error) {
-    if (note) note.textContent = "Внешний каталог не загрузился. Показан встроенный список известных героев; это не полный каталог игры.";
+    heroDataSource = "fallback";
+    if (note) note.textContent = "Внешний каталог недоступен. Показан сокращённый встроенный список; он не является полным каталогом игры.";
     console.warn("Grim_gg: внешний каталог героев недоступен.",error);
   }
 }
