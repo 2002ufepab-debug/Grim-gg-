@@ -92,11 +92,24 @@ def main() -> int:
         print(f"Only {len(articles)} articles extracted; keeping existing feed.", file=sys.stderr)
         return 1
     articles.sort(key=lambda item: (item["published"] or "0000-00-00", item["url"]), reverse=True)
+    articles = articles[:30]
+
+    # Avoid a commit and Pages deployment every scheduled run when nothing changed.
+    # updatedAt means the feed content last changed, not the last polling attempt.
+    if OUT.exists():
+        try:
+            existing = json.loads(OUT.read_text(encoding="utf-8"))
+            if existing.get("articles") == articles:
+                print("No new or changed official news; keeping the existing feed unchanged.")
+                return 0
+        except (OSError, json.JSONDecodeError, AttributeError):
+            pass
+
     payload = {
         "source": "MOONTON Games official news",
         "sourceUrl": "https://en.moonton.com/news/index.html",
         "updatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "articles": articles[:30],
+        "articles": articles,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
