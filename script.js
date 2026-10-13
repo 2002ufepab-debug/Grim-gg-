@@ -1453,6 +1453,8 @@ function setupPageNavigation() {
     if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.searchParams.has("page")) return;
 
     event.preventDefault();
+    closeHeroDetail();
+    closeHeroBuild();
     if (url.href !== window.location.href) history.pushState({}, "", url.href);
     applyPageNavigation(url.searchParams.get("page"));
     if (url.searchParams.get("page") === "hero") renderHeroFullPage(url.searchParams.get("name"));
