@@ -21,7 +21,7 @@ script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
-for asset in ("styles.css?v=50", "talents.css?v=3", "layout-wide.css?v=2", "script.js?v=49", "talents.js?v=6"):
+for asset in ("styles.css?v=50", "talents.css?v=3", "layout-wide.css?v=2", "script.js?v=50", "talents.js?v=6"):
     require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
 
 # Catch duplicate static IDs and accidentally unbalanced CSS before publishing.
