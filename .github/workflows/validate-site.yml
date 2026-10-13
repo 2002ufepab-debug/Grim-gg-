@@ -1,0 +1,30 @@
+name: Validate Grim_gg site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check JavaScript syntax
+        run: |
+          node --check script.js
+          node --check talents.js
+      - name: Validate news JSON
+        run: python -m json.tool data/esports-news.json > /dev/null
+      - name: Run static smoke tests
+        run: python scripts/smoke_test.py
