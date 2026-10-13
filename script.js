@@ -409,11 +409,10 @@ function renderHeroes() {
   const grid = $("heroGrid");
   if (!grid) return;
 
-  const filtered = heroes.filter(hero=>{
-    const lane = getHeroLane(hero);
-    return (activeRole==="Все" || getHeroClasses(hero).includes(activeRole)) &&
-      hero.name.toLocaleLowerCase().includes(heroQuery);
-  });
+  const filtered = heroes.filter(hero=>
+    (activeRole==="Все" || getHeroClasses(hero).includes(activeRole)) &&
+    hero.name.toLocaleLowerCase().includes(heroQuery)
+  );
 
   $("heroCount").textContent = `Показано: ${filtered.length}. ${heroDataSource === "fallback" ? "Показан сокращённый встроенный список: он не является полным каталогом." : "Роли взяты из стороннего каталога сообщества; это не данные о рекомендуемой линии."}`;
 
