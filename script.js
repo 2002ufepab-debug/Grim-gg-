@@ -569,6 +569,69 @@ function favoriteButton(type,id,saved) {
   return `<button type="button" class="favorite-btn ${saved?"saved":""}" data-favorite-type="${type}" data-favorite-id="${escapeHTML(id)}" aria-pressed="${saved}">${saved?"★ В избранном":"☆ В избранное"}</button>`;
 }
 
+let activeDetailHeroId = "";
+
+function getHeroById(id) {
+  return heroes.find(hero => String(hero.id) === String(id)) || null;
+}
+
+function renderHeroDetailContent(hero, target) {
+  if (!hero || !target) return;
+  const roles = getHeroClasses(hero);
+  const tip = heroTips[hero.name] || "Учитывай дальность навыков, следи за мини-картой и подстраивай тактику под состав команды соперника.";
+  const headingId = target.id === "heroDetailModalContent" ? "heroDetailModalTitle" : "heroDetailPageTitle";
+  target.innerHTML = `
+    <div class="hero-detail-layout">
+      <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
+      <div class="hero-detail-copy">
+        <span class="eyebrow">GRIM_GG / HERO PROFILE</span>
+        <h2 id="${headingId}">${escapeHTML(hero.name)}</h2>
+        <p class="hero-role">${escapeHTML(hero.role || roles.join(" / "))}</p>
+        <div class="hero-tags">${roles.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
+        <div class="hero-detail-tip"><strong>Совет Grim_gg</strong><p>${escapeHTML(tip)}</p></div>
+        <div class="hero-detail-actions">
+          <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Сборка героя ↗</button>
+          ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
+          <a class="btn btn-ghost" href="?page=hero&amp;name=${encodeURIComponent(hero.name)}">Полная страница ↗</a>
+          <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
+          <a class="btn btn-ghost" href="?page=counterpicks">Контрпики ↗</a>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderHeroFullPage(name) {
+  const target = $("heroDetailPage");
+  if (!target) return;
+  const hero = heroes.find(entry => entry.name.toLocaleLowerCase() === String(name || "").toLocaleLowerCase());
+  if (!hero) {
+    target.innerHTML = '<div class="empty-state"><strong>Герой не найден</strong><p>Вернись в каталог и выбери героя ещё раз.</p><a class="btn btn-ghost" href="?page=heroes">Вернуться к героям</a></div>';
+    return;
+  }
+  activeDetailHeroId = String(hero.id);
+  renderHeroDetailContent(hero,target);
+}
+
+function openHeroDetail(id) {
+  const hero = getHeroById(id);
+  const modal = $("heroDetailModal");
+  const content = $("heroDetailModalContent");
+  if (!hero || !modal || !content) return;
+  activeDetailHeroId = String(hero.id);
+  renderHeroDetailContent(hero,content);
+  modal.hidden = false;
+  if ($("buildModal")) $("buildModal").hidden = true;
+  document.body.classList.add("modal-open");
+  modal.querySelector(".hero-detail-close")?.focus();
+}
+
+function closeHeroDetail() {
+  const modal = $("heroDetailModal");
+  if (!modal) return;
+  modal.hidden = true;
+  if ($("buildModal")?.hidden !== false) document.body.classList.remove("modal-open");
+}
+
 function renderHeroes() {
   const grid = $("heroGrid");
   if (!grid) return;
@@ -604,11 +667,14 @@ function renderHeroes() {
 
     return `<article class="hero-card">
       <div class="hero-image-wrap">
-        ${heroImageMarkup(hero)}
-        <span class="hero-id">HERO / ${escapeHTML(id)}</span>
+        <button type="button" class="hero-image-open" data-open-hero="${escapeHTML(id)}" aria-label="Открыть профиль героя ${escapeHTML(hero.name)}">
+          ${heroImageMarkup(hero)}
+          <span class="hero-id">HERO / ${escapeHTML(id)}</span>
+          <span class="hero-image-hint">Открыть профиль ↗</span>
+        </button>
       </div>
       <div class="hero-card-content">
-        <h3>${escapeHTML(hero.name)}</h3>
+        <h3><button type="button" class="hero-name-open" data-open-hero="${escapeHTML(id)}">${escapeHTML(hero.name)}</button></h3>
         <p class="hero-role">${escapeHTML(hero.role || getHeroClasses(hero).join(" / "))}</p>
         <div class="hero-tags">${heroClasses.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <button type="button" class="btn btn-red hero-build-btn" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(heroClasses.join(","))}">Сборка героя ↗</button>
@@ -714,6 +780,7 @@ function renderTierList() {
 
 function effectIconMarkup(item) {
   const art = {
+    "retribution": '<path d="M59 13 34 55h17l-7 29 31-43H57Z" fill="#ff526b" stroke="#ffd0d7" stroke-width="3" stroke-linejoin="round"/><path d="m34 55-11 6 17 7 4-13" fill="#ff9aaa"/><circle cx="48" cy="48" r="36" fill="none" stroke="#ff526b" stroke-opacity=".5" stroke-width="3"/>',
     "roam-boots": '<path d="M24 54c8 1 14-4 18-15l10 8c7 5 13 7 20 7 5 0 9 4 9 9v8H18v-7c0-5 2-8 6-10Z" fill="#b88cff" stroke="#eadbff" stroke-width="3" stroke-linejoin="round"/><path d="M22 65h55M42 45l-3 8M51 49l-2 5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
     "ice-retribution": '<g fill="none" stroke="#8feaff" stroke-width="3" stroke-linecap="round"><path d="M48 22v52M25 35l46 26M71 35L25 61M39 29l9 7 9-7M39 67l9-7 9 7M20 43l5-8 9 1M62 64l9 1 5-8M20 53l5 8 9-1M62 36l9-1 5 8"/></g>',
     "flame-retribution": '<path d="M49 18c4 14-8 17-2 29 4-7 11-10 12-19 14 13 18 25 12 37-5 11-15 17-27 14-15-3-23-16-17-29 3-7 10-13 12-22 4 5 5 9 4 14 8-6 10-14 6-24Z" fill="#ff9858" stroke="#ffd1a0" stroke-width="3" stroke-linejoin="round"/><path d="M47 51c7 7 10 12 6 19-3 5-10 4-12-1-3-6 2-11 6-18Z" fill="#fff0bf"/>',
@@ -739,7 +806,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const symbol = item.cat === "Jungle" ? "⚔" : item.cat === "Roam" ? "◈" : escapeHTML(item.ru.slice(0,1).toUpperCase());
     const iconSlug = itemIconSlug(item.name);
     // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
-    const vectorIcon = item.id === "roam-boots" || item.cat === "Roam" || (item.cat === "Jungle" && item.id !== "retribution")
+    const vectorIcon = item.id === "retribution" || item.id === "roam-boots" || item.cat === "Roam" || (item.cat === "Jungle" && item.id !== "retribution")
       ? effectIconMarkup(item)
       : "";
     const iconSource = item.id === "retribution"
@@ -1053,6 +1120,13 @@ function updateFavorite(type,id) {
   renderTierList();
   renderItems();
   renderFavorites();
+  if (type === "hero" && activeDetailHeroId) {
+    const activeHero = getHeroById(activeDetailHeroId);
+    if (activeHero) {
+      renderHeroDetailContent(activeHero,$("heroDetailModalContent"));
+      renderHeroDetailContent(activeHero,$("heroDetailPage"));
+    }
+  }
 }
 
 function renderCounterpicks() {
@@ -1319,6 +1393,9 @@ async function loadExternalHeroes() {
     renderComboGuides();
     renderCounterpicks();
     renderFavorites();
+    if (new URLSearchParams(window.location.search).get("page") === "hero") {
+      renderHeroFullPage(new URLSearchParams(window.location.search).get("name"));
+    }
   } catch (error) {
     heroDataSource = "fallback";
     if (note) note.textContent = "Внешний каталог недоступен. Показан сокращённый встроенный список; он не является полным каталогом игры.";
@@ -1328,11 +1405,13 @@ async function loadExternalHeroes() {
 
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
-  const pageIds = ["home","heroes","tierlist","items","perks","builds","favorites","guides","counterpicks"];
+  const pageIds = ["home","heroes","tierlist","items","perks","builds","favorites","guides","counterpicks","hero"];
   const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
+  const visibleSection = page === "hero" ? "hero-detail" : page;
 
   document.querySelectorAll("main > section").forEach(section => {
-    section.classList.toggle("page-hidden", Boolean(page) && section.id !== page);
+    const isHeroDetail = section.id === "hero-detail";
+    section.classList.toggle("page-hidden", isHeroDetail ? page !== "hero" : Boolean(page) && section.id !== visibleSection);
   });
 
   document.querySelectorAll("#nav a").forEach(link => {
@@ -1353,7 +1432,8 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     builds: "Сборки",
     favorites: "Избранное",
     guides: "Комбо и гайды",
-    counterpicks: "Контрпики"
+    counterpicks: "Контрпики",
+    hero: "Профиль героя"
   };
   document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — MLBB Tactical Database";
 
@@ -1375,6 +1455,7 @@ function setupPageNavigation() {
     event.preventDefault();
     if (url.href !== window.location.href) history.pushState({}, "", url.href);
     applyPageNavigation(url.searchParams.get("page"));
+    if (url.searchParams.get("page") === "hero") renderHeroFullPage(url.searchParams.get("name"));
     const nav = $("nav");
     const toggle = $("menuToggle");
     nav?.classList.remove("open");
@@ -1383,7 +1464,9 @@ function setupPageNavigation() {
 
   window.addEventListener("popstate", () => {
     applyPageNavigation(getRequestedPage(), false);
+    if (getRequestedPage() === "hero") renderHeroFullPage(new URLSearchParams(window.location.search).get("name"));
   });
+  if (getRequestedPage() === "hero") renderHeroFullPage(new URLSearchParams(window.location.search).get("name"));
 }
 
 function setupMenu() {
@@ -1435,8 +1518,18 @@ function init() {
   });
 
   document.addEventListener("click",event=>{
+    const openHeroButton = event.target.closest("[data-open-hero]");
+    if (openHeroButton) {
+      openHeroDetail(openHeroButton.dataset.openHero);
+      return;
+    }
+    if (event.target.closest("[data-close-hero]")) {
+      closeHeroDetail();
+      return;
+    }
     const openBuildButton = event.target.closest("[data-open-build]");
     if (openBuildButton) {
+      closeHeroDetail();
       openHeroBuild(openBuildButton.dataset.openBuild, openBuildButton.dataset.buildRoles);
       return;
     }
@@ -1458,7 +1551,12 @@ function init() {
   setupPageNavigation();
   setupFilters();
   setupMenu();
-  document.addEventListener("keydown",event=>{ if(event.key==="Escape") closeHeroBuild(); });
+  document.addEventListener("keydown",event=>{
+    if(event.key==="Escape") {
+      closeHeroDetail();
+      closeHeroBuild();
+    }
+  });
   renderHeroes();
   renderItems();
   renderPerks();
