@@ -943,18 +943,23 @@ function inferHeroRole(name) {
 }
 
 function getCounterPicks(enemy, enemyRole) {
-  const exact = counters[enemy];
+  const exact = counters[enemy] || Object.entries(counters).find(([name])=>name.toLocaleLowerCase()===String(enemy).toLocaleLowerCase())?.[1];
   if (exact) return {picks:exact.picks,reason:exact.reason};
   const rolePicks = {
     "Убийца":["Khufra","Franco","Saber"],
     "Маг":["Lolita","Chou","Saber"],
     "Стрелок":["Saber","Franco","Lolita"],
-    "Боец":["Kite","Kaja","Franco"],
+    "Боец":["Khufra","Kaja","Franco"],
     "Танк":["Karrie","Claude","Dyrroth"],
     "Поддержка":["Saber","Franco","Chou"]
   };
-  const picks = (rolePicks[enemyRole] || ["Khufra","Franco","Saber"]).filter(name=>heroes.some(h=>h.name.toLowerCase()===name.toLowerCase()));
-  return {picks,reason:`Для ${enemy} нет отдельной проверенной записи. Это предварительные варианты по классу ${enemyRole || "героя"}; проверяй навыки, состав команд и текущий патч.`};
+  const availableNames = new Set(heroes.map(hero=>hero.name.toLocaleLowerCase()));
+  const suggested = rolePicks[enemyRole] || ["Khufra","Franco","Saber"];
+  const picks = suggested.filter(name=>availableNames.has(name.toLocaleLowerCase()));
+  const reason = exact
+    ? exact.reason
+    : `Для героя «${enemy}» нет отдельной проверенной записи. Это предварительные варианты по классу «${enemyRole || "неизвестная роль"}». Учитывай способности, составы команд и текущий патч.`;
+  return {picks,reason};
 }
 
 function getSituationalItems(ownHero, ownRole, enemy, enemyRole) {
@@ -1008,7 +1013,7 @@ function showCounterpick() {
   }
   const enemyRole = inferHeroRole(enemy);
   const counterData = getCounterPicks(enemy,enemyRole);
-  const pickNames = counterData.picks.length ? counterData.picks : ["Khufra","Franco","Saber"];
+  const pickNames = counterData.picks;
   const pickButtons = pickNames.map(name=>{
     const found = heroes.find(h=>h.name.toLowerCase()===name.toLowerCase());
     const actualName = found ? found.name : name;
@@ -1026,7 +1031,7 @@ function showCounterpick() {
   }
   result.innerHTML = `<div class="counter-result-inner">
     <strong>Кого выбрать против ${escapeHTML(enemy)}?</strong>
-    <div class="counter-pick-list">${pickButtons}</div>
+    ${pickButtons ? `<div class="counter-pick-list">${pickButtons}</div>` : '<p class="counter-help">В загруженном каталоге не нашлось подходящих вариантов для этой роли. Попробуй другой выбор и учитывай навыки соперника.</p>'}
     <p class="counter-reason">${escapeHTML(counterData.reason)}</p>
     ${buildBlock}
     <p class="fine-print">Подсказки ориентировочные. Пик и предметы зависят от патча, линии, союзников и состава противника.</p>
