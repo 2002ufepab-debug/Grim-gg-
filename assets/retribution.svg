@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Возмездие</title>
+  <desc id="desc">Стилизованный красно-синий символ игрового заклинания.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#38203b"/>
+      <stop offset="1" stop-color="#101017"/>
+    </linearGradient>
+    <linearGradient id="blade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff4d2"/>
+      <stop offset=".38" stop-color="#ff5b72"/>
+      <stop offset="1" stop-color="#8c1537"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ff3048" stop-opacity=".45"/>
+      <stop offset="1" stop-color="#ff3048" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="3" y="3" width="122" height="122" rx="19" fill="url(#bg)" stroke="#9b354d" stroke-width="2"/>
+  <circle cx="64" cy="62" r="49" fill="url(#glow)"/>
+  <path d="M77 17 43 61l18 1-10 34 35-47-18-1z" fill="url(#blade)" stroke="#ffd8dc" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="m43 61-13 6 18 7 3-12M61 62l-8 34 17-24" fill="#ff3048" opacity=".8"/>
+  <path d="m29 91 21-12m28-41 17-10M28 39l10 7m49 42 10 8" fill="none" stroke="#ff9aaa" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+  <circle cx="64" cy="64" r="54" fill="none" stroke="#ff3048" stroke-opacity=".35"/>
+</svg>
