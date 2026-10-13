@@ -588,7 +588,7 @@ function renderHeroDetailContent(hero, target) {
     const iconSlug = item ? itemIconSlug(item.name) : null;
     const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
-    return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
+    return `<div class="build-item-row">${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
   }).join("");
   const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
   const skillsSection = combo
