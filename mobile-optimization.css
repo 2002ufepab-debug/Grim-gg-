@@ -195,6 +195,8 @@
 #main-content .hero-grid .hero-image-wrap:has(.hero-image--splash),
 #main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait),
 #main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar) {
+  position: relative !important;
+  display: block !important;
   width: 100% !important;
   height: auto !important;
   aspect-ratio: 3 / 4 !important;
