@@ -19,10 +19,38 @@ try {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
 
-  await page.goto(BASE_URL + "?page=home", { waitUntil: "domcontentloaded", timeout: 60000 });
+  // A push can start this workflow before GitHub Pages finishes publishing. Reload until
+  // the distinctive homepage revision marker is live, rather than testing stale HTML.
+  let publishedRevision = false;
+  for (let attempt = 0; attempt < 24; attempt += 1) {
+    await page.goto(BASE_URL + "?page=home&smoke=" + Date.now(), {
+      waitUntil: "domcontentloaded", timeout: 60000
+    });
+    if (await page.locator(".hero-feature").count() > 0
+      && (await page.locator(".hero-feature").innerText()).includes("HERO SPOTLIGHT / 001")) {
+      publishedRevision = true;
+      break;
+    }
+    await page.waitForTimeout(5000);
+  }
+  check("Latest homepage revision is published", publishedRevision,
+    "waiting for the new hero spotlight to appear on GitHub Pages");
+  if (!publishedRevision) throw new Error("GitHub Pages did not publish the expected homepage revision in time");
+
   await page.locator("#home").waitFor({ state: "visible", timeout: 20000 });
   check("Homepage renders", await page.locator("#home").isVisible());
   check("Main navigation exists", await page.locator("#nav a").count() >= 8);
+  const spotlight = page.locator(".hero-feature");
+  check("Homepage has a real hero spotlight", await spotlight.isVisible()
+    && await page.locator(".hero-feature-name").innerText() === "CLINT");
+  const spotlightImage = page.locator(".hero-feature-image");
+  await spotlightImage.waitFor({ state: "visible", timeout: 20000 });
+  await page.waitForFunction(() => {
+    const image = document.querySelector(".hero-feature-image");
+    return image && image.complete;
+  }, { timeout: 30000 });
+  check("Featured hero artwork loads", await spotlightImage.evaluate(image => image.naturalWidth > 0),
+    await spotlightImage.getAttribute("src"));
 
   const routes = [
     ["heroes", "#heroes"],
