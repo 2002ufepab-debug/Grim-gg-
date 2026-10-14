@@ -1118,3 +1118,66 @@
   transform: scale(1.2) !important;
   transform-origin: center 36% !important;
 }
+
+
+/* Circle avatar fill pass: zoom the artwork inside the circular mask, not the frame.
+   Keep splash art conservative so roam/tank/support portraits are not cropped away. */
+.build-hero-avatar-art {
+  position: relative;
+  flex: 0 0 58px;
+  width: 58px !important;
+  height: 58px !important;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 1px solid rgba(255, 91, 116, .42);
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 50% 35%, #39202c, #151016 74%);
+  isolation: isolate;
+}
+.build-hero-avatar-art .hero-image,
+.build-hero-avatar-art .hero-image-fallback {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
+  transform: none !important;
+  filter: none !important;
+}
+.build-hero-avatar-art .hero-image--avatar {
+  transform: scale(1.16) !important;
+  transform-origin: center 22%;
+}
+.build-hero-avatar-art .hero-image--portrait {
+  transform: scale(1.06) !important;
+  transform-origin: center 22%;
+}
+.build-hero-avatar-art .hero-image--splash {
+  object-position: center 28% !important;
+}
+#heroDetailPage .hero-profile-name-avatar {
+  overflow: hidden;
+  border-radius: 50%;
+}
+#heroDetailPage .hero-profile-name-avatar .hero-profile-avatar {
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
+  transform: scale(1.14) !important;
+  transform-origin: center 22%;
+}
+@media (max-width: 650px) {
+  .build-hero-avatar-art {
+    flex-basis: 54px;
+    width: 54px !important;
+    height: 54px !important;
+  }
+}
