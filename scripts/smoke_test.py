@@ -115,8 +115,10 @@ require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
 require('"lesley": "Lesley/Deadly Sniper.png"' in script and "images.weserv.nl/?url=" in script,
         "Lesley must use optimized high-resolution splash artwork with a CDN fallback")
-require('item.id === "retribution"\n      ? "https://raw.githubusercontent.com/Alexandre221178/alexandregames/main/img-MLBB/spells/retribution-ca%C3%A7ar.webp"' in script,
-        "Base Retribution must use a verified game-spell icon source")
+require('item.id === "retribution"\n      ? new URL("assets/retribution.svg", window.location.href).href' in script
+        and 'const retrySource = item.id === "retribution" ? ""' in script
+        and (ROOT / "assets" / "retribution.svg").is_file(),
+        "Base Retribution must use its local icon and avoid retrying a known-missing remote icon")
 require("Array.isArray(payload?.records)" in talents and "skill?.icon_url" in talents,
         "Talent icon loader must handle alternate public API response shapes")
 require("grid-template-columns: repeat(3, minmax(0, 1fr))" in wide_styles and "object-fit: cover" in wide_styles,
