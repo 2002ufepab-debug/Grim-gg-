@@ -33,8 +33,8 @@ def fit_art(source: "Image.Image", mode: str, scale: float, focal_x: float, foca
             target: tuple[int, int] = CANVAS) -> "Image.Image":
     """Place art on a fixed canvas without stretching or cropping opaque splash art."""
     require_pillow()
-    if not (0.1 <= scale <= 1.5):
-        raise ValueError("scale must be between 0.1 and 1.5")
+    if not (0.1 <= scale <= 1.0):
+        raise ValueError("scale must be between 0.1 and 1.0; zooming beyond fit could crop artwork")
     if not (0.0 <= focal_x <= 1.0 and 0.0 <= focal_y <= 1.0):
         raise ValueError("focal_x and focal_y must be between 0 and 1")
 
@@ -52,9 +52,7 @@ def fit_art(source: "Image.Image", mode: str, scale: float, focal_x: float, foca
 
     # Fit the full image to the canvas. scale=1.0 fills the maximum available area;
     # per-hero scale overrides tune the visible size without distorting proportions.
-    factor = min(canvas_w / image.width, canvas_h / image.height) * min(scale, 1.0)
-    if scale > 1.0:
-        factor = min(canvas_w / image.width, canvas_h / image.height) * scale
+    factor = min(canvas_w / image.width, canvas_h / image.height) * scale
     new_w = max(1, min(canvas_w, round(image.width * factor)))
     new_h = max(1, min(canvas_h, round(image.height * factor)))
     image = image.resize((new_w, new_h), Image.Resampling.LANCZOS)
