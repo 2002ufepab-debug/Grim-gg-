@@ -1498,10 +1498,23 @@ function closeHeroBuild() {
   document.body.classList.remove("modal-open");
 }
 
+function renderBuildHeroAvatars() {
+  const container = $("buildHeroAvatars");
+  if (!container) return;
+  container.innerHTML = heroes.map(hero => {
+    const selected = buildQuery.trim().toLocaleLowerCase() === String(hero.name || "").toLocaleLowerCase();
+    return `<button type="button" class="build-hero-avatar" data-build-hero="${escapeHTML(hero.name)}" aria-pressed="${String(selected)}" aria-label="Выбрать ${escapeHTML(hero.name)}">
+      <span class="build-hero-avatar-art">${heroImageMarkup(hero)}</span>
+      <span class="build-hero-avatar-name">${escapeHTML(hero.name)}</span>
+    </button>`;
+  }).join("");
+}
+
 function renderBuilds() {
   const grid = $("buildGrid");
   if (!grid) return;
 
+  renderBuildHeroAvatars();
   const query = buildQuery.trim().toLocaleLowerCase();
   const filtered = heroes.filter(hero => {
     const roles = getHeroClasses(hero);
@@ -1531,7 +1544,7 @@ function renderBuilds() {
       return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item ? item.ru : name)}</strong><span>${escapeHTML(item ? item.stats : "Проверь предмет в актуальной версии игры.")}</span></div></div>`;
     }).join("");
 
-    return `<article class="build-card">
+    return `<article class="build-card" data-build-card="${escapeHTML(hero.name)}">
       <span class="build-label">BUILD LAB / ${escapeHTML(hero.name)}</span>
       <h3>${escapeHTML(hero.name)}</h3>
       <p>${escapeHTML(roles.join(" / "))}</p>
@@ -1730,6 +1743,20 @@ function setupFilters() {
   $("buildSearch")?.addEventListener("input",event=>{
     buildQuery = event.target.value;
     renderBuilds();
+  });
+  $("buildHeroAvatars")?.addEventListener("click",event=>{
+    const button = event.target.closest("[data-build-hero]");
+    if (!button) return;
+    buildQuery = button.dataset.buildHero || "";
+    buildRoleFilter = "Все";
+    if ($("buildSearch")) $("buildSearch").value = buildQuery;
+    const allRolesButton = $("buildFilters")?.querySelector('[data-build-role="Все"]');
+    if (allRolesButton) syncFilterSelection($("buildFilters"),"[data-build-role]",allRolesButton);
+    renderBuilds();
+    if (typeof window.selectGrimTalentHero === "function") window.selectGrimTalentHero(buildQuery);
+    const card = Array.from($("buildGrid")?.querySelectorAll("[data-build-card]") || [])
+      .find(element => element.dataset.buildCard === buildQuery);
+    if (card) card.scrollIntoView({behavior:"smooth",block:"start"});
   });
   $("buildFilters")?.addEventListener("click",event=>{
     const button = event.target.closest("[data-build-role]");
@@ -1981,8 +2008,9 @@ async function loadExternalHeroes() {
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
   const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","esports","hero"];
-  const page = pageIds.includes(requestedPage) ? requestedPage : "home";
-  const visibleSection = page === "hero" ? "hero-detail" : page === "talents" ? "talentLab" : page;
+  // Keep old talent-page links working, but show the unified builds + talents workspace.
+  const page = requestedPage === "talents" ? "builds" : pageIds.includes(requestedPage) ? requestedPage : "home";
+  const visibleSection = page === "hero" ? "hero-detail" : page;
 
   document.querySelectorAll("main > section").forEach(section => {
     const isHeroDetail = section.id === "hero-detail";
@@ -2005,7 +2033,7 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     items: "Предметы",
     perks: "Перки и заклинания",
     talents: "Таланты и эмблемы",
-    builds: "Сборки",
+    builds: "Сборки и таланты",
     favorites: "Избранное",
     guides: "Комбо и гайды",
     esports: "Киберспорт",
@@ -2043,6 +2071,10 @@ function setupPageNavigation() {
     if (url.href !== window.location.href) history.pushState({}, "", url.href);
     applyPageNavigation(url.searchParams.get("page"));
     applyRoleFromUrl();
+    if (url.hash) {
+      const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+      if (target) target.scrollIntoView({behavior:"smooth",block:"start"});
+    }
     if (url.searchParams.get("page") === "hero") renderHeroFullPage(url.searchParams.get("name"));
     const nav = $("nav");
     const toggle = $("menuToggle");
