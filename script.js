@@ -1012,6 +1012,41 @@ function closeHeroDetail() {
   if ($("buildModal")?.hidden !== false) document.body.classList.remove("modal-open");
 }
 
+function renderQuickHeroSearch() {
+  const input = $("quickHeroSearch");
+  const results = $("quickHeroResults");
+  if (!input || !results) return;
+
+  const query = input.value.trim().toLocaleLowerCase();
+  if (query.length < 2) {
+    results.hidden = true;
+    results.replaceChildren();
+    return;
+  }
+
+  const matched = heroes.filter(hero => {
+    const name = String(hero.name || "");
+    const aliases = HERO_SEARCH_ALIASES[heroSearchKey(name)] || "";
+    const roles = getHeroClasses(hero).join(" ");
+    return (name + " " + aliases + " " + roles).toLocaleLowerCase().includes(query);
+  }).slice(0, 6);
+
+  if (!matched.length) {
+    results.innerHTML = '<div class="quick-hero-empty">Ничего не найдено. Попробуй другое имя или роль.</div>';
+    results.hidden = false;
+    return;
+  }
+
+  results.innerHTML = matched.map(hero => {
+    const name = escapeHTML(hero.name);
+    const roles = escapeHTML(getHeroClasses(hero).join(" · "));
+    return '<button class="quick-hero-result" type="button" role="option" aria-label="Открыть профиль героя ' + name + '" data-open-hero-full="' + name + '">' +
+      '<span><strong>' + name + '</strong><small>' + roles + ' · профиль и сборка</small></span>' +
+      '<span class="quick-result-action">ОТКРЫТЬ ↗</span></button>';
+  }).join("");
+  results.hidden = false;
+}
+
 function renderHeroes() {
   const grid = $("heroGrid");
   if (!grid) return;
@@ -1928,6 +1963,7 @@ async function loadExternalHeroes() {
       ? "Загружен сторонний каталог сообщества. Он неофициальный и может отставать от текущего патча; роли обозначают классы героев, а не рекомендуемые линии."
       : "Внешний каталог недоступен: используется локальный резервный снимок из 133 записей сообщества. Он неофициальный и может отставать от текущего патча.";
     renderHeroes();
+    renderQuickHeroSearch();
     renderTierList();
     renderBuilds();
     renderComboGuides();
@@ -2159,6 +2195,21 @@ function init() {
   $("heroSearch").addEventListener("input",event=>{
     heroQuery = event.target.value.trim().toLocaleLowerCase();
     renderHeroes();
+  });
+
+  $("quickHeroSearch")?.addEventListener("input", renderQuickHeroSearch);
+  $("quickHeroSearch")?.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      $("quickHeroResults").hidden = true;
+      return;
+    }
+    if (event.key === "Enter") {
+      const firstResult = $("quickHeroResults")?.querySelector("[data-open-hero-full]");
+      if (firstResult) {
+        event.preventDefault();
+        firstResult.click();
+      }
+    }
   });
 
   $("itemSearch").addEventListener("input",event=>{
