@@ -185,6 +185,15 @@ try:
             "Every local hero catalog entry must include a name and image filename")
     require(all(isinstance(row.get("name-equipment"), str) and row.get("logo-equipment") for row in equipment_catalog),
             "Every local equipment entry must include a name and image filename")
+    hero_ids = [row.get("id_hero") for row in hero_catalog]
+    hero_names = [str(row.get("name_hero", "")).casefold() for row in hero_catalog]
+    equipment_ids = [row.get("id_equip") for row in equipment_catalog]
+    require(len(hero_ids) == len(set(hero_ids)) and len(hero_names) == len(set(hero_names)),
+            "Local hero snapshot must not contain duplicate IDs or names")
+    require(len(equipment_ids) == len(set(equipment_ids)),
+            "Local equipment snapshot must not contain duplicate item IDs")
+    require('existingNames.add(name.toLocaleLowerCase())' in script,
+            "Equipment loader must deduplicate repeated names in the community catalog")
 except (OSError, json.JSONDecodeError, AttributeError) as exc:
     errors.append(f"Could not validate local catalog snapshots: {exc}")
 
