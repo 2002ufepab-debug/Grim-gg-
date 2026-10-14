@@ -1370,31 +1370,15 @@ function renderItemCards(filtered, grid, emptyMessage) {
   grid.innerHTML = filtered.map(item=>{
     const saved = favoriteItems.has(item.id);
     const iconSlug = itemIconSlug(item.name);
-    const fallbackIcon = itemFallbackIconMarkup(item);
-    // У базового Возмездия в стороннем наборе нет отдельного PNG — используем локальную SVG-иконку.
-    // Используем исходные PNG-иконки предметов и усилений там, где они доступны.
-    // Для общего роум-благословения оставляем собственную векторную пиктограмму:
-    // в наборе нет отдельного файла с таким названием.
-    const normalizedItemId = String(item.id || "").toLowerCase();
-    const normalizedItemName = String(item.ru || item.name || "").toLocaleLowerCase("ru");
-    const isRoamBlessing = normalizedItemId === "roam-boots"
-      || (item.cat === "Roam" && /роум.?благослов|roaming blessing/.test(normalizedItemName));
-    // Use dedicated local vector artwork for known battle spells and Roam blessings,
-    // so those perk cards never depend on a fragile third-party PNG URL.
-    const vectorIcon = effectIconMarkup(item) || (isRoamBlessing
-      ? effectIconMarkup({ ...item, id: "roam-boots", cat: "Roam" })
-      : "");
-    const iconSource = item.id === "retribution"
-      ? new URL("assets/retribution.svg", window.location.href).href
-      : item.imageFile
-        ? ITEM_IMAGE_BASE + item.imageFile
-        : item.id === "roam-boots"
-          ? ""
-          : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
-    const retrySource = item.id === "retribution" ? "" : ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : "");
-    const iconMarkup = vectorIcon || (iconSource
-      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(retrySource)}" data-fallback="${escapeHTML(fallbackIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
-      : fallbackIcon);
+    // Показываем только изображения из набора оригинальных игровых иконок.
+    // Если оригинального файла нет или он недоступен, не подменяем его самодельной пиктограммой.
+    const missingIcon = '<div class="item-symbol item-symbol-fallback" role="img" aria-label="Оригинальная иконка недоступна"><span style="font:600 10px/1.4 sans-serif;text-align:center;padding:6px">Нет оригинальной иконки</span></div>';
+    const iconSource = item.imageFile
+      ? ITEM_IMAGE_BASE + item.imageFile
+      : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const iconMarkup = iconSource
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-fallback="${escapeHTML(missingIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.outerHTML=this.dataset.fallback">`
+      : missingIcon;
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
       <div class="item-content">
