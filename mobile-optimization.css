@@ -958,3 +958,71 @@
   object-position: center 24% !important;
   transform: none !important;
 }
+
+
+/* GRIM_GG / targeted circle-fill corrections for heroes whose source artwork
+   leaves too much empty margin around the character. Applied to catalog and
+   favorites cards; frame dimensions stay identical for every hero. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Argus"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Argus"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Argus"] {
+  transform: scale(1.16) !important;
+  transform-origin: center 34% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"] {
+  transform: scale(1.24) !important;
+  transform-origin: center 42% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Atlas"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Atlas"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Atlas"] {
+  transform: scale(1.18) !important;
+  transform-origin: center 38% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Badang"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Badang"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Badang"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Bane"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Bane"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Bane"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Bruno"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Bruno"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Bruno"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Chip"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Chip"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Chip"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Chou"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Chou"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Chou"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Cici"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Cici"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Cici"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Cyclops"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Cyclops"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Cyclops"] {
+  transform: scale(1.15) !important;
+  transform-origin: center 38% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Beatrix"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Beatrix"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Beatrix"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Benedetta"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Benedetta"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Benedetta"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Carmilla"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Carmilla"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Carmilla"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Cecilion"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Cecilion"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Cecilion"] {
+  transform: scale(1.19) !important;
+  transform-origin: center 34% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Khufra"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Khufra"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Khufra"] {
+  transform: scale(1.17) !important;
+  transform-origin: center 38% !important;
+}
