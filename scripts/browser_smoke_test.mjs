@@ -154,10 +154,17 @@ try {
   await page.locator("#profile-hero-talents").waitFor({ state: "visible", timeout: 10000 });
   check("Tapping a hero opens one profile with build and talents together",
     new URL(page.url()).searchParams.get("page") === "hero"
-    && /Клинт/i.test(await page.locator("#heroDetailPage").innerText())
+    && /Клинт|clint/i.test(await page.locator("#heroDetailPage").innerText())
     && await page.locator("#profile-hero-build").isVisible()
     && await page.locator("#profile-hero-talents").isVisible()
     && await page.locator(".hero-profile-jump-links a").count() === 3);
+  const profileDimensions = await page.evaluate(() => ({
+    width: document.documentElement.clientWidth,
+    scrollWidth: document.documentElement.scrollWidth
+  }));
+  check("Hero profile fits the mobile viewport without horizontal overflow",
+    profileDimensions.scrollWidth <= profileDimensions.width + 2,
+    JSON.stringify(profileDimensions));
 
   await page.goto(BASE_URL + "?page=items", { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.locator("#itemGrid").waitFor({ state: "visible", timeout: 20000 });
