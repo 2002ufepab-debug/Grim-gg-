@@ -113,6 +113,8 @@ require("Array.isArray(payload?.records)" in talents and "skill?.icon_url" in ta
         "Talent icon loader must handle alternate public API response shapes")
 require("grid-template-columns: repeat(3, minmax(0, 1fr))" in wide_styles and "object-fit: cover" in wide_styles,
         "Hero directory must show larger game-like portraits in a three-column phone grid")
+require(".hero-grid .hero-card-actions { grid-template-columns: repeat(2, minmax(0, 1fr))" in wide_styles,
+        "Three-column hero cards must keep build and 3D actions in a compact two-column row")
 
 # Ensure every first-party script/style/icon referenced by index.html exists.
 for attr, value in re.findall(r'\b(href|src)="([^"]+)"', html):
