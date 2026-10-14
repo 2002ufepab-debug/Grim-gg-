@@ -1295,33 +1295,49 @@
 }
 
 
-/* GRIM_GG universal circle-fill refinement (2026-10-15).
-   The circular frame stays identical; zoom the character artwork itself so
-   source files with built-in empty margins don't look half-size. Keep the
-   known-good Aamon/Aldous/Alice/Angela framing stable. */
+/* GRIM_GG portrait recovery (2026-10-15).
+   Reduce the excessive zoom that clipped character artwork. Keep circular frames,
+   restore moderate catalogue framing, and preserve portraits already approved. */
 #main-content .hero-grid .hero-image-wrap .hero-image,
 #heroGrid.hero-grid .hero-image-wrap .hero-image,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image {
   object-fit: cover !important;
   object-position: center 20% !important;
-  transform: scale(1.72) !important;
+  transform: scale(1.45) !important;
+  transform-origin: center 22% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--portrait,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--portrait,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--portrait,
+#main-content .hero-grid .hero-image-wrap .hero-image--avatar,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--avatar,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--avatar {
+  object-position: center 20% !important;
+  transform: scale(1.52) !important;
   transform-origin: center 22% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image--splash,
 #heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
   object-fit: cover !important;
-  object-position: center 24% !important;
-  transform: scale(1.5) !important;
+  object-position: center 26% !important;
+  transform: scale(1.18) !important;
   transform-origin: center 24% !important;
 }
-/* Extra-tight framing for the portraits most affected by internal image margins. */
+/* Akai and Aamon keep their previously acceptable framing; do not tighten them further. */
 #main-content .hero-grid .hero-image-wrap .hero-image[alt="Akai"],
 #heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Akai"],
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Akai"] {
-  transform: scale(1.88) !important;
+  transform: scale(1.55) !important;
   transform-origin: center 22% !important;
 }
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"] {
+  transform: scale(1.68) !important;
+  transform-origin: center 20% !important;
+}
+/* Moderate extra framing for portraits that previously looked too small. */
 #main-content .hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
 #heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
@@ -1331,16 +1347,10 @@
 #main-content .hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
 #heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"] {
-  transform: scale(1.82) !important;
+  transform: scale(1.58) !important;
   transform-origin: center 22% !important;
 }
-/* Preserve already-approved portraits; Aamon remains at its existing zoom. */
-#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
-#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
-#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"] {
-  transform: scale(1.68) !important;
-  transform-origin: center 20% !important;
-}
+/* Keep the already-approved Aldous, Alice and Angela exactly at their restrained zoom. */
 #main-content .hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
 #heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
