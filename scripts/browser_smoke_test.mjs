@@ -57,6 +57,29 @@ try {
   check("All featured hero images load", rosterImages.every(image => image.loaded),
     JSON.stringify(rosterImages));
 
+  // New Premium Dark Esports quick search: a Russian alias should narrow results to one hero,
+  // and choosing that result must open the correct profile.
+  const quickSearch = page.locator("#quickHeroSearch");
+  check("Homepage quick hero search exists", await quickSearch.count() === 1);
+  await quickSearch.fill("Клинт");
+  await page.waitForFunction(() => {
+    const results = Array.from(document.querySelectorAll("#quickHeroResults .quick-hero-result"));
+    return results.length === 1 && /clint/i.test(results[0].innerText);
+  }, { timeout: 10000 });
+  const quickResults = await page.locator("#quickHeroResults .quick-hero-result").count();
+  check("Quick hero search filters Russian alias to Clint", quickResults === 1);
+  await page.locator("#quickHeroResults .quick-hero-result").first().click();
+  await page.locator("#hero-detail").waitFor({ state: "visible", timeout: 20000 });
+  await page.waitForFunction(() => /clint/i.test(document.querySelector("#heroDetailPage")?.innerText || ""), { timeout: 10000 });
+  check("Quick search opens the selected hero profile", /clint/i.test(await page.locator("#heroDetailPage").innerText()));
+
+  // Featured roster cards should open individual profiles rather than the generic directory.
+  await page.goto(BASE_URL + "?page=home", { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.locator(".roster-fanny").click();
+  await page.locator("#hero-detail").waitFor({ state: "visible", timeout: 20000 });
+  await page.waitForFunction(() => /fanny/i.test(document.querySelector("#heroDetailPage")?.innerText || ""), { timeout: 10000 });
+  check("Featured Fanny card opens Fanny profile", /fanny/i.test(await page.locator("#heroDetailPage").innerText()));
+
   const routes = [
     ["heroes", "#heroes"],
     ["tierlist", "#tierlist"],
