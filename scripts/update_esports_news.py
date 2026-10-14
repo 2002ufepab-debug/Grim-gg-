@@ -71,6 +71,9 @@ def extract_page(url: str, html: str) -> list[dict]:
             match = DATE_RE.search(best_text)
             if match:
                 published = f"{match.group(1)}-{int(match.group(2)):02d}-{int(match.group(3)):02d}"
+        # Footer/legal pages may use the same /news/<id>.html URL pattern but have no publication date.
+        if not published:
+            continue
         key = absolute.split("#", 1)[0]
         if key in seen:
             continue
