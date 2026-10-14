@@ -158,12 +158,21 @@ try {
       return s.borderRadius === "50%" && Math.abs(r.width - r.height) < 2
         && getComputedStyle(el.querySelector(".hero-image")).objectFit === "cover";
     }));
+  // Perks are a separate route in the single-page shell; open it before interacting.
+  await page.goto(BASE_URL + "?page=perks", { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.locator("#perkGrid").waitFor({ state: "visible", timeout: 20000 });
   await page.locator('#perkFilters [data-perk-category="Roam"]').click();
   await page.waitForTimeout(250);
   check("Roam blessing has a visible dedicated icon",
     await page.locator('#perkGrid .item-image-vector[aria-label="Роум-благословение"]').count() > 0
     && await page.locator('#perkGrid .item-image-vector[aria-label="Роум-благословение"]').isVisible());
+  check("Known spell and Roam perk cards use local vector artwork",
+    await page.locator('#perkGrid .item-image-vector').count() > 0);
   await page.locator('#perkFilters [data-perk-category="Все"]').click();
+
+  // Return to hero catalog before role filtering checks.
+  await page.goto(BASE_URL + "?page=heroes", { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.locator("#heroGrid").waitFor({ state: "visible", timeout: 20000 });
 
   // Tank and support roles are the core of many roam picks; make sure filtering them
   // does not hide or remove the associated hero artwork.
