@@ -38,16 +38,18 @@ for stylesheet_name, stylesheet in (
             f"{stylesheet_name} has unbalanced CSS braces")
 
 
-for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports"):
+for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "esports"):
     require(f'id="{section_id}"' in html, f"Missing core section #{section_id}")
 
 require('href="?page=talents"' in html, "Talent page must be reachable from the main navigation")
 require('href="favicon.svg"' in html, "Main page favicon reference is missing")
+require('id="counterpicks"' not in html and 'href="?page=counterpicks"' not in html,
+        "Removed counterpick section must not reappear in the page or navigation")
 require("styles.css?v=" in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must load a versioned main stylesheet")
 require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must use the correct GitHub Pages favicon path")
-for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "counterpicks", "esports"):
+for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "esports"):
     require(f'href="?page={route}"' in html, f"Main navigation is missing route ?page={route}")
 
 require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
@@ -113,6 +115,8 @@ require("Array.isArray(payload?.records)" in talents and "skill?.icon_url" in ta
         "Talent icon loader must handle alternate public API response shapes")
 require("grid-template-columns: repeat(3, minmax(0, 1fr))" in wide_styles and "object-fit: cover" in wide_styles,
         "Hero directory must show larger game-like portraits in a three-column phone grid")
+require("font-size: 9px; line-height: 1.25; min-height: 36px" in wide_styles,
+        "Mobile hero-card actions must remain readable and touch-friendly")
 require(".hero-grid .hero-card-actions { grid-template-columns: repeat(2, minmax(0, 1fr))" in wide_styles,
         "Three-column hero cards must keep build and 3D actions in a compact two-column row")
 
