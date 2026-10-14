@@ -260,10 +260,10 @@ const HERO_SPLASH_ART_OVERRIDES = {
   "zilong": "Zilong/Eastern Warrior.png"
 };
 const heroSplashImageUrl = path => {
-  const source = "raw.githubusercontent.com/Sparkies01/Splash/main/" +
+  // Load the verified original art directly instead of relying on an image proxy.
+  // The proxy can fail on some mobile networks, causing the site to fall back to old avatars.
+  return "https://raw.githubusercontent.com/Sparkies01/Splash/main/" +
     String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
-  return "https://images.weserv.nl/?url=" + encodeURIComponent(source) +
-    "&w=640&h=900&fit=contain&output=webp&q=82";
 };
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
