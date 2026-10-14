@@ -204,6 +204,10 @@ try:
             "Local hero snapshot must retain the full 130+ hero community catalog")
     require(isinstance(equipment_catalog, list) and len(equipment_catalog) >= 100,
             "Local equipment snapshot must retain the full 100+ item community catalog")
+    equipment_names = [str(row.get("name-equipment", "")).strip().casefold() for row in equipment_catalog]
+    require(all(equipment_names), "Local equipment fallback contains an unnamed item")
+    require(len(equipment_names) == len(set(equipment_names)),
+            "Local equipment fallback contains duplicate item names")
     require(all(isinstance(row.get("name_hero"), str) and row.get("images-hero") for row in hero_catalog),
             "Every local hero catalog entry must include a name and image filename")
     require(all(isinstance(row.get("name-equipment"), str) and row.get("logo-equipment") for row in equipment_catalog),
