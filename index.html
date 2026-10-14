@@ -23,7 +23,8 @@
   <link rel="stylesheet" href="talents.css?v=10">
   <link rel="stylesheet" href="layout-wide.css?v=17">
   <link rel="stylesheet" href="visual-refresh.css?v=2">
-  <script src="script.js?v=77" defer></script>
+  <link rel="stylesheet" href="premium-update.css?v=1">
+  <script src="script.js?v=78" defer></script>
   <script src="talents.js?v=22" defer></script>
 </head>
 <body>
@@ -58,6 +59,13 @@
       <a class="btn btn-red" href="?page=heroes">Изучить героев ↗</a>
       <a class="btn btn-ghost" href="?page=items">База предметов</a>
     </div>
+    <div class="quick-hero-search" role="search">
+      <label for="quickHeroSearch">БЫСТРЫЙ ПОИСК ПО ГЕРОЯМ</label>
+      <div class="quick-hero-search-field">
+        <input id="quickHeroSearch" type="search" autocomplete="off" placeholder="Имя героя или роль…" aria-label="Быстрый поиск героя" aria-controls="quickHeroResults" aria-autocomplete="list">
+      </div>
+      <div class="quick-hero-results" id="quickHeroResults" role="listbox" aria-label="Результаты поиска героев" hidden></div>
+    </div>
     <nav class="hero-shortcuts" aria-label="Быстрый доступ к разделам">
       <a href="?page=heroes"><span class="shortcut-icon" aria-hidden="true">◈</span> Герои <span aria-hidden="true">↗</span></a>
       <a href="?page=builds"><span class="shortcut-icon" aria-hidden="true">⚔</span> Сборки <span aria-hidden="true">↗</span></a>
@@ -72,22 +80,22 @@
   <div class="hero-art hero-roster" aria-label="Подборка героев Mobile Legends разных ролей">
     <div class="hero-roster-heading">
       <div><span class="hero-feature-label">GRIM_GG / HERO ROSTER</span><h2>КАЖДЫЙ ГЕРОЙ — <span>СВОЙ СТИЛЬ</span></h2></div>
-      <span class="hero-roster-count">04 PICKS</span>
+      <span class="hero-roster-count">04 FEATURED</span>
     </div>
     <div class="hero-roster-grid">
-      <a class="roster-card roster-clint" href="?page=heroes" aria-label="Клинт — стрелок, Gold Lane">
+      <a class="roster-card roster-clint" href="?page=hero&amp;name=Clint" aria-label="Клинт — стрелок, Gold Lane">
         <img src="https://raw.githubusercontent.com/Lara3924/Lara_Image/main/Clint%20-%20Hero131.png" alt="Клинт" fetchpriority="high" decoding="async">
         <span class="roster-role">СТРЕЛОК / GOLD</span><strong>CLINT</strong><span class="roster-tag">Криты · Агрессия</span>
       </a>
-      <a class="roster-card roster-fanny" href="?page=heroes" aria-label="Фанни — убийца, лес">
+      <a class="roster-card roster-fanny" href="?page=hero&amp;name=Fanny" aria-label="Фанни — убийца, лес">
         <img src="https://raw.githubusercontent.com/Lara3924/Lara_Image/main/Fanny%20-%20Hero171.png" alt="Фанни" loading="eager" decoding="async">
         <span class="roster-role">УБИЙЦА / JUNGLE</span><strong>FANNY</strong><span class="roster-tag">Мобильность</span>
       </a>
-      <a class="roster-card roster-kadita" href="?page=heroes" aria-label="Кадита — маг, мид">
+      <a class="roster-card roster-kadita" href="?page=hero&amp;name=Kadita" aria-label="Кадита — маг, мид">
         <img src="https://raw.githubusercontent.com/Lara3924/Lara_Image/main/Kadita%20-%20Hero751.png" alt="Кадита" loading="eager" decoding="async">
         <span class="roster-role">МАГ / MID</span><strong>KADITA</strong><span class="roster-tag">Взрывной урон</span>
       </a>
-      <a class="roster-card roster-belerick" href="?page=heroes" aria-label="Белерик — танк, роум">
+      <a class="roster-card roster-belerick" href="?page=hero&amp;name=Belerick" aria-label="Белерик — танк, роум">
         <img src="https://raw.githubusercontent.com/Lara3924/Lara_Image/main/Belerick%20-%20Hero701.png" alt="Белерик" loading="eager" decoding="async">
         <span class="roster-role">ТАНК / ROAM</span><strong>BELERICK</strong><span class="roster-tag">Защита команды</span>
       </a>
