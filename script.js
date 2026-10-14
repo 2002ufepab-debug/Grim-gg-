@@ -698,15 +698,18 @@ function normalizeRemoteHero(hero,index) {
   const translatedRoles = roleText.map(role=>roleTranslations[role] || role);
   const fallbackMatch = fallbackHeroes.find(h=>h.name.toLowerCase()===String(name).toLowerCase());
   const filename = hero["images-hero"] || hero.image || hero.image_url || "";
+  const catalogImage = filename && /^https?:\/\//i.test(filename)
+    ? filename
+    : filename ? HERO_IMAGE_BASE + String(filename).replace(/^images-hero\//, "").split("/").map(part => encodeURIComponent(part)).join("/")
+    : heroImageUrl(name);
+  const hdImage = heroHDImageUrl(name);
 
   return {
     id:fallbackMatch ? String(fallbackMatch.id) : String(hero.id_hero ?? hero.id ?? "remote-"+index),
     name:String(name),
     role:translatedRoles.join(" / ") || "Роль не указана",
-    image:heroHDImageUrl(name) || (filename && /^https?:\/\//i.test(filename)
-      ? filename
-      : filename ? HERO_IMAGE_BASE + String(filename).replace(/^images-hero\//, "").split("/").map(part => encodeURIComponent(part)).join("/")
-      : heroImageUrl(name)),
+    image:hdImage || catalogImage,
+    fallbackImage:catalogImage,
     roles:roleText
   };
 }
@@ -716,8 +719,10 @@ function heroImageMarkup(hero) {
   if (!hero.image) {
     return `<div class="hero-image-fallback" role="img" aria-label="Изображение героя недоступно">${initial}</div>`;
   }
-  const retryImage = heroImageUrl(hero.name);
-  return `<img class="hero-image" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+  const retryImage = hero.fallbackImage && hero.fallbackImage !== hero.image
+    ? hero.fallbackImage
+    : heroImageUrl(hero.name);
+  return `<img class="hero-image" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
 function favoriteButton(type,id,saved) {
