@@ -1501,15 +1501,19 @@ function closeHeroBuild() {
 function renderBuildHeroAvatars() {
   const container = $("buildHeroAvatars");
   if (!container) return;
-  container.innerHTML = heroes.map(hero => {
-    const selected = buildQuery.trim().toLocaleLowerCase() === String(hero.name || "").toLocaleLowerCase();
-    return `<button type="button" class="build-hero-avatar" data-build-hero="${escapeHTML(hero.name)}" aria-pressed="${String(selected)}" aria-label="Выбрать ${escapeHTML(hero.name)}">
-      <span class="build-hero-avatar-art">${heroImageMarkup(hero)}</span>
-      <span class="build-hero-avatar-name">${escapeHTML(hero.name)}</span>
-    </button>`;
-  }).join("");
+  if (container.dataset.rendered !== "true") {
+    container.innerHTML = heroes.map(hero => `
+      <button type="button" class="build-hero-avatar" data-build-hero="${escapeHTML(hero.name)}" aria-pressed="false" aria-label="Выбрать ${escapeHTML(hero.name)}">
+        <span class="build-hero-avatar-art">${heroImageMarkup(hero)}</span>
+        <span class="build-hero-avatar-name">${escapeHTML(hero.name)}</span>
+      </button>`).join("");
+    container.dataset.rendered = "true";
+  }
+  const selectedName = buildQuery.trim().toLocaleLowerCase();
+  container.querySelectorAll("[data-build-hero]").forEach(button => {
+    button.setAttribute("aria-pressed", String(String(button.dataset.buildHero || "").toLocaleLowerCase() === selectedName));
+  });
 }
-
 function renderBuilds() {
   const grid = $("buildGrid");
   if (!grid) return;
