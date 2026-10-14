@@ -280,6 +280,13 @@ if static_items_match:
 else:
     require(False, "Could not locate the built-in item catalog for build validation")
 
+# The latest hero additions with verified art in the splash repository must not fall back
+# to low-resolution catalog thumbnails.
+require('"chip": "Chip/Nexus Engineer.png"' in script
+        and '"kalea": "Kalea/Sakura Haruno.png"' in script
+        and '"lukas": "Lukas/Naruto Uzumaki.png"' in script,
+        "Chip, Kalea and Lukas need verified high-resolution splash artwork mappings")
+
 # The talent planner must populate all roles from the full community catalog and avoid
 # injecting externally sourced hero names into HTML.
 require("const roleLabels = {" in talents and "discoveredByRole" in talents and "heroesByRole[role].splice" in talents,
