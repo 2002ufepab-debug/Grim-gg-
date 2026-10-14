@@ -1092,7 +1092,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
       <div class="item-content">
         <span class="item-category">${escapeHTML(categories[item.cat] || item.cat)}</span>
         <h3>${escapeHTML(item.ru)}</h3>
-        <p class="item-description">${escapeHTML(item.name)}</p>
+        <details class="item-original-name"><summary>Оригинальное название</summary><p lang="en">${escapeHTML(item.name)}</p></details>
         <p class="item-stats">${escapeHTML(item.stats)}</p>
         <p class="item-description">${escapeHTML(item.desc)}</p>
         <details><summary>Подробнее</summary><p class="item-tip">${escapeHTML(item.tip)}</p><p class="fine-print">Проверяй актуальные эффекты в текущей версии игры.</p></details>
@@ -1691,6 +1691,60 @@ function setupFilters() {
   });
 }
 
+const EQUIPMENT_RU_NAMES = {
+  "fleeting time": "Мимолётное время",
+  "great dragon spear": "Копьё великого дракона",
+  "malefic gun": "Зловредное ружьё",
+  "wind of nature": "Ветер природы",
+  "winter crown": "Зимняя корона",
+  "fury hammer": "Молот ярости",
+  "legion sword": "Меч легиона",
+  "magic blade": "Магический клинок",
+  "rogue meteor": "Метеор разбойника",
+  "swift crossbow": "Скоростной арбалет",
+  "expert gloves": "Перчатки мастера",
+  "iron hunting bow": "Железный охотничий лук",
+  "javelin": "Метательное копьё",
+  "vampire mallet": "Вампирский молот",
+  "power potion": "Зелье силы",
+  "concentrated energy": "Концентрированная энергия",
+  "enchanted talisman": "Зачарованный талисман",
+  "ice queen wand": "Жезл ледяной королевы",
+  "starlium scythe": "Коса старлиума",
+  "wishing lantern": "Фонарь желаний",
+  "azure blade": "Лазурный клинок",
+  "elegant gem": "Изысканный самоцвет",
+  "exotic veil": "Экзотическая вуаль",
+  "mystic container": "Мистический сосуд",
+  "tome of evil": "Фолиант зла",
+  "book of sages": "Книга мудрецов",
+  "magic necklace": "Магическое ожерелье",
+  "mystery codex": "Таинственный кодекс",
+  "power crystal": "Кристалл силы",
+  "flower of hope": "Цветок надежды",
+  "lantern of hope": "Фонарь надежды",
+  "brute force breastplate": "Кираса грубой силы",
+  "chastise pauldron": "Наплечник наказания",
+  "thunder belt": "Грозовой пояс",
+  "ares belt": "Пояс Ареса",
+  "black ice shield": "Щит чёрного льда",
+  "dreadnaught armor": "Броня дредноута",
+  "molten essence": "Расплавленная эссенция",
+  "silence robe": "Мантия тишины",
+  "steel legplates": "Стальные поножи",
+  "healing necklace": "Ожерелье исцеления",
+  "hero's ring": "Кольцо героя",
+  "leather jerkin": "Кожаный дублет",
+  "magic resist cloak": "Плащ магической защиты",
+  "vitality crystal": "Кристалл жизненной силы",
+  "rock potion": "Зелье стойкости",
+  "rapid boots": "Ботинки стремительности",
+  "allow throw": "Разрешённый бросок",
+  "broken heart": "Разбитое сердце",
+  "throw forbidden": "Запретный бросок"
+};
+function translateEquipmentName(name) { const key = String(name || '').trim().toLocaleLowerCase(); return EQUIPMENT_RU_NAMES[key] || name; }
+
 async function loadExternalItems() {
   try {
     const response = await fetch(EQUIPMENT_SOURCE,{cache:"no-cache"});
@@ -1717,11 +1771,11 @@ async function loadExternalItems() {
       items.push({
         id:"catalog-" + name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
         name,
-        ru:name,
+        ru:translateEquipmentName(name),
         cat,
         imageFile,
         stats:Number.isFinite(price) && price > 0 ? "Цена: " + price.toLocaleString("ru-RU") + " золота" : "Цена не указана",
-        desc:"Предмет добавлен из внешнего каталога MLBB. Название и иконка могут зависеть от версии источника.",
+        desc:"Предмет из каталога Mobile Legends: Bang Bang. Цена и доступность могут меняться в обновлениях.",
         tip:"Проверь наличие, цену и характеристики предмета в актуальной версии игры."
       });
       existingNames.add(name.toLocaleLowerCase());
