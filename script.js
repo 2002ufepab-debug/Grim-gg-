@@ -685,6 +685,7 @@ let activeRole = "Все";
 let activeTier = "Все";
 let activeTierRole = "Все";
 let itemQuery = "";
+let itemDataSource = "static";
 let itemCategory = "Все";
 let itemPurpose = "Все";
 let itemSort = "default";
@@ -1227,7 +1228,7 @@ function renderItems() {
   if (itemSort === "name") filtered.sort((a,b)=>a.ru.localeCompare(b.ru,"ru"));
   if (itemSort === "favorites") filtered.sort((a,b)=>Number(favoriteItems.has(b.id))-Number(favoriteItems.has(a.id)) || a.ru.localeCompare(b.ru,"ru"));
   const count = $("itemCount");
-  if (count) count.textContent = `Предметов в справочнике: ${filtered.length}${itemOnlyFavorites ? " · только избранное" : ""}`;
+  if (count) count.textContent = `Предметов в справочнике: ${filtered.length}${itemOnlyFavorites ? " · только избранное" : ""}${itemDataSource === "local" ? " · резервный каталог" : ""}`;
   renderItemCards(filtered,grid,"Ничего не найдено. Измени поиск или фильтры.");
 }
 
@@ -1820,6 +1821,7 @@ async function loadExternalItems() {
       "data/equipment-catalog.json",
       "предметов"
     );
+    itemDataSource = catalogSource;
     const existingNames = new Set(items.map(item=>String(item.name).toLocaleLowerCase()));
     const categoryFor = (name,index) => {
       const value = String(name).toLocaleLowerCase();
