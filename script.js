@@ -786,7 +786,12 @@ function heroImageMarkup(hero) {
   const retryImage = hero.fallbackImage && hero.fallbackImage !== hero.image
     ? hero.fallbackImage
     : heroImageUrl(hero.name);
-  return `<img class="hero-image" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+  const imageType = String(hero.image).includes("images.weserv.nl")
+    ? "hero-image--splash"
+    : String(hero.image).includes("Lara_Image")
+      ? "hero-image--portrait"
+      : "hero-image--avatar";
+  return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
 function favoriteButton(type,id,saved) {
