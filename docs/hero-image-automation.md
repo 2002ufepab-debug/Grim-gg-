@@ -26,9 +26,16 @@ Parse the current source maps without making network requests:
 
 Reports are written to artifacts/hero-image-audit/report.json and artifacts/hero-image-audit/report.csv.
 
-## Next phase: image processing (not enabled yet)
+## Local image processor (implemented, not connected to the site)
 
-After reviewing the source audit and confirming source permissions and usage terms, add a separate processor that works on approved local source files. The processor should:
+The helper at tools/hero_images/process_images.py is now in the branch. GitHub Actions runs its synthetic self-test with Pillow, without using or downloading game artwork. The processor reads a manifest only when one is explicitly created, expects approved files under assets/heroes/source/, writes 600×800 WebP files to assets/heroes/processed/, and creates a contact sheet for review. Copy manifest.example.json to manifest.json only after approved source files are collected, then replace the example entry with the actual set of files.
+
+To test locally, install Pillow and run:
+
+    python -m pip install Pillow
+    python tools/hero_images/process_images.py --self-test
+
+After reviewing the source audit and confirming source permissions and usage terms, use the processor on approved local source files. The processor should:
 
 1. Preserve originals and write derived files to a separate output folder.
 2. Fit images to a common canvas without stretching.
