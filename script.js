@@ -972,7 +972,10 @@ function renderHeroDetailContent(hero, target) {
       <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
       <div class="hero-detail-copy">
         <span class="eyebrow">GRIM_GG / HERO PROFILE</span>
-        <h2 id="${headingId}">${escapeHTML(hero.name)}</h2>
+        <h2 class="hero-profile-name" id="${headingId}">
+          <span class="hero-profile-name-avatar" aria-hidden="true">${heroImageMarkup(hero).replace('class="hero-image ', 'class="hero-image hero-profile-avatar ').replace('class="hero-image-fallback"', 'class="hero-image-fallback hero-profile-avatar-fallback"')}</span>
+          <span class="hero-profile-name-text">${escapeHTML(hero.name)}</span>
+        </h2>
         <p class="hero-role">${escapeHTML(hero.role || roles.join(" / "))}</p>
         <div class="hero-tags">${roles.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <div class="hero-detail-actions">

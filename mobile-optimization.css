@@ -514,7 +514,50 @@
     font-size: 10px;
   }
   .hero-profile-jump-links .hero-profile-jump-secondary span { font-size: 12px; }
-  #heroDetailPage .hero-detail-copy h2 { margin-top: 7px; margin-bottom: 5px; }
+  #heroDetailPage .hero-detail-copy h2.hero-profile-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    margin-top: 7px;
+    margin-bottom: 5px;
+  }
+  #heroDetailPage .hero-profile-name-avatar {
+    display: inline-flex;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ff526b;
+    border-radius: 50%;
+    background: #21151e;
+    box-shadow: 0 0 0 3px #ff526b1c;
+  }
+  #heroDetailPage .hero-profile-name-avatar .hero-profile-avatar {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 50%;
+    object-fit: cover !important;
+    object-position: center 20% !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  #heroDetailPage .hero-profile-name-avatar .hero-profile-avatar-fallback {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 900;
+  }
+  #heroDetailPage .hero-profile-name-text { min-width: 0; overflow-wrap: anywhere; }
   #heroDetailPage .hero-detail-copy .hero-tags { margin: 8px 0 10px; }
   #heroDetailPage .hero-detail-actions { gap: 6px; }
   #heroDetailPage .hero-detail-actions .btn,
