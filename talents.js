@@ -341,7 +341,24 @@
       section.querySelector("#talentResultDesc").textContent = emblemNames[role] + " · стиль: " + style.toLowerCase() + ". Пример комбинации для дальнейшей настройки.";
       section.querySelector("#talentRoleChip").textContent = role.toUpperCase();
       section.querySelector("#talentSlots").innerHTML = list.map((t,i) => `
-        <article class="talent-slot"><span class="talent-slot-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][i]}</span>${talentIconMarkup(t[1],i)}<div><h4>${t[1]}</h4><p>${t[2]}</p></div></article>`).join("");
+        <article class="talent-slot">
+          <button type="button" class="talent-slot-toggle" aria-expanded="false" aria-controls="talent-description-${i}">
+            <span class="talent-slot-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][i]}</span>
+            ${talentIconMarkup(t[1],i)}
+            <span class="talent-slot-label"><h4>${t[1]}</h4><span class="talent-expand-indicator" aria-hidden="true">+</span></span>
+          </button>
+          <p class="talent-slot-description" id="talent-description-${i}" hidden>${t[2]}</p>
+        </article>`).join("");
+      section.querySelectorAll(".talent-slot-toggle").forEach(button => {
+        button.addEventListener("click", () => {
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!expanded));
+          const description = section.querySelector("#" + button.getAttribute("aria-controls"));
+          if (description) description.hidden = expanded;
+          const indicator = button.querySelector(".talent-expand-indicator");
+          if (indicator) indicator.textContent = expanded ? "+" : "−";
+        });
+      });
       section.querySelector("#talentNote").textContent = "Проверяй названия, уровни и эффекты талантов в актуальном клиенте. Подбор примерный: он не учитывает патч, ранг, состав соперника и конкретные игровые условия.";
       section.querySelector("#talentStatus").textContent = "";
       renderHeroPortrait();
