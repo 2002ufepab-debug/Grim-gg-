@@ -16,6 +16,23 @@ try {
     permissions: ["clipboard-read", "clipboard-write"]
   });
   const page = await context.newPage();
+  // Disable decorative motion during automated tests so continuously animated cards
+  // do not appear "unstable" to Playwright's real-user click checks.
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      const style = document.createElement("style");
+      style.setAttribute("data-playwright-motion-reset", "true");
+      style.textContent = `
+        *, *::before, *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+          scroll-behavior: auto !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }, { once: true });
+  });
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
 
