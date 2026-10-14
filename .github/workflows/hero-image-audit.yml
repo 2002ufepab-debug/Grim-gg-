@@ -1,0 +1,44 @@
+name: Hero image source audit
+
+on:
+  pull_request:
+    paths:
+      - "script.js"
+      - "data/hero-catalog.json"
+      - "tools/hero_images/**"
+      - ".github/workflows/hero-image-audit.yml"
+      - "docs/hero-image-automation.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hero-image-audit-\${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Check current hero image sources
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Audit image sources
+        run: python tools/hero_images/audit_sources.py --workers 8 --timeout 12 --retries 1
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: grim-gg-hero-image-audit
+          path: artifacts/hero-image-audit/
+          if-no-files-found: warn
+          retention-days: 14
