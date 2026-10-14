@@ -209,6 +209,10 @@ require('if (/retribution/.test(value)) return "Jungle";' in script
 require('endless battle|golden staff|rose gold meteor|sea halberd|war axe|javelin|magic blade' in script
         and 'fleeting time|winter crown|flask of the oasis|magic potion' in script,
         "Core equipment names must not fall into the generic Other category")
+require('let itemDataSource = "static";' in script
+        and 'itemDataSource = catalogSource;' in script
+        and 'itemDataSource === "local" ? " · резервный каталог" : ""' in script,
+        "Item count must disclose local fallback while retaining the active filter count")
 require('renderItems();\n    renderPerks();\n    renderBuilds();\n    renderFavorites();\n    // renderItems() owns the visible count' in script,
         "Catalog refresh must not overwrite the active item-filter count")
 require("контрпик" not in html.lower(),
