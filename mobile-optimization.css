@@ -945,3 +945,16 @@
   transform: scale(1.24) !important;
   transform-origin: center 42% !important;
 }
+
+
+/* GRIM_GG / circular avatar consistency pass (2026-10-14).
+   Match the successful Aamon framing across every hero whose portrait was
+   letterboxed by contain: fill the round window while keeping the face near
+   the upper-center. Existing per-hero focal-point adjustments remain active. */
+#main-content .hero-grid .hero-image-wrap .hero-image--portrait,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--portrait,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--portrait {
+  object-fit: cover !important;
+  object-position: center 24% !important;
+  transform: none !important;
+}
