@@ -125,6 +125,20 @@ try {
     return /Показано:/i.test(count) && document.querySelectorAll("#heroGrid .hero-card").length > 0;
   }, { timeout: 30000 });
   const heroCardsBefore = await page.locator("#heroGrid .hero-card").count();
+  const heroGridLayout = await page.locator("#heroGrid").evaluate(grid => {
+    const style = getComputedStyle(grid);
+    return {
+      columns: style.gridTemplateColumns.split(" ").filter(Boolean).length,
+      gridWidth: Math.round(grid.getBoundingClientRect().width),
+      cardWidths: Array.from(grid.querySelectorAll(".hero-card")).slice(0, 3)
+        .map(card => Math.round(card.getBoundingClientRect().width))
+    };
+  });
+  check("Mobile hero catalogue uses three columns", heroGridLayout.columns === 3,
+    JSON.stringify(heroGridLayout));
+  check("Hero cards fit within the mobile grid", heroGridLayout.cardWidths.length === 3
+    && heroGridLayout.cardWidths.every(width => width > 0 && width < heroGridLayout.gridWidth / 2),
+    JSON.stringify(heroGridLayout));
   await page.locator("#heroSearch").fill("Клинт");
   await page.waitForFunction(() => document.querySelectorAll("#heroGrid .hero-card").length === 1,
     { timeout: 10000 });
