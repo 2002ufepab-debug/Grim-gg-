@@ -207,6 +207,7 @@
     if (talentIconsLoaded) return;
     talentIconsLoaded = true;
     const endpoints = [
+      "https://mlbb-stats.rone.dev/api/academy/emblems?lang=en&size=100",
       "https://openmlbb.fastapicloud.dev/api/academy/emblems?lang=en&size=100",
       "https://mlbb.rone.dev/api/academy/emblems?lang=en&size=100"
     ];
@@ -299,9 +300,9 @@
     section.innerHTML = `
       <div class="section-heading">
         <div><div class="eyebrow">06 / EMBLEM & TALENT LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">ТАЛАНТОВ</span></h2></div>
-        <p>Подбирай пример эмблем и талантов под героя и стиль игры. Оригинальные значки загружаются из открытого справочника, а встроенные иконки сохраняются как резерв.</p>
+        <p>Подбирай пример эмблем и талантов под героя и стиль игры. Игровые значки загружаются из открытых источников, если они доступны; при сбое остаются резервные иконки.</p>
       </div>
-      <p class="talent-intro">Выбери роль, героя и стиль — получишь стартовую комбинацию. Сверено со справочником талантов патча 2.2.16; это ориентир, а не персональная мета-сборка и не официальная рекомендация MOONTON.</p>
+      <p class="talent-intro">Выбери роль, героя и стиль — получишь стартовую комбинацию. Подборка по ролям и стилям игры; это ориентир, а не персональная мета-сборка и не официальная рекомендация MOONTON.</p>
       <div class="talent-controls">
         <div class="talent-control"><label for="talentRole">Роль</label><select id="talentRole"><option>Стрелок</option><option>Убийца</option><option>Маг</option><option>Боец</option><option>Танк</option><option>Поддержка</option></select></div>
         <div class="talent-control"><label for="talentHero">Герой</label><select id="talentHero"></select></div>
