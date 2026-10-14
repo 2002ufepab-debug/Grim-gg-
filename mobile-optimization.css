@@ -1239,16 +1239,26 @@
   padding: 0 !important;
   margin: 0 !important;
   object-fit: cover !important;
-  object-position: center 24% !important;
+  object-position: center 20% !important;
   border-radius: 50% !important;
-  transform: scale(1.24) !important;
-  transform-origin: center 27% !important;
+  transform: scale(1.55) !important;
+  transform-origin: center 22% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--portrait,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--portrait,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--portrait,
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--avatar,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--avatar,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--avatar {
+  object-position: center 18% !important;
+  transform: scale(1.68) !important;
+  transform-origin: center 20% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--splash,
 #heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
-  object-position: center 30% !important;
-  transform: scale(1.12) !important;
+  object-position: center 24% !important;
+  transform: scale(1.32) !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image[alt="Aldous"],
 #main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image[alt="Alice"],
