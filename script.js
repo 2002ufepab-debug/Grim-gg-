@@ -1627,7 +1627,7 @@ function renderComboGuides() {
         <span class="combo-difficulty difficulty-${combo.difficulty==="Высокая"?"hard":combo.difficulty==="Средняя"?"medium":"easy"}">Сложность: ${escapeHTML(combo.difficulty.toLocaleLowerCase())}</span>
       </div>
       <div class="combo-card-heading"><div class="combo-avatar">${(() => { const matchedHero = heroes.find(hero => hero.name.toLocaleLowerCase() === combo.key.toLocaleLowerCase()); return matchedHero ? heroImageMarkup(matchedHero) : `<span aria-hidden="true">${escapeHTML(combo.hero.slice(0,1).toUpperCase())}</span>`; })()}</div><div><h3>${escapeHTML(combo.hero)}</h3><span class="combo-role">${escapeHTML(combo.role)} · ${escapeHTML(combo.situation)}</span></div></div>
-      <div class="combo-sequence" aria-label="Порядок навыков">${combo.skills.map((skill,i)=>`<span class="combo-step"><b>${escapeHTML(skill)}</b><small>${i===combo.skills.length-1?"Финиш":"Шаг "+(i+1)}</small></span>`).join('<span class="combo-arrow" aria-hidden="true">›</span>')}</div>
+      <div class="combo-sequence" aria-label="Порядок навыков" tabindex="0">${combo.skills.map((skill,i)=>`<span class="combo-step"><b>${escapeHTML(skill)}</b><small>${i===combo.skills.length-1?"Финиш":"Шаг "+(i+1)}</small></span>`).join('<span class="combo-arrow" aria-hidden="true">›</span>')}</div>
       <details class="combo-details"><summary>Показать объяснение комбо</summary><ol>${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><div class="combo-tip"><strong>Совет Grim_gg</strong><p>${escapeHTML(combo.tip)}</p></div></details>
     </article>`).join("");
 }
