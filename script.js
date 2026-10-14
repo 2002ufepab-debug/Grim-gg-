@@ -269,8 +269,17 @@ const heroSplashDirectImageUrl = path =>
   String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
-  // Prefer higher-resolution official-style splash artwork where available.
-  // Fall back to the tall portrait set, then to the base hero icon in heroImageUrl().
+  // Use the square catalogue-style portraits for these three cards: their splash artwork
+  // has too much empty margin to fit the circular hero selector cleanly.
+  if (key === "arlott") return "";
+  if (key === "atlas" || key === "badang") {
+    const portraitFile = HERO_HD_IMAGE_FILES[key];
+    if (portraitFile) {
+      return "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(portraitFile);
+    }
+  }
+  // Prefer higher-resolution splash artwork for other heroes where available.
+  // Fall back to the portrait set, then to the base hero icon in heroImageUrl().
   const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
   if (splashPath) return heroSplashImageUrl(splashPath);
   const file = HERO_HD_IMAGE_FILES[key];
@@ -863,7 +872,8 @@ function heroImageMarkup(hero) {
     : String(hero.image).includes("Lara_Image")
       ? "hero-image--portrait"
       : "hero-image--avatar";
-  const shapeFallback = String(hero.image).includes("Lara_Image") && splashPath
+  const keepSquarePortrait = ["arlott", "atlas", "badang"].includes(heroImageKey(hero.name));
+  const shapeFallback = String(hero.image).includes("Lara_Image") && splashPath && !keepSquarePortrait
     ? heroSplashImageUrl(splashPath)
     : "";
   return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-shape-fallback="${escapeHTML(shapeFallback)}" data-retry="${escapeHTML(directSplashFallback || retryImage)}" data-retry2="${escapeHTML(directSplashFallback ? retryImage : "")}" onload="if(this.classList.contains('hero-image--portrait') && this.naturalWidth > this.naturalHeight * 0.82 && this.dataset.shapeFallback){const next=this.dataset.shapeFallback;this.dataset.shapeFallback='';this.classList.remove('hero-image--portrait');this.classList.add('hero-image--splash');this.src=next;}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else if(this.dataset.retry2 && this.dataset.retry2!==this.src){const next=this.dataset.retry2;this.dataset.retry2='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
