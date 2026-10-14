@@ -1026,3 +1026,15 @@
   transform: scale(1.17) !important;
   transform-origin: center 38% !important;
 }
+
+
+/* GRIM_GG / subtle shared zoom for splash-art portraits.
+   These source images often contain built-in margins around the character.
+   A small default zoom reduces empty space; hero-specific rules above take
+   precedence for characters that need a different crop. */
+#main-content .hero-grid .hero-image-wrap .hero-image--splash,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
+  transform: scale(1.08) !important;
+  transform-origin: center 38% !important;
+}
