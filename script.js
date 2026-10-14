@@ -157,10 +157,7 @@ const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]
 // Each source path was checked against the image repository; the portrait set remains the fallback.
 const HERO_SPLASH_ART_OVERRIDES = {
   // Aamon, Alpha and Alucard use tighter portrait sources in the circular catalog.
-  "arlott": "Arlott/Lone Lancer.png",
   "argus": "Argus/Dark Angel.png",
-  "atlas": "Atlas/Ocean Gladiator.png",
-  "badang": "Badang/Tribal Warrior.png",
   "bane": "Bane/Frozen King.png",
   "beatrix": "Beatrix/Dawnbreak Soldier.png",
   "benedetta": "Benedetta/Death Oath.png",
