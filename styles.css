@@ -3252,3 +3252,27 @@ img.hero-image,
 .hero-image-wrap .hero-image {
   filter: saturate(1.08) contrast(1.04) !important;
 }
+
+
+/* Russian-first equipment cards: keep source names available without cluttering every card. */
+.item-original-name {
+  margin: 5px 0 8px;
+  color: var(--muted, #b9aebc);
+  font-size: 11px;
+}
+.item-original-name summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  cursor: pointer;
+  color: #d5b7c2;
+  text-decoration: underline;
+  text-decoration-color: rgba(213, 183, 194, .4);
+  text-underline-offset: 3px;
+}
+.item-original-name p {
+  margin: 5px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--muted, #b9aebc);
+  font-size: 11px;
+}
