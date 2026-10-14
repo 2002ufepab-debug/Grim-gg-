@@ -187,6 +187,78 @@
     portrait.setAttribute("aria-label", "Портрет героя " + select.value);
   }
 
+  const talentIconByName = new Map();
+  let talentIconsLoaded = false;
+
+  function normalizeTalentName(value) {
+    return String(value || "").toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
+  }
+
+  function safeImageUrl(value) {
+    try {
+      const url = new URL(String(value || ""));
+      return url.protocol === "https:" || url.protocol === "http:" ? url.href : "";
+    } catch (_) {
+      return "";
+    }
+  }
+
+  async function loadTalentIcons() {
+    if (talentIconsLoaded) return;
+    talentIconsLoaded = true;
+    const endpoints = [
+      "https://openmlbb.fastapicloud.dev/api/academy/emblems?lang=en&size=100",
+      "https://mlbb.rone.dev/api/academy/emblems?lang=en&size=100"
+    ];
+    for (const endpoint of endpoints) {
+      try {
+        const response = await fetch(endpoint, {cache:"force-cache"});
+        if (!response.ok) continue;
+        const payload = await response.json();
+        const records = Array.isArray(payload?.data?.records) ? payload.data.records : [];
+        for (const record of records) {
+          const skill = record?.data?.emblemskill;
+          const name = normalizeTalentName(skill?.skillname);
+          const icon = safeImageUrl(skill?.skillicon);
+          if (!name || !icon) continue;
+          talentIconByName.set(name, icon);
+          if (name.endsWith("s")) talentIconByName.set(name.slice(0, -1), icon);
+          if (name === "weapon master") talentIconByName.set("weapons master", icon);
+          if (name === "weapons master") talentIconByName.set("weapon master", icon);
+        }
+        if (talentIconByName.size) break;
+      } catch (_) {
+        // Optional source: keep the built-in SVG icons if the API is unavailable or blocks browser requests.
+      }
+    }
+    applyTalentIcons(document);
+  }
+
+  function applyTalentIcons(root) {
+    if (!root || !talentIconByName.size) return;
+    const icons = [];
+    if (root.matches?.(".talent-icon[data-talent-name]")) icons.push(root);
+    root.querySelectorAll?.(".talent-icon[data-talent-name]").forEach(icon => icons.push(icon));
+    icons.forEach(icon => {
+      const key = normalizeTalentName(icon.dataset.talentName);
+      const url = talentIconByName.get(key);
+      if (!url || icon.querySelector(".talent-original-icon")) return;
+      const img = document.createElement("img");
+      img.className = "talent-original-icon";
+      img.alt = "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.referrerPolicy = "no-referrer";
+      img.addEventListener("load", () => {
+        const fallback = icon.querySelector("svg");
+        if (fallback) fallback.classList.add("talent-icon-fallback-hidden");
+      }, {once:true});
+      img.addEventListener("error", () => img.remove(), {once:true});
+      img.src = url;
+      icon.prepend(img);
+    });
+  }
+
   function talentIconMarkup(name,index) {
     const key = String(name).toLowerCase();
     const glyph = /swift|agility|quantum|speed|мобиль|стрельб/.test(key) ? "↗"
@@ -195,7 +267,21 @@
       : /hunter|bargain|seasoned|эконом/.test(key) ? "◈"
       : /festival|blood|rage|восстанов/.test(key) ? "✚"
       : /focusing|pull yourself|support|команд|помощ/.test(key) ? "◎" : ["✦","⬡","◈"][index];
-    return '<span class="talent-icon talent-icon-art" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><path d="M32 11 48 20v24L32 53 16 44V20Z" fill="none" stroke="#ff8795" stroke-opacity=".4"/><text x="32" y="40" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
+    const safeName = String(name).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return '<span class="talent-icon talent-icon-art" data-talent-name="' + safeName + '" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><path d="M32 11 48 20v24L32 53 16 44V20Z" fill="none" stroke="#ff8795" stroke-opacity=".4"/><text x="32" y="40" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
+  }
+
+  window.GrimGGTalentData.refreshIcons = () => applyTalentIcons(document);
+  if (typeof MutationObserver !== "undefined") {
+    const talentIconObserver = new MutationObserver(records => {
+      records.forEach(record => record.addedNodes.forEach(node => {
+        if (node.nodeType === 1) applyTalentIcons(node);
+      }));
+    });
+    if (document.body) talentIconObserver.observe(document.body, {childList:true,subtree:true});
+    else document.addEventListener("DOMContentLoaded", () => {
+      if (document.body) talentIconObserver.observe(document.body, {childList:true,subtree:true});
+    }, {once:true});
   }
 
   // Share the same talent icon renderer with hero profiles and build modals.
@@ -210,7 +296,7 @@
     section.innerHTML = `
       <div class="section-heading">
         <div><div class="eyebrow">06 / EMBLEM & TALENT LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">ТАЛАНТОВ</span></h2></div>
-        <p>Подбирай пример эмблем и талантов под героя и стиль игры.</p>
+        <p>Подбирай пример эмблем и талантов под героя и стиль игры. Оригинальные значки загружаются из открытого справочника, а встроенные иконки сохраняются как резерв.</p>
       </div>
       <p class="talent-intro">Выбери роль, героя и стиль — получишь стартовую комбинацию. Сверено со справочником талантов патча 2.2.16; это ориентир, а не персональная мета-сборка и не официальная рекомендация MOONTON.</p>
       <div class="talent-controls">
@@ -271,6 +357,7 @@
     fillHeroes("Клинт");
     render();
     loadHeroArt();
+    loadTalentIcons();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
