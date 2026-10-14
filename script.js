@@ -2018,7 +2018,16 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
 
 function setupPageNavigation() {
   const getRequestedPage = () => new URLSearchParams(window.location.search).get("page");
+  const applyRoleFromUrl = () => {
+    const requestedRole = new URLSearchParams(window.location.search).get("role");
+    const supportedRoles = ["Убийца","Маг","Стрелок","Боец","Танк","Поддержка"];
+    if (getRequestedPage() !== "heroes" || !supportedRoles.includes(requestedRole)) return;
+    activeRole = requestedRole;
+    syncFilterSelection($("roleFilters"), "[data-role]", $("roleFilters")?.querySelector('[data-role="' + requestedRole + '"]'));
+    renderHeroes();
+  };
   applyPageNavigation(getRequestedPage(), false);
+  applyRoleFromUrl();
 
   document.addEventListener("click", event => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -2033,6 +2042,7 @@ function setupPageNavigation() {
     closeHeroBuild();
     if (url.href !== window.location.href) history.pushState({}, "", url.href);
     applyPageNavigation(url.searchParams.get("page"));
+    applyRoleFromUrl();
     if (url.searchParams.get("page") === "hero") renderHeroFullPage(url.searchParams.get("name"));
     const nav = $("nav");
     const toggle = $("menuToggle");
@@ -2042,6 +2052,7 @@ function setupPageNavigation() {
 
   window.addEventListener("popstate", () => {
     applyPageNavigation(getRequestedPage(), false);
+    applyRoleFromUrl();
     if (getRequestedPage() === "hero") renderHeroFullPage(new URLSearchParams(window.location.search).get("name"));
   });
   if (getRequestedPage() === "hero") renderHeroFullPage(new URLSearchParams(window.location.search).get("name"));
