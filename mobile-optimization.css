@@ -186,3 +186,54 @@
   }
 }
 
+
+
+/* Definitive hero-card image sizing fix.
+   The earlier rules lost to more-specific :has() selectors in layout-wide.css.
+   Apply the same frame to portrait/avatar/splash images and preserve the full art. */
+#main-content .hero-grid .hero-image-wrap,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar) {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 3 / 4 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash) .hero-image-open,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait) .hero-image-open,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar) .hero-image-open {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash) .hero-image-open .hero-image--splash,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait) .hero-image-open .hero-image--portrait,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar) .hero-image-open .hero-image--avatar {
+  display: block !important;
+  flex: 0 1 auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+  image-rendering: auto !important;
+}
+@media (max-width: 650px) {
+  #main-content .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+}
