@@ -19,43 +19,36 @@ try {
   const pageErrors = [];
   page.on("pageerror", error => pageErrors.push(error.message));
 
-  // A push can start this workflow before GitHub Pages finishes publishing. Reload until
-  // the distinctive homepage revision marker is live, rather than testing stale HTML.
+  // Wait for the role-first homepage revision instead of accidentally testing cached HTML.
   let publishedRevision = false;
   for (let attempt = 0; attempt < 24; attempt += 1) {
     await page.goto(BASE_URL + "?page=home&smoke=" + Date.now(), {
       waitUntil: "domcontentloaded", timeout: 60000
     });
-    if (await page.locator(".hero-roster").count() > 0
-      && (await page.locator(".hero-roster").innerText()).includes("HERO ROSTER")
-      && await page.locator("#main-content").getAttribute("data-ui-version") === "multi-hero-roster-1") {
+    if (await page.locator(".home-hub").count() > 0
+      && await page.locator("#main-content").getAttribute("data-ui-version") === "grim-mlbb-home-2"
+      && (await page.locator(".brand").first().innerText()).includes("GRIM_MLBB")) {
       publishedRevision = true;
       break;
     }
     await page.waitForTimeout(5000);
   }
-  check("Latest homepage revision is published", publishedRevision,
-    "waiting for the new hero spotlight to appear on GitHub Pages");
-  if (!publishedRevision) throw new Error("GitHub Pages did not publish the expected homepage revision in time");
+  check("Latest Grim_MLBB homepage revision is published", publishedRevision,
+    "waiting for the role-first homepage to appear on GitHub Pages");
+  if (!publishedRevision) throw new Error("GitHub Pages did not publish the expected Grim_MLBB homepage revision in time");
 
   await page.locator("#home").waitFor({ state: "visible", timeout: 20000 });
   check("Homepage renders", await page.locator("#home").isVisible());
   check("Main navigation exists", await page.locator("#nav a").count() >= 8);
-  const roster = page.locator(".hero-roster");
-  const rosterText = await roster.innerText();
-  check("Homepage features four different heroes", await roster.isVisible()
-    && await page.locator(".roster-card").count() === 4
-    && ["CLINT", "FANNY", "KADITA", "BELERICK"].every(name => rosterText.includes(name)));
-  check("Roster shows heroes across different roles", /СТРЕЛОК/.test(rosterText)
-    && /УБИЙЦА/.test(rosterText) && /МАГ/.test(rosterText) && /ТАНК/.test(rosterText));
-  await page.waitForFunction(() => {
-    const images = Array.from(document.querySelectorAll(".roster-card img"));
-    return images.length === 4 && images.every(image => image.complete);
-  }, { timeout: 30000 });
-  const rosterImages = await page.locator(".roster-card img").evaluateAll(images =>
-    images.map(image => ({name:image.alt,loaded:image.naturalWidth > 0,src:image.currentSrc})));
-  check("All featured hero images load", rosterImages.every(image => image.loaded),
-    JSON.stringify(rosterImages));
+  const hub = page.locator(".home-hub");
+  check("Four featured hero cards are removed", await hub.isVisible()
+    && await page.locator(".roster-card").count() === 0);
+  check("Homepage shows all five lanes", await page.locator(".home-lane-card").count() === 5
+    && ["EXP Lane", "Jungle", "Mid Lane", "Gold Lane", "Roam"].every(name => hub.innerText().then(text => text.includes(name))));
+  check("Homepage links to builds, talents and full hero catalogue",
+    await page.locator(".home-feature-link[href='?page=builds']").count() === 1
+    && await page.locator(".home-feature-link[href='?page=talents']").count() === 1
+    && await page.locator(".home-all-heroes[href='?page=heroes']").count() === 1);
 
   // New Premium Dark Esports quick search: a Russian alias should narrow results to one hero,
   // and choosing that result must open the correct profile.
@@ -73,12 +66,20 @@ try {
   await page.waitForFunction(() => /clint/i.test(document.querySelector("#heroDetailPage")?.innerText || ""), { timeout: 10000 });
   check("Quick search opens the selected hero profile", /clint/i.test(await page.locator("#heroDetailPage").innerText()));
 
-  // Featured roster cards should open individual profiles rather than the generic directory.
+  // Role shortcuts should open the full catalogue with the selected class filter.
   await page.goto(BASE_URL + "?page=home", { waitUntil: "domcontentloaded", timeout: 60000 });
-  await page.locator(".roster-fanny").click();
-  await page.locator("#hero-detail").waitFor({ state: "visible", timeout: 20000 });
-  await page.waitForFunction(() => /fanny/i.test(document.querySelector("#heroDetailPage")?.innerText || ""), { timeout: 10000 });
-  check("Featured Fanny card opens Fanny profile", /fanny/i.test(await page.locator("#heroDetailPage").innerText()));
+  await page.locator(".home-lane-card[data-home-role='Убийца']").click();
+  await page.locator("#heroes").waitFor({ state: "visible", timeout: 20000 });
+  await page.waitForFunction(() => document.querySelector("#heroCount")?.innerText.includes("Показано:"), { timeout: 15000 });
+  check("Jungle shortcut opens the hero catalogue with assassin filter",
+    new URL(page.url()).searchParams.get("role") === "Убийца"
+    && await page.locator("#roleFilters [data-role='Убийца']").getAttribute("aria-pressed") === "true");
+  await page.goto(BASE_URL + "?page=home", { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.locator(".home-all-heroes").click();
+  await page.locator("#heroes").waitFor({ state: "visible", timeout: 20000 });
+  check("All heroes shortcut opens the unfiltered catalogue",
+    !new URL(page.url()).searchParams.has("role")
+    && await page.locator("#roleFilters [data-role='Все']").getAttribute("aria-pressed") === "true");
 
   const routes = [
     ["heroes", "#heroes"],
