@@ -38,3 +38,47 @@
 .talent-icon{position:relative;isolation:isolate}
 .talent-icon .talent-original-icon{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;z-index:1}
 .talent-icon .talent-icon-fallback-hidden{visibility:hidden}
+
+
+/* Original talent artwork should remain fully visible instead of being cropped. */
+.talent-slot .talent-icon {
+  position: relative;
+  flex: 0 0 48px;
+  isolation: isolate;
+}
+.talent-icon .talent-original-icon {
+  object-fit: contain;
+  padding: 2px;
+  background: #151019;
+  image-rendering: auto;
+}
+.talent-slot h4,
+.talent-slot p {
+  overflow-wrap: anywhere;
+}
+.talent-control select,
+.talent-actions button {
+  min-height: 42px;
+  touch-action: manipulation;
+}
+.talent-actions button:focus-visible,
+.talent-control select:focus-visible {
+  outline: 2px solid #ff6579;
+  outline-offset: 3px;
+}
+@media (max-width: 700px) {
+  .talent-slot {
+    grid-template-columns: 48px minmax(0, 1fr);
+    align-items: start;
+  }
+  .talent-slot .talent-icon {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .talent-slot > div {
+    min-width: 0;
+  }
+  .talent-actions button {
+    flex: 1 1 150px;
+  }
+}
