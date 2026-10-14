@@ -1070,3 +1070,51 @@
   transform: scale(1.14) !important;
   transform-origin: center 38% !important;
 }
+
+
+/* GRIM_GG FIX: universal circular portrait fill pass (2026-10-14).
+   The circle itself stays the same size. A modest default zoom reduces the
+   empty margins baked into many source portraits. Selected heroes get a
+   stronger crop; the already-good Aldous, Alice and Angela remain unchanged. */
+#main-content .hero-grid .hero-image-wrap .hero-image,
+#heroGrid.hero-grid .hero-image-wrap .hero-image,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image {
+  transform: scale(1.12) !important;
+  transform-origin: center 36% !important;
+}
+
+/* Preserve the reference avatars that already fit the circle well. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Angela"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"] {
+  transform: none !important;
+}
+
+/* Stronger framing for heroes with excess empty space around the character. */
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Aamon"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Argus"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Atlas"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Alucard"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Alpha"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Arlott"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Badang"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Bane"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Beatrix"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Benedetta"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Bruno"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Carmilla"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Cecilion"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Chip"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Chou"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Cici"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Cyclops"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Khufra"]) .hero-image {
+  transform: scale(1.2) !important;
+  transform-origin: center 36% !important;
+}
