@@ -353,3 +353,29 @@ html, body { max-width: 100%; }
     height: auto !important;
   }
 }
+
+
+/* Per-source artwork sizing: splash art is close to 3:4, while the HD
+   transparent portrait set is 256:512. Do not squeeze both into one ratio. */
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar) {
+  aspect-ratio: 3 / 4;
+  height: auto !important;
+}
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait) {
+  aspect-ratio: 1 / 1.75;
+  height: auto !important;
+}
+#main-content .hero-grid .hero-image-open .hero-image--splash,
+#main-content .hero-grid .hero-image-open .hero-image--portrait,
+#main-content .hero-grid .hero-image-open .hero-image--avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+}
+@media (max-width: 650px) {
+  #main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait) {
+    aspect-ratio: 1 / 1.75;
+  }
+}
