@@ -1466,29 +1466,3 @@
     border-radius: 50% !important;
   }
 }
-
-
-/* GRIM_GG targeted avatar framing test (2026-10-15).
-   Tighten only the three splash-art portraits being reviewed.
-   Keep faces high in frame and avoid changing already-approved heroes. */
-#main-content .hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
-#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
-#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"] {
-  object-position: center 27% !important;
-  transform: scale(1.18) !important;
-  transform-origin: center 27% !important;
-}
-#main-content .hero-grid .hero-image-wrap .hero-image[alt="Atlas"],
-#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Atlas"],
-#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Atlas"] {
-  object-position: center 28% !important;
-  transform: scale(1.30) !important;
-  transform-origin: center 28% !important;
-}
-#main-content .hero-grid .hero-image-wrap .hero-image[alt="Badang"],
-#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Badang"],
-#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Badang"] {
-  object-position: center 28% !important;
-  transform: scale(1.25) !important;
-  transform-origin: center 28% !important;
-}
