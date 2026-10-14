@@ -1783,12 +1783,37 @@ Object.assign(EQUIPMENT_RU_NAMES, {
 });
 function translateEquipmentName(name) { const key = String(name || '').trim().toLocaleLowerCase(); return EQUIPMENT_RU_NAMES[key] || name; }
 
+async function fetchCatalogWithLocalFallback(remoteUrl, localUrl, label) {
+  let remoteError;
+  try {
+    const response = await fetch(remoteUrl, { cache: "no-cache" });
+    if (!response.ok) throw new Error(label + ": внешний источник недоступен");
+    const data = await response.json();
+    if (!Array.isArray(data) || !data.length) throw new Error(label + ": неверный формат внешнего каталога");
+    return { data, source: "external" };
+  } catch (error) {
+    remoteError = error;
+  }
+
+  try {
+    const response = await fetch(localUrl, { cache: "no-cache" });
+    if (!response.ok) throw new Error(label + ": локальный резервный каталог недоступен");
+    const data = await response.json();
+    if (!Array.isArray(data) || !data.length) throw new Error(label + ": неверный формат локального каталога");
+    return { data, source: "local" };
+  } catch (localError) {
+    console.warn("Grim_gg: не удалось загрузить ни внешний, ни локальный каталог " + label + ".", localError);
+    throw remoteError || localError;
+  }
+}
+
 async function loadExternalItems() {
   try {
-    const response = await fetch(EQUIPMENT_SOURCE,{cache:"no-cache"});
-    if (!response.ok) throw new Error("Каталог предметов недоступен");
-    const data = await response.json();
-    if (!Array.isArray(data) || !data.length) throw new Error("Неверный формат каталога предметов");
+    const { data, source: catalogSource } = await fetchCatalogWithLocalFallback(
+      EQUIPMENT_SOURCE,
+      "data/equipment-catalog.json",
+      "предметов"
+    );
     const existingNames = new Set(items.map(item=>String(item.name).toLocaleLowerCase()));
     const categoryFor = (name,index) => {
       const value = String(name).toLocaleLowerCase();
@@ -1823,7 +1848,10 @@ async function loadExternalItems() {
     renderBuilds();
     renderFavorites();
     const count = $("itemCount");
-    if (count) count.textContent = `Предметов в справочнике: ${items.filter(item=>item.cat!=="Jungle" && item.cat!=="Roam").length}`;
+    if (count) {
+      const total = items.filter(item=>item.cat!=="Jungle" && item.cat!=="Roam").length;
+      count.textContent = `Предметов в справочнике: ${total}${catalogSource === "local" ? " · резервный каталог" : ""}`;
+    }
   } catch (error) {
     console.warn("Grim_gg: внешний каталог предметов недоступен.",error);
   }
@@ -1832,11 +1860,11 @@ async function loadExternalItems() {
 async function loadExternalHeroes() {
   const note = $("heroSourceNote");
   try {
-    const response = await fetch(HERO_SOURCE,{cache:"no-cache"});
-    if (!response.ok) throw new Error("Внешний каталог недоступен");
-
-    const data = await response.json();
-    if (!Array.isArray(data) || !data.length) throw new Error("Неверный формат каталога");
+    const { data, source: catalogSource } = await fetchCatalogWithLocalFallback(
+      HERO_SOURCE,
+      "data/hero-catalog.json",
+      "героев"
+    );
 
     const normalized = data.map(normalizeRemoteHero).filter(Boolean);
     if (!normalized.length) throw new Error("Не удалось обработать каталог героев");
@@ -1851,8 +1879,10 @@ async function loadExternalHeroes() {
     favoriteHeroes = new Set([...favoriteHeroes].map(id => remoteIdToFallbackId.get(String(id)) || String(id)));
     safeWrite("grimgg-favorite-heroes", favoriteHeroes);
     heroes = normalized;
-    heroDataSource = "external";
-    if (note) note.textContent = "Загружен сторонний каталог сообщества. Он неофициальный и может отставать от текущего патча; роли обозначают классы героев, а не рекомендуемые линии.";
+    heroDataSource = catalogSource;
+    if (note) note.textContent = catalogSource === "external"
+      ? "Загружен сторонний каталог сообщества. Он неофициальный и может отставать от текущего патча; роли обозначают классы героев, а не рекомендуемые линии."
+      : "Внешний каталог недоступен: используется локальный резервный снимок из 133 записей сообщества. Он неофициальный и может отставать от текущего патча.";
     renderHeroes();
     renderTierList();
     renderBuilds();
@@ -1863,8 +1893,8 @@ async function loadExternalHeroes() {
     }
   } catch (error) {
     heroDataSource = "fallback";
-    if (note) note.textContent = "Внешний каталог недоступен. Показан сокращённый встроенный список; он не является полным каталогом игры.";
-    console.warn("Grim_gg: внешний каталог героев недоступен.",error);
+    if (note) note.textContent = "Не удалось загрузить каталоги. Показан сокращённый встроенный список; он не является полным каталогом игры.";
+    console.warn("Grim_gg: не удалось загрузить внешний и локальный каталоги героев.",error);
   }
 }
 
