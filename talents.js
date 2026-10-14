@@ -404,8 +404,8 @@
   window.GrimGGTalentData.iconMarkup = talentIconMarkup;
 
   function init() {
-    const perks = document.getElementById("perks");
-    if (!perks || document.getElementById("talentLab")) return;
+    const builds = document.getElementById("builds");
+    if (!builds || document.getElementById("talentLab")) return;
     const section = document.createElement("section");
     section.className = "talent-lab";
     section.id = "talentLab";
@@ -427,12 +427,10 @@
         <div class="talent-actions"><button type="button" id="talentCopy">Копировать комбинацию</button><button type="button" class="secondary" id="talentReset">Сбросить выбор</button></div>
         <p class="talent-status" id="talentStatus" role="status"></p>
       </div>`;
-    perks.insertAdjacentElement("afterend", section);
+    builds.appendChild(section);
 
-    // The main router runs before this dynamically-created section exists.
-    // Match the initial URL so the talent page never leaks into another page.
-    const requestedPage = new URLSearchParams(window.location.search).get("page");
-    if (requestedPage !== "talents") section.classList.add("page-hidden");
+    // The talent planner now lives inside the Builds page, so both tools share one workspace.
+    // Keep the old ?page=talents URL as an alias handled by the main router.
 
     const roleSelect = section.querySelector("#talentRole");
     const heroSelect = section.querySelector("#talentHero");
@@ -474,6 +472,12 @@
       section.querySelector("#talentStatus").textContent = "";
       renderHeroPortrait();
     }
+    window.selectGrimTalentHero = function(heroName) {
+      const matchingRole = Object.keys(heroesByRole).find(role => (heroesByRole[role] || []).includes(heroName));
+      if (matchingRole) roleSelect.value = matchingRole;
+      fillHeroes(heroName);
+      render();
+    };
     roleSelect.addEventListener("change", () => { fillHeroes(); render(); });
     heroSelect.addEventListener("change", render);
     styleSelect.addEventListener("change", render);
@@ -495,6 +499,9 @@
     loadHeroArt();
     wireTalentArtFallbacks(section);
     loadTalentIcons();
+    if (new URLSearchParams(window.location.search).get("page") === "builds" && window.location.hash === "#talentLab") {
+      section.scrollIntoView({behavior:"auto",block:"start"});
+    }
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
