@@ -169,6 +169,9 @@ const heroHDImageUrl = name => {
   return file ? "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file) : "";
 };
 
+// Shared image resolver so hero cards, profiles and the talent planner use the same HD source.
+window.GrimGGHeroImageUrl = name => heroHDImageUrl(name) || heroImageUrl(name);
+
 const fallbackHeroes = [
   ["Fanny","Лес","Убийца"],["Vexana","Мид","Маг"],
   ["Claude","Голд","Стрелок"],["Belerick","Роум","Танк"],
