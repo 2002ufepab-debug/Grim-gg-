@@ -199,6 +199,18 @@ try:
 except (OSError, json.JSONDecodeError, AttributeError) as exc:
     errors.append(f"Could not validate local catalog snapshots: {exc}")
 
+require('name:"Magic Boots"' in script and 'name:"Demon Boots"' in script
+        and 'name:"Magic Shoes"' not in script and 'name:"Demon Shoes"' not in script,
+        "The equipment catalog must use the current boots names without stale duplicate aliases")
+require('if (/retribution/.test(value)) return "Jungle";' in script
+        and 'if (/conceal|dire hit|encourage|favor/.test(value)) return "Roam";' in script
+        and 'if (/allow throw|broken heart|throw forbidden/.test(value)) return "Movement";' in script,
+        "Jungle spells, roaming effects and special movement items must use the right categories")
+require('endless battle|golden staff|rose gold meteor|sea halberd|war axe|javelin|magic blade' in script
+        and 'fleeting time|winter crown|flask of the oasis|magic potion' in script,
+        "Core equipment names must not fall into the generic Other category")
+require('renderItems();\n    renderPerks();\n    renderBuilds();\n    renderFavorites();\n    // renderItems() owns the visible count' in script,
+        "Catalog refresh must not overwrite the active item-filter count")
 require("контрпик" not in html.lower(),
         "Page metadata must not advertise the removed counterpick section")
 require("AbortController" in script and "window.setTimeout(() => controller.abort(), 7000)" in script,
