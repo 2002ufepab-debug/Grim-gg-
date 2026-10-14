@@ -169,6 +169,18 @@ for attr, value in re.findall(r'\b(href|src)="([^"]+)"', html):
         continue
     require((ROOT / path).is_file(), f"Broken local {attr} reference: {value}")
 
+# The talent planner must populate all roles from the full community catalog and avoid
+# injecting externally sourced hero names into HTML.
+require("const roleLabels = {" in talents and "discoveredByRole" in talents and "heroesByRole[role].splice" in talents,
+        "Talent planner must merge the full external hero catalog into all role lists")
+require("heroSelect.replaceChildren(...availableHeroes.map(name => new Option(name, name)))" in talents,
+        "Talent planner must refresh hero choices safely after catalog loading")
+require("heroSelect.replaceChildren(...names.map(name => new Option(name, name)))" in talents
+        and "heroSelect.innerHTML = heroesByRole[role]" not in talents,
+        "External hero names must be inserted as text options, not HTML")
+require("heroEnglishNames[select.value] || select.value" in talents,
+        "Talent planner must resolve portraits for heroes without a Russian display-name mapping")
+
 feed_path = ROOT / "data" / "esports-news.json"
 try:
     feed = json.loads(feed_path.read_text(encoding="utf-8"))
