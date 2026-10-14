@@ -269,7 +269,7 @@ html, body { max-width: 100%; }
   #main-content .hero-grid .hero-tags span { font-size: 8px; padding: 3px 4px; }
   /* Keep both primary actions side-by-side so three-column cards stay compact. */
   #main-content .hero-grid .hero-card-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
-  #main-content .hero-grid .hero-card-actions .btn { padding: 7px 2px; font-size: 8px; line-height: 1.2; min-height: 34px; white-space: normal; overflow-wrap: anywhere; }
+  #main-content .hero-grid .hero-card-actions .btn { padding: 7px 3px; font-size: 9px; line-height: 1.25; min-height: 36px; white-space: normal; overflow-wrap: anywhere; }
   #main-content .hero-grid .favorite-btn { min-height: 32px; padding: 6px 3px; font-size: 9px; line-height: 1.25; }
   #main-content .hero-grid .hero-name-open { max-width: 100%; font-size: inherit; overflow-wrap: anywhere; }
 }
