@@ -83,6 +83,16 @@ require("new MutationObserver" in talents and "refreshIcons" in talents,
         "Dynamically rendered talent icons must be enhanced after the API responds")
 
 require("@media(max-width:700px)" in talent_css, "Talent planner needs a mobile layout")
+
+require("object-fit: contain" in wide_styles and "focus-visible" in wide_styles,
+        "Responsive polish must preserve artwork and keyboard focus visibility")
+require("@media (max-width: 650px)" in wide_styles and "grid-template-columns: minmax(0, 1fr)" in wide_styles,
+        "Mobile hero actions must stack cleanly on narrow screens")
+require("prefers-reduced-motion: reduce" in wide_styles,
+        "Reduced-motion preference must be respected")
+require("object-fit: contain" in talent_css and "min-height: 42px" in talent_css,
+        "Talent icons and controls must remain clear and touch-friendly")
+
 require(".hero-image-wrap::after" in styles and "display: none !important" in styles and "background: none !important" in styles,
         "Hero portrait cards must not retain a dark overlay after labels are removed")
 require("linear-gradient(145deg, #30232d 0%, #241b27 58%, #30212a 100%)" in styles,
