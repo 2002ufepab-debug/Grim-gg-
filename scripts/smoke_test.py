@@ -115,7 +115,7 @@ require("Array.isArray(payload?.records)" in talents and "skill?.icon_url" in ta
         "Talent icon loader must handle alternate public API response shapes")
 require("grid-template-columns: repeat(3, minmax(0, 1fr))" in wide_styles and "object-fit: cover" in wide_styles,
         "Hero directory must show larger game-like portraits in a three-column phone grid")
-require("font-size: 9px; line-height: 1.25; min-height: 36px" in wide_styles,
+require("font-size: 10px; line-height: 1.25; min-height: 40px" in wide_styles,
         "Mobile hero-card actions must remain readable and touch-friendly")
 require("counterpick" not in script.lower() and "enemySelect" not in script and "ownHeroSelect" not in script,
         "Removed counterpick functionality must not leave stale script references")
