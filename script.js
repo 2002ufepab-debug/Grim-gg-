@@ -156,7 +156,6 @@ const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]
 // High-resolution hero splash artwork, optimized to responsive WebP for faster loading.
 // Each source path was checked against the image repository; the portrait set remains the fallback.
 const HERO_SPLASH_ART_OVERRIDES = {
-  "arlott": "Arlott/Lone Lancer.png",
   // Aamon, Alpha and Alucard use tighter portrait sources in the circular catalog.
   "argus": "Argus/Dark Angel.png",
   "bane": "Bane/Frozen King.png",
