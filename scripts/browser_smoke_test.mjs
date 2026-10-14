@@ -43,8 +43,9 @@ try {
   const hub = page.locator(".home-hub");
   check("Four featured hero cards are removed", await hub.isVisible()
     && await page.locator(".roster-card").count() === 0);
+  const hubText = await hub.innerText();
   check("Homepage shows all five lanes", await page.locator(".home-lane-card").count() === 5
-    && ["EXP Lane", "Jungle", "Mid Lane", "Gold Lane", "Roam"].every(name => hub.innerText().then(text => text.includes(name))));
+    && ["EXP Lane", "Jungle", "Mid Lane", "Gold Lane", "Roam"].every(name => hubText.includes(name)));
   check("Homepage links to builds, talents and full hero catalogue",
     await page.locator(".home-feature-link[href='?page=builds']").count() === 1
     && await page.locator(".home-feature-link[href='?page=talents']").count() === 1
