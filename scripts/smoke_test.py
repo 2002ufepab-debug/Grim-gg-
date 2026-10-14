@@ -188,6 +188,11 @@ try:
 except (OSError, json.JSONDecodeError, AttributeError) as exc:
     errors.append(f"Could not validate local catalog snapshots: {exc}")
 
+require("контрпик" not in html.lower(),
+        "Page metadata must not advertise the removed counterpick section")
+require("AbortController" in script and "window.setTimeout(() => controller.abort(), 7000)" in script,
+        "Remote catalog requests must time out before using the local fallback")
+
 # The talent planner must populate all roles from the full community catalog and avoid
 # injecting externally sourced hero names into HTML.
 require("const roleLabels = {" in talents and "discoveredByRole" in talents and "heroesByRole[role].splice" in talents,
