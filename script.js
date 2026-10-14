@@ -747,6 +747,38 @@ function getHeroClasses(hero) {
   return [...new Set(translated.length ? translated : ["Роль не указана"])];
 }
 
+// Russian aliases make the hero catalogue searchable in the language used by the interface.
+const HERO_SEARCH_ALIASES = {
+  aamon:"аамон", akai:"акай", alice:"алиса", alpha:"альфа", alucard:"алукард",
+  angela:"ангела", argus:"аргус", atlas:"атлас", aurora:"аврора", badang:"баданг",
+  balmond:"балмонд", bane:"бейн", beatrix:"беатрис", belerick:"белерик", benedetta:"бенедетта",
+  brody:"броуди", bruno:"бруно", carmilla:"кармилла", cecilion:"сесилион", change:"чанъэ",
+  chou:"чу", cici:"цзицзи", claude:"клод", clint:"клинт", cyclops:"циклоп", diggie:"дигги",
+  dyrroth:"диррот", edith:"эдит", esmeralda:"эсмеральда", estes:"эстес", eudora:"эудора",
+  fanny:"фанни", faramis:"фарамис", floryn:"флорин", franco:"франко", fredrinn:"фредринн",
+  freya:"фрея", gatotkaca:"гатоткача", gloo:"глу", gord:"горд", granger:"грейнджер",
+  grock:"грок", guinevere:"гвиневра", gusion:"госсен гусион", hanabi:"ханаби", hanzo:"ханзо",
+  harith:"харит", harley:"харли", hayabusa:"хаябуса", helcurt:"хелкарт", hilda:"хильда",
+  hylos:"хилос", irithel:"иритэль", jawhead:"джавхед", johnson:"джонсон", joy:"джой",
+  julian:"джулиан", kadita:"кадита", kagura:"кагура", kaja:"кайя", karina:"карина",
+  karrie:"кэрри карри", khaleed:"халид", khufra:"хуфра", kimmy:"кимми", lancelot:"ланселот",
+  lapulapu:"лапу лапу", layla:"лейла", lesley:"лесли", ling:"линг", lolita:"лолита",
+  lunox:"люнокс", luoyi:"ло йи", lylia:"лилия", martis:"мартис", masha:"маша",
+  mathilda:"матильда", melissa:"мелисса", miya:"мия", moskov:"москов", nana:"нана",
+  natalia:"наталья", natan:"натан", nolan:"нолан", novaria:"новария", odette:"одэтт одетта",
+  paquito:"пакито", pharsa:"фарса", phoveus:"фовиус", rafaela:"рафаэль", roger:"роджер",
+  ruby:"руби", saber:"сейбер сабер", selena:"селена", silvanna:"сильванна", sun:"сан",
+  suyou:"су ю", terizla:"теризла", thamuz:"тамуз", tigreal:"тигрил", uranus:"уранус",
+  vale:"вэйл", valentina:"валентина", valir:"валир", vexana:"вексана", wanwan:"ванван",
+  xborg:"икс борг иксборг", xavier:"ксавьер", yin:"инь", yisunshin:"ли сун син",
+  yuzhong:"юй чжун", yve:"ив", zhask:"жаск", zilong:"зилонг", chip:"чип", kalea:"калеа",
+  lukas:"лукас", marcel:"марсель", melissa:"мелисса", nolan:"нолан", obsidia:"обсидия",
+  sora:"сора", zetian:"цзэтянь", zhuxin:"чжусин"
+};
+function heroSearchKey(value) {
+  return String(value || "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+}
+
 function itemIconSlug(name) {
   const overrides = {
     "Magic Boots":"magic_boots",
@@ -994,10 +1026,13 @@ function renderHeroes() {
     });
   }
 
-  const filtered = heroes.filter(hero=>
-    (activeRole==="Все" || getHeroClasses(hero).includes(activeRole)) &&
-    hero.name.toLocaleLowerCase().includes(heroQuery)
-  );
+  const filtered = heroes.filter(hero => {
+    const name = String(hero.name || "").toLocaleLowerCase();
+    const alias = HERO_SEARCH_ALIASES[heroSearchKey(hero.name)] || "";
+    const searchable = (name + " " + alias).toLocaleLowerCase();
+    return (activeRole === "Все" || getHeroClasses(hero).includes(activeRole))
+      && searchable.includes(heroQuery);
+  });
 
   $("heroCount").textContent = `Показано: ${filtered.length}. ${heroDataSource === "fallback" ? "Показан сокращённый встроенный список: он не является полным каталогом." : "Роли взяты из стороннего каталога сообщества и не означают, что герой рекомендован для указанной линии."}`;
 
