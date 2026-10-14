@@ -946,6 +946,10 @@ function renderHeroDetailContent(hero, target) {
       <div class="hero-talent-card"><span class="hero-talent-label">Боевой навык</span>${battleSpellMarkup(spellText)}</div>
     </div>
     <p class="fine-print">Это стартовый вариант по роли и стилю, а не гарантированная мета-сборка для каждого героя. Сверяй эффекты талантов с текущей версией MLBB и меняй выбор под матч.</p>
+    <div class="hero-talent-footer-actions">
+      <a class="btn btn-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель ↗</a>
+      <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
+    </div>
   </div>`;
   const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
   const skillsSection = combo
@@ -973,8 +977,6 @@ function renderHeroDetailContent(hero, target) {
         <div class="hero-tags">${roles.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <div class="hero-detail-actions">
           ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
-          <a class="btn btn-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель ↗</a>
-          <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
         </div>
       </div>
     </div>

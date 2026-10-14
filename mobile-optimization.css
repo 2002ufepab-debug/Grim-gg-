@@ -520,6 +520,22 @@
   #heroDetailPage .hero-detail-actions .btn,
   #heroDetailPage .hero-detail-actions .favorite-btn { min-height: 38px; }
   #heroDetailPage .hero-detail-section { margin-top: 10px; }
+  #heroDetailPage .hero-talent-footer-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  #heroDetailPage .hero-talent-footer-actions .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 40px;
+    padding: 8px 6px;
+    font-size: 11px;
+    text-align: center;
+  }
 
   /* Put the useful match setup first on phones; the large artwork follows it. */
   #heroDetailPage {
