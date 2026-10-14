@@ -222,10 +222,12 @@ try:
     # Hirara is the only current catalog entry without a matching, verified artwork path.
     verified_hero_art: dict[str, str] = {}
     for map_name in ("HERO_HD_IMAGE_FILES", "HERO_SPLASH_ART_OVERRIDES"):
-        map_match = re.search(rf"const {map_name} = \\{{(.*?)\\n\\}};", script, re.S)
-        require(map_match is not None, f"Could not locate {map_name} for portrait coverage validation")
-        if map_match:
-            entries = re.findall(r"""["']([^"']+)["']\s*:\s*["']([^"']+)["']""", map_match.group(1))
+        map_start = script.find(f"const {map_name} = {{")
+        map_end = script.find("\n};", map_start)
+        map_text = script[map_start:map_end] if map_start >= 0 and map_end >= 0 else ""
+        require(bool(map_text), f"Could not locate {map_name} for portrait coverage validation")
+        if map_text:
+            entries = re.findall(r"""["']([^"']+)["']\s*:\s*["']([^"']+)["']""", map_text)
             verified_hero_art.update({
                 re.sub(r"[^a-z0-9]", "", key.casefold()): value.strip()
                 for key, value in entries
