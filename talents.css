@@ -82,3 +82,61 @@
     flex: 1 1 150px;
   }
 }
+
+
+/* Expandable talent cards: tap a talent to reveal its effect without crowding mobile screens. */
+.talent-slot { min-width: 0; }
+.talent-slot-toggle {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.talent-slot-toggle .talent-slot-num { grid-column: 1 / -1; }
+.talent-slot-toggle .talent-icon { margin: 0; }
+.talent-slot-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+.talent-slot-label h4 { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.talent-expand-indicator {
+  display: grid;
+  place-items: center;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  border: 1px solid #67404e;
+  border-radius: 50%;
+  color: #ff8795;
+  font-size: 18px;
+  line-height: 1;
+}
+.talent-slot-toggle:hover .talent-expand-indicator,
+.talent-slot-toggle[aria-expanded="true"] .talent-expand-indicator {
+  background: #3b1c29;
+  border-color: #ff6579;
+}
+.talent-slot-toggle:focus-visible {
+  outline: 2px solid #ff6579;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+.talent-slot-description { margin: 12px 0 0 !important; padding-top: 10px; border-top: 1px solid #392b37; }
+.talent-slot-description[hidden] { display: none !important; }
+@media (max-width: 700px) {
+  .talent-slot { display: block; }
+  .talent-slot-toggle { grid-template-columns: 44px minmax(0, 1fr) auto; gap: 9px; }
+  .talent-slot-toggle .talent-icon { grid-row: auto; grid-column: auto; }
+  .talent-slot-description { margin-left: 53px !important; }
+}
