@@ -122,6 +122,38 @@ require("counterpick" not in script.lower() and "enemySelect" not in script and 
 require(".hero-grid .hero-card-actions { grid-template-columns: repeat(2, minmax(0, 1fr))" in wide_styles,
         "Three-column hero cards must keep build and 3D actions in a compact two-column row")
 
+# Validate the central hero-art catalogs: duplicate keys and malformed source paths
+# can silently overwrite mappings or create broken images despite valid JavaScript syntax.
+for catalog_name in ("HERO_HD_IMAGE_FILES", "HERO_SPLASH_ART_OVERRIDES"):
+    match = re.search(
+        rf"const\\s+{catalog_name}\\s*=\\s*\\{{(.*?)^\\}};",
+        script,
+        re.MULTILINE | re.DOTALL,
+    )
+    require(match is not None, f"Missing hero image catalog: {catalog_name}")
+    if match:
+        body = match.group(1)
+        keys = re.findall(r"""["']([^"']+)["']\\s*:""", body)
+        require(len(keys) == len(set(keys)),
+                f"{catalog_name} contains duplicate keys that overwrite earlier images")
+        values = re.findall(r"""["']([^"']+)["']\\s*:\\s*["']([^"']+)["']""", body)
+        require(bool(values), f"{catalog_name} contains no image mappings")
+        for key, path in values:
+            require(bool(key.strip()), f"{catalog_name} contains an empty hero key")
+            require(not path.startswith("/") and ".." not in path.split("/"),
+                    f"{catalog_name} has an unsafe relative image path for {key}: {path}")
+            require(path.lower().endswith((".png", ".webp", ".jpg", ".jpeg")),
+                    f"{catalog_name} has an unexpected image file type for {key}: {path}")
+            if catalog_name == "HERO_SPLASH_ART_OVERRIDES":
+                require("/" in path, f"Splash artwork should include its hero folder: {key}: {path}")
+
+require('loading="lazy"' in script and 'decoding="async"' in script and 'alt="\u0024{escapeHTML(hero.name)}"' in script,
+        "Hero images must have accessible alt text and efficient loading hints")
+require("this.naturalWidth > this.naturalHeight * 0.82" in script and "data-shape-fallback" in script,
+        "Near-square portrait files must switch to available tall hero artwork")
+require("assets/retribution.svg" in script and (ROOT / "assets" / "retribution.svg").is_file(),
+        "The local Retribution icon used in builds must exist")
+
 # Ensure every first-party script/style/icon referenced by index.html exists.
 for attr, value in re.findall(r'\b(href|src)="([^"]+)"', html):
     if attr not in {"href", "src"} or value.startswith(("#", "?", "http://", "https://", "data:", "mailto:", "tel:")):
