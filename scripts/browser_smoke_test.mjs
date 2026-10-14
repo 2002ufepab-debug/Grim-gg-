@@ -54,6 +54,28 @@ try {
     "waiting for the role-first homepage to appear on GitHub Pages");
   if (!publishedRevision) throw new Error("GitHub Pages did not publish the expected Grim_MLBB homepage revision in time");
 
+  // Check crawlable static SEO pages by their clean URLs (not only query-string variants).
+  for (const [path, heading, canonical] of [
+    ["hero-guide/", "Герои Mobile Legends: роли, линии и тактика", "https://2002ufepab-debug.github.io/Grim-gg-/hero-guide/"],
+    ["combo-guides/", "Комбо и гайды по Mobile Legends", "https://2002ufepab-debug.github.io/Grim-gg-/combo-guides/"]
+  ]) {
+    const response = await page.goto(BASE_URL + path, { waitUntil: "domcontentloaded", timeout: 60000 });
+    check("SEO page returns HTTP 200: " + path, response?.status() === 200,
+      "received HTTP " + (response?.status() ?? "no response"));
+    check("SEO page has its expected heading: " + path,
+      (await page.locator("h1").first().innerText().catch(() => "")).includes(heading));
+    check("SEO page canonical is correct: " + path,
+      await page.locator('link[rel="canonical"]').getAttribute("href").catch(() => "") === canonical);
+    const dimensions = await page.evaluate(() => ({
+      width: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth
+    }));
+    check("SEO page fits mobile viewport: " + path,
+      dimensions.scrollWidth <= dimensions.width + 2, JSON.stringify(dimensions));
+  }
+  await page.goto(BASE_URL + "?page=home&smoke=" + Date.now(), {
+    waitUntil: "domcontentloaded", timeout: 60000
+  });
   await page.locator("#home").waitFor({ state: "visible", timeout: 20000 });
   check("Homepage renders", await page.locator("#home").isVisible());
   check("Main navigation exists", await page.locator("#nav a").count() >= 8);
