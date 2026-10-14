@@ -30,7 +30,7 @@ def parse_js_map(source: str, name: str) -> dict[str, str]:
     match = re.search(r"\bconst\s+" + re.escape(name) + r"\s*=\s*\{(.*?)\n\};", source, re.S)
     if not match:
         raise ValueError(f"Could not find JavaScript map {name}")
-    pairs = re.findall(r'["\']([^"\']+)["\']\s*:\s*["\']([^"\']*)["\']', match.group(1))
+    pairs = re.findall(r'"([^"]+)"\s*:\s*"([^"]*)"', match.group(1))
     return dict(pairs)
 
 
