@@ -1363,3 +1363,99 @@
   transform: scale(1.08) !important;
   transform-origin: center 22% !important;
 }
+
+/* GRIM_GG emergency image-layout repair (2026-10-15).
+   Previous patches repeatedly overrode each other: cover + transform zoom
+   followed contain rules, while mobile also forced a square frame. This final
+   rule set is intentionally simple: stable portrait frame, no zoom/cropping. */
+#main-content .hero-grid .hero-image-wrap,
+#heroGrid.hero-grid .hero-image-wrap,
+#favoritesGrid.hero-grid .hero-image-wrap {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 3 / 4 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+#main-content .hero-grid .hero-image-open,
+#heroGrid.hero-grid .hero-image-open,
+#favoritesGrid.hero-grid .hero-image-open {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image,
+#heroGrid.hero-grid .hero-image-wrap .hero-image,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image {
+  display: block !important;
+  flex: 0 1 auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 2px 0 0 !important;
+  box-sizing: border-box !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  transform: none !important;
+  transform-origin: center center !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--splash,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
+  object-fit: contain !important;
+  object-position: center center !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Akai"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Akai"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Akai"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Angela"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"] {
+  transform: none !important;
+}
+.build-hero-avatar-art .hero-image--avatar,
+.build-hero-avatar-art .hero-image--portrait,
+.build-hero-avatar-art .hero-image--splash {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+}
+@media (max-width: 650px) {
+  #main-content .hero-grid,
+  #heroGrid.hero-grid,
+  #favoritesGrid.hero-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  #main-content .hero-grid .hero-image-wrap,
+  #heroGrid.hero-grid .hero-image-wrap,
+  #favoritesGrid.hero-grid .hero-image-wrap {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4 !important;
+  }
+}
