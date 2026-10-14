@@ -217,6 +217,46 @@ try:
     equipment_ids = [row.get("id_equip") for row in equipment_catalog]
     require(len(hero_ids) == len(set(hero_ids)) and len(hero_names) == len(set(hero_names)),
             "Local hero snapshot must not contain duplicate IDs or names")
+
+    # Every catalog hero should have a verified portrait or splash-art mapping.
+    # Hirara is the only current catalog entry without a matching, verified artwork path.
+    verified_hero_art: dict[str, str] = {}
+    for map_name in ("HERO_HD_IMAGE_FILES", "HERO_SPLASH_ART_OVERRIDES"):
+        map_match = re.search(rf"const {map_name} = \{(.*?)\n\};", script, re.S)
+        require(map_match is not None, f"Could not locate {map_name} for portrait coverage validation")
+        if map_match:
+            entries = re.findall(r"""["']([^"']+)["']\s*:\s*["']([^"']+)["']""", map_match.group(1))
+            verified_hero_art.update({
+                re.sub(r"[^a-z0-9]", "", key.casefold()): value.strip()
+                for key, value in entries
+            })
+            require(all(value.strip() for _, value in entries),
+                    f"{map_name} must not contain empty image paths")
+    heroes_without_verified_art = sorted(
+        str(row.get("name_hero", "")).strip()
+        for row in hero_catalog
+        if re.sub(r"[^a-z0-9]", "", str(row.get("name_hero", "")).casefold())
+        not in verified_hero_art
+    )
+    require(heroes_without_verified_art == ["Hirara"],
+            "Hero artwork coverage changed unexpectedly; verify new image paths instead of guessing: "
+            + ", ".join(heroes_without_verified_art))
+
+    # Guard against item icon filenames drifting away from the names in the local equipment snapshot.
+    item_icon_overrides = {
+        "Magic Boots": "magic_boots", "Demon Boots": "demon_boots",
+        "Retribution": "retribution", "Ice Retribution": "ice_retribution",
+        "Flame Retribution": "flame_retribution", "Bloody Retribution": "bloody_retribution",
+        "Conceal": "conceal", "Encourage": "encourage", "Favor": "favor", "Dire Hit": "dire_hit",
+    }
+    for row in equipment_catalog:
+        item_name = str(row.get("name-equipment", "")).strip()
+        icon_slug = item_icon_overrides.get(
+            item_name,
+            re.sub(r"[^a-z0-9]+", "_", re.sub(r"['’]", "", item_name.casefold())).strip("_")
+        )
+        require(str(row.get("logo-equipment", "")).strip().casefold() == f"{icon_slug}.png",
+                f"Equipment icon mapping does not match the local catalog: {item_name}")
     featured_build_block = re.search(r"const featuredHeroBuilds = \{(.*?)\n\};", script, re.S)
     if featured_build_block:
         featured_build_names = {
