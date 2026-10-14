@@ -50,7 +50,7 @@ require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding
 for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "counterpicks", "esports"):
     require(f'href="?page={route}"' in html, f"Main navigation is missing route ?page={route}")
 
-require('knownPages.includes(requestedPage)' in talents and 'section.classList.add("page-hidden")' in talents,
+require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
         "Talent section must respect the initial page route")
 require('"perks","talents","builds"' in script, "Talent route is missing from the page router")
 require('page === "talents" ? "talentLab"' in script, "Talent route must reveal the dynamically created talent section")
