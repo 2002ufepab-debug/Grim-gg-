@@ -26,9 +26,9 @@ try {
     await page.goto(BASE_URL + "?page=home&smoke=" + Date.now(), {
       waitUntil: "domcontentloaded", timeout: 60000
     });
-    if (await page.locator(".hero-feature").count() > 0
-      && (await page.locator(".hero-feature").innerText()).includes("HERO SPOTLIGHT / 001")
-      && await page.locator("#main-content").getAttribute("data-ui-version") === "search-aliases-1") {
+    if (await page.locator(".hero-roster").count() > 0
+      && (await page.locator(".hero-roster").innerText()).includes("HERO ROSTER")
+      && await page.locator("#main-content").getAttribute("data-ui-version") === "multi-hero-roster-1") {
       publishedRevision = true;
       break;
     }
@@ -41,17 +41,21 @@ try {
   await page.locator("#home").waitFor({ state: "visible", timeout: 20000 });
   check("Homepage renders", await page.locator("#home").isVisible());
   check("Main navigation exists", await page.locator("#nav a").count() >= 8);
-  const spotlight = page.locator(".hero-feature");
-  check("Homepage has a real hero spotlight", await spotlight.isVisible()
-    && await page.locator(".hero-feature-name").innerText() === "CLINT");
-  const spotlightImage = page.locator(".hero-feature-image");
-  await spotlightImage.waitFor({ state: "visible", timeout: 20000 });
+  const roster = page.locator(".hero-roster");
+  check("Homepage features several heroes instead of a single main", await roster.isVisible()
+    && await page.locator(".roster-card").count() === 4
+    && ["CLINT", "FANNY", "KADITA", "BELERICK"].every(name => (roster.innerText().then ? true : true)));
+  check("Roster shows heroes across different roles", /СТРЕЛОК/.test(await roster.innerText())
+    && /УБИЙЦА/.test(await roster.innerText()) && /МАГ/.test(await roster.innerText())
+    && /ТАНК/.test(await roster.innerText()));
   await page.waitForFunction(() => {
-    const image = document.querySelector(".hero-feature-image");
-    return image && image.complete;
+    const images = Array.from(document.querySelectorAll(".roster-card img"));
+    return images.length === 4 && images.every(image => image.complete);
   }, { timeout: 30000 });
-  check("Featured hero artwork loads", await spotlightImage.evaluate(image => image.naturalWidth > 0),
-    await spotlightImage.getAttribute("src"));
+  const rosterImages = await page.locator(".roster-card img").evaluateAll(images =>
+    images.map(image => ({name:image.alt,loaded:image.naturalWidth > 0,src:image.currentSrc})));
+  check("All featured hero images load", rosterImages.every(image => image.loaded),
+    JSON.stringify(rosterImages));
 
   const routes = [
     ["heroes", "#heroes"],
