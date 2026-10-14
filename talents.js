@@ -348,12 +348,12 @@
 
   function talentIconMarkup(name,index) {
     const key = String(name);
-    const glyph = /swift|agility|quantum|speed|мобиль|стрельб/i.test(key) ? "↗"
+    const glyph = /swift|agility|quantum|speed|мобильность|стрельба/i.test(key) ? "↗"
       : /rupture|master assassin|lethal|ignition|пробив|урон|weapon/i.test(key) ? "✦"
-      : /firmness|tenacity|vitality|smite|защит|стойк|здоров/i.test(key) ? "⬡"
+      : /firmness|tenacity|vitality|smite|защита|стойкость|здоровье/i.test(key) ? "⬡"
       : /hunter|bargain|seasoned|эконом/i.test(key) ? "◈"
-      : /festival|blood|rage|восстанов/i.test(key) ? "✚"
-      : /focusing|pull yourself|support|команд|помощ/i.test(key) ? "◎" : ["✦","⬡","◈"][index];
+      : /festival|blood|rage|восстановление/i.test(key) ? "✚"
+      : /focusing|pull yourself|support|команда|помощь/i.test(key) ? "◎" : ["✦","⬡","◈"][index];
     const safeName = key.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const slug = talentArtworkSlugs[key];
     const art = slug
