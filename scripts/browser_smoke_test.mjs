@@ -74,26 +74,37 @@ try {
   await page.goto(BASE_URL + "?page=heroes", { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.locator("#heroGrid").waitFor({ state: "visible", timeout: 20000 });
   await page.waitForFunction(() => {
-    const text = document.querySelector("#heroGrid")?.innerText || "";
-    return text.length > 0 && !/загружаем базу/i.test(text);
-  }, { timeout: 20000 });
-  const heroGridBefore = await page.locator("#heroGrid").innerText();
+    const count = document.querySelector("#heroCount")?.innerText || "";
+    return /Показано:/i.test(count) && document.querySelectorAll("#heroGrid .hero-card").length > 0;
+  }, { timeout: 30000 });
+  const heroCardsBefore = await page.locator("#heroGrid .hero-card").count();
   await page.locator("#heroSearch").fill("Клинт");
-  await page.waitForTimeout(350);
+  await page.waitForFunction(() => document.querySelectorAll("#heroGrid .hero-card").length === 1,
+    { timeout: 10000 });
   const heroGridAfter = await page.locator("#heroGrid").innerText();
-  check("Hero search responds", heroGridAfter !== heroGridBefore && /клинт/i.test(heroGridAfter),
-    "searching for Клинт should narrow the hero catalog");
+  check("Hero search supports Russian aliases", heroCardsBefore > 1
+    && await page.locator("#heroGrid .hero-card").count() === 1
+    && /clint/i.test(heroGridAfter),
+    "searching for Клинт should return the Clint hero card");
 
   await page.goto(BASE_URL + "?page=items", { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.locator("#itemGrid").waitFor({ state: "visible", timeout: 20000 });
-  await page.waitForFunction(() => (document.querySelector("#itemGrid")?.innerText || "").length > 0,
-    { timeout: 20000 });
-  const itemGridBefore = await page.locator("#itemGrid").innerText();
+  await page.waitForFunction(() => {
+    const count = document.querySelector("#itemCount")?.innerText || "";
+    return /Предметов в справочнике:/i.test(count) && document.querySelectorAll("#itemGrid .item-card").length > 0;
+  }, { timeout: 30000 });
+  const itemCardsBefore = await page.locator("#itemGrid .item-card").count();
   await page.locator("#itemSearch").fill("Berserker");
-  await page.waitForTimeout(350);
+  await page.waitForFunction(() => {
+    const grid = document.querySelector("#itemGrid");
+    return Boolean(grid?.innerText.includes("Ярость берсерка"))
+      && document.querySelectorAll("#itemGrid .item-card").length > 0;
+  }, { timeout: 10000 });
   const itemGridAfter = await page.locator("#itemGrid").innerText();
-  check("Item search responds", itemGridAfter !== itemGridBefore && /berserker/i.test(itemGridAfter),
-    "searching for Berserker should narrow the equipment catalog");
+  check("Item search responds in English and displays Russian names", itemCardsBefore > 1
+    && await page.locator("#itemGrid .item-card").count() < itemCardsBefore
+    && /Ярость берсерка/i.test(itemGridAfter),
+    "searching for Berserker should show Ярость берсерка and narrow the list");
 
   // Talent planner: hero/role/style controls, expandable descriptions, reset and icon rendering.
   await page.goto(BASE_URL + "?page=talents", { waitUntil: "domcontentloaded", timeout: 60000 });
