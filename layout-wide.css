@@ -279,3 +279,36 @@ html, body { max-width: 100%; }
   #main-content .hero-grid .hero-card-content { padding: 7px 5px; }
   #main-content .hero-grid .hero-card h3 { font-size: 11px; }
 }
+
+
+/* Artwork fidelity pass: preserve the full hero illustration instead of cropping it. */
+#main-content .hero-grid .hero-image-wrap {
+  background:
+    radial-gradient(ellipse at 50% 72%, rgba(160,35,65,.24), transparent 62%),
+    linear-gradient(145deg, #21131b 0%, #100e14 58%, #1a1118 100%);
+}
+#main-content .hero-grid .hero-image-open {
+  overflow: hidden;
+}
+#main-content .hero-grid .hero-image-open .hero-image {
+  width: 100%;
+  height: 100%;
+  padding: 5px 3px 0;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  filter: saturate(1.04) contrast(1.025) drop-shadow(0 7px 12px rgba(0,0,0,.38));
+}
+#main-content .hero-grid .hero-card {
+  background: linear-gradient(180deg, #171219 0%, #100e13 100%);
+}
+#main-content .hero-grid .hero-image-wrap::after {
+  height: 18%;
+  background: linear-gradient(transparent, rgba(9,8,12,.34));
+}
+@media (min-width: 651px) {
+  #main-content .hero-grid .hero-image-wrap { height: clamp(250px, 25vw, 340px); }
+}
+@media (max-width: 650px) {
+  #main-content .hero-grid .hero-image-wrap { height: clamp(132px, 39vw, 176px); }
+  #main-content .hero-grid .hero-image-open .hero-image { padding: 3px 1px 0; }
+}
