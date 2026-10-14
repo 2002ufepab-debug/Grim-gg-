@@ -62,7 +62,8 @@ for stylesheet_name, stylesheet in (
 for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "esports"):
     require(f'id="{section_id}"' in html, f"Missing core section #{section_id}")
 
-require('href="?page=talents"' in html, "Talent page must be reachable from the main navigation")
+require('href="?page=builds">Сборки и таланты</a>' in html and 'href="?page=builds#talentLab"' in html,
+        "Combined Builds + Talents workspace must be reachable from navigation and homepage")
 require('href="favicon.svg"' in html, "Main page favicon reference is missing")
 require('id="counterpicks"' not in html and 'href="?page=counterpicks"' not in html,
         "Removed counterpick section must not reappear in the page or navigation")
@@ -76,14 +77,16 @@ require('window.location.replace("/Grim-gg-/")' in (ROOT / "404.html").read_text
         "404 JavaScript redirect must use the correct GitHub Pages project path")
 require('href="/Grim-gg-/"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 fallback link must use the correct GitHub Pages project path")
-for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "esports"):
+for route in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "esports"):
     require(f'href="?page={route}"' in html, f"Main navigation is missing route ?page={route}")
+require('requestedPage === "talents" ? "builds"' in script,
+        "Legacy talent links must route to the combined Builds + Talents workspace")
 
-require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
-        "Talent section must respect the initial page route")
-require('"perks","talents","builds"' in script, "Talent route is missing from the page router")
-require('page === "talents" ? "talentLab"' in script, "Talent route must reveal the dynamically created talent section")
-require('talents: "Таланты и эмблемы"' in script, "Talent route title is missing")
+require('builds.appendChild(section)' in talents and 'id = "talentLab"' in talents,
+        "Talent planner must be nested inside the combined builds workspace")
+require('"perks","talents","builds"' in script, "Legacy talent route alias is missing from the page router")
+require('requestedPage === "talents" ? "builds"' in script, "Legacy talent route must reveal the combined workspace")
+require('builds: "Сборки и таланты"' in script, "Combined workspace title is missing")
 require('id="talentHeroPortrait"' in talents and "heroArtByName" in talents,
         "Talent planner must render the selected hero portrait when the source is available")
 require("GrimGGHeroImageUrl" in script and "GrimGGHeroImageUrl" in talents,
@@ -96,8 +99,8 @@ require('this.dataset.retry!==this.src' in script and "item-image" in script,
         "Item image fallback must avoid retrying the same broken URL")
 require('img.dataset.fallback = catalogUrl && catalogUrl !== url ? catalogUrl : "";' in talents,
         "Talent portrait must retry the catalog image before showing a placeholder")
-require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
-        "Talent Lab must stay hidden except on its own route")
+require('builds.appendChild(section)' in talents,
+        "Talent Lab must remain inside the builds section and inherit its page visibility")
 require('id="talentRole"' in talents and 'id="talentHero"' in talents and 'id="talentStyle"' in talents,
         "Talent planner must expose role, hero and playstyle selectors")
 require('id="talentCopy"' in talents and 'id="talentReset"' in talents,
