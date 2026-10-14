@@ -1290,6 +1290,7 @@ const featuredHeroBuilds = {
 let activeBuildHeroName = "";
 let activeBuildRoles = [];
 let activeBuildVariant = "standard";
+let activeBuildTalentStyle = "Командные бои";
 
 const magicDamageHeroNames = new Set([
   "Aamon","Alice","Aurora","Cecilion","Chang'e","Cyclops","Esmeralda","Eudora",
@@ -1382,9 +1383,10 @@ function renderHeroBuildModal() {
     return `<div class="build-item-row"><span class="build-slot">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в клиенте игры.")}</span></div></div>`;
   }).join("");
   const variantLabel = activeBuildVariant === "standard" ? "Основная" : activeBuildVariant === "antiTank" ? "Против танков" : "Защитная";
-  const talentPreset = getHeroTalentPreset(activeBuildHeroName, activeBuildRoles);
+  const talentPreset = getHeroTalentPreset(activeBuildHeroName, activeBuildRoles, activeBuildTalentStyle);
   const talentText = build.talents || "Выбери таланты под механику героя и текущую ситуацию.";
-  const modalTalentRows = talentPreset.talents.map((talent,index)=>`<article class="build-talent-row"><span class="build-talent-index">${["I","II","III"][index] || index+1}</span><span class="build-talent-glyph" aria-hidden="true">${talentIconMarkupForBuild(talent[1],index)}</span><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("");
+  const talentStyles = ["Агрессивно","Командные бои","Выживаемость"];
+  const modalTalentRows = talentPreset.talents.map((talent,index)=>`<article class="build-talent-row"><button type="button" class="build-talent-toggle" aria-expanded="false" aria-controls="build-talent-description-${index}"><span class="build-talent-index">${["I","II","III"][index] || index+1}</span><span class="build-talent-glyph" aria-hidden="true">${talentIconMarkupForBuild(talent[1],index)}</span><span class="build-talent-heading"><strong>${escapeHTML(talent[1])}</strong><span class="build-talent-expand" aria-hidden="true">+</span></span></button><p class="build-talent-description" id="build-talent-description-${index}" hidden>${escapeHTML(talent[2])}</p></article>`).join("");
   content.innerHTML = `<h2 id="buildModalTitle">${escapeHTML(activeBuildHeroName)} <span class="red">/ СБОРКА</span></h2>
     <p class="build-modal-subtitle">${escapeHTML(build.role)} · ${build.isMagicBuild ? "МАГИЧЕСКАЯ СБОРКА" : "СБОРКА ПО РОЛИ"} · ${escapeHTML(build.goal)}</p>
     <div class="build-variant-tabs" role="group" aria-label="Вариант сборки">
@@ -1395,7 +1397,7 @@ function renderHeroBuildModal() {
     <div class="build-modal-section"><h3>${escapeHTML(variantLabel)} · предметы по порядку</h3><p class="fine-print">Порядок покупки — ориентир, а не обязательная последовательность для каждого матча.</p><div class="build-item-list">${itemRows}</div></div>
     <div class="build-advice">
       <div class="build-advice-card"><span class="build-advice-icon">✦</span><div><strong>Эмблема</strong><p>${escapeHTML(build.emblem || talentPreset.emblem)}</p></div></div>
-      <div class="build-advice-card build-advice-talents"><span class="build-advice-icon">◆</span><div><strong>Таланты / перки · ${escapeHTML(talentPreset.style)}</strong>${modalTalentRows ? `<div class="build-talent-list">${modalTalentRows}</div>` : `<p>${escapeHTML(talentText)}</p>`}</div></div>
+      <div class="build-advice-card build-advice-talents"><span class="build-advice-icon">◆</span><div><strong>Таланты / перки</strong><label class="build-style-label" for="buildTalentStyle">Стиль комбинации</label><select id="buildTalentStyle" class="build-style-select">${talentStyles.map(style=>`<option value="${escapeHTML(style)}" ${activeBuildTalentStyle===style?"selected":""}>${escapeHTML(style)}</option>`).join("")}</select><div class="build-talent-list">${modalTalentRows || `<p>${escapeHTML(talentText)}</p>`}</div></div></div>
       <div class="build-advice-card build-advice-spell"><span class="build-advice-icon">➤</span><div><strong>Боевой навык</strong>${battleSpellMarkup(build.spell)}</div></div>
     </div>
     <p class="build-modal-note">${build.personalized ? "Рекомендация для конкретного героя. " : "Пока это шаблон по классу, а не точная сборка для каждого героя. "}${escapeHTML(build.note)}</p>
@@ -1407,6 +1409,7 @@ function openHeroBuild(heroName, rolesText) {
   activeBuildHeroName = String(heroName || "");
   activeBuildRoles = String(rolesText || "").split(",").map(value=>value.trim()).filter(Boolean);
   activeBuildVariant = "standard";
+  activeBuildTalentStyle = "Командные бои";
   renderHeroBuildModal();
   modal.hidden = false;
   document.body.classList.add("modal-open");
@@ -2139,6 +2142,16 @@ function init() {
       renderHeroBuildModal();
       return;
     }
+    const talentToggle = event.target.closest(".build-talent-toggle");
+    if (talentToggle) {
+      const expanded = talentToggle.getAttribute("aria-expanded") === "true";
+      talentToggle.setAttribute("aria-expanded", String(!expanded));
+      const description = document.getElementById(talentToggle.getAttribute("aria-controls"));
+      if (description) description.hidden = expanded;
+      const indicator = talentToggle.querySelector(".build-talent-expand");
+      if (indicator) indicator.textContent = expanded ? "+" : "−";
+      return;
+    }
     if (event.target.closest("[data-close-build]")) {
       closeHeroBuild();
       return;
@@ -2148,6 +2161,12 @@ function init() {
     updateFavorite(button.dataset.favoriteType,button.dataset.favoriteId);
   });
 
+  document.addEventListener("change", event => {
+    if (event.target && event.target.id === "buildTalentStyle") {
+      activeBuildTalentStyle = event.target.value;
+      renderHeroBuildModal();
+    }
+  });
   setupPageNavigation();
   setupBackToTop();
   setupFilters();
