@@ -884,3 +884,30 @@
     margin-top: 5px !important;
   }
 }
+
+
+/* Normalize perceived character size inside the shared circular hero viewport.
+   Source files mix full splash art, tall transparent renders, and square avatars. */
+#main-content .hero-grid .hero-image-wrap .hero-image,
+#heroGrid.hero-grid .hero-image-wrap .hero-image,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image {
+  transform-origin: center 30% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--splash,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
+  object-position: center 18% !important;
+  transform: scale(1.02) !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--portrait,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--portrait,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--portrait {
+  object-position: center 18% !important;
+  transform: scale(1.14) !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--avatar,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--avatar,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--avatar {
+  object-position: center 28% !important;
+  transform: scale(1.08) !important;
+}
