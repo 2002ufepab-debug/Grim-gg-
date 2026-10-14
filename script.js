@@ -260,11 +260,14 @@ const HERO_SPLASH_ART_OVERRIDES = {
   "zilong": "Zilong/Eastern Warrior.png"
 };
 const heroSplashImageUrl = path => {
-  // Load the verified original art directly instead of relying on an image proxy.
-  // The proxy can fail on some mobile networks, causing the site to fall back to old avatars.
-  return "https://raw.githubusercontent.com/Sparkies01/Splash/main/" +
+  const source = "raw.githubusercontent.com/Sparkies01/Splash/main/" +
     String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
+  return "https://images.weserv.nl/?url=" + encodeURIComponent(source) +
+    "&w=640&h=900&fit=contain&output=webp&q=82";
 };
+const heroSplashDirectImageUrl = path =>
+  "https://raw.githubusercontent.com/Sparkies01/Splash/main/" +
+  String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
   // Prefer the same tall, clean portrait style used by Akai for consistent hero cards.
@@ -801,12 +804,16 @@ function heroImageMarkup(hero) {
   const retryImage = hero.fallbackImage && hero.fallbackImage !== hero.image
     ? hero.fallbackImage
     : heroImageUrl(hero.name);
+  const splashPath = HERO_SPLASH_ART_OVERRIDES[heroImageKey(hero.name)];
+  const directSplashFallback = String(hero.image).includes("images.weserv.nl") && splashPath
+    ? heroSplashDirectImageUrl(splashPath)
+    : "";
   const imageType = String(hero.image).includes("images.weserv.nl")
     ? "hero-image--splash"
     : String(hero.image).includes("Lara_Image")
       ? "hero-image--portrait"
       : "hero-image--avatar";
-  return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+  return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-retry="${escapeHTML(directSplashFallback || retryImage)}" data-retry2="${escapeHTML(directSplashFallback ? retryImage : "")}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else if(this.dataset.retry2 && this.dataset.retry2!==this.src){const next=this.dataset.retry2;this.dataset.retry2='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
 function favoriteButton(type,id,saved) {
