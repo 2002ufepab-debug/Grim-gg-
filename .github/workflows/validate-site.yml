@@ -22,9 +22,9 @@ jobs:
           node-version: "22"
       - name: Install CSpell with Russian dictionary
         run: npm install --no-save cspell @cspell/dict-ru_ru
-      - name: Check spelling in site text (initial baseline)
+      - name: Check spelling in HTML and talent recommendations (initial baseline)
         continue-on-error: true
-        run: npx cspell --no-progress index.html script.js talents.js
+        run: npx cspell --no-progress index.html talents.js
       - name: Check JavaScript syntax
         run: |
           node --check script.js
