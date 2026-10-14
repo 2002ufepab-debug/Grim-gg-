@@ -1293,3 +1293,63 @@
     aspect-ratio: 1 / 1 !important;
   }
 }
+
+
+/* GRIM_GG universal circle-fill refinement (2026-10-15).
+   The circular frame stays identical; zoom the character artwork itself so
+   source files with built-in empty margins don't look half-size. Keep the
+   known-good Aamon/Aldous/Alice/Angela framing stable. */
+#main-content .hero-grid .hero-image-wrap .hero-image,
+#heroGrid.hero-grid .hero-image-wrap .hero-image,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image {
+  object-fit: cover !important;
+  object-position: center 20% !important;
+  transform: scale(1.72) !important;
+  transform-origin: center 22% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--splash,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
+  object-fit: cover !important;
+  object-position: center 24% !important;
+  transform: scale(1.5) !important;
+  transform-origin: center 24% !important;
+}
+/* Extra-tight framing for the portraits most affected by internal image margins. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Akai"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Akai"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Akai"] {
+  transform: scale(1.88) !important;
+  transform-origin: center 22% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alucard"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alucard"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alucard"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"] {
+  transform: scale(1.82) !important;
+  transform-origin: center 22% !important;
+}
+/* Preserve already-approved portraits; Aamon remains at its existing zoom. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"] {
+  transform: scale(1.68) !important;
+  transform-origin: center 20% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aldous"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alice"],
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Angela"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"] {
+  transform: scale(1.08) !important;
+  transform-origin: center 22% !important;
+}
