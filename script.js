@@ -1375,7 +1375,13 @@ function renderItemCards(filtered, grid, emptyMessage) {
     // Используем исходные PNG-иконки предметов и усилений там, где они доступны.
     // Для общего роум-благословения оставляем собственную векторную пиктограмму:
     // в наборе нет отдельного файла с таким названием.
-    const vectorIcon = item.id === "roam-boots" ? effectIconMarkup(item) : "";
+    const normalizedItemId = String(item.id || "").toLowerCase();
+    const normalizedItemName = String(item.ru || item.name || "").toLocaleLowerCase("ru");
+    const isRoamBlessing = normalizedItemId === "roam-boots"
+      || (item.cat === "Roam" && /роум.?благослов|roaming blessing/.test(normalizedItemName));
+    const vectorIcon = isRoamBlessing
+      ? (effectIconMarkup({ ...item, id: "roam-boots", cat: "Roam" }) || `<svg class="item-image item-image-vector" viewBox="0 0 96 96" role="img" aria-label="Роум-благословение" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="roam-blessing-bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#493267"/><stop offset="1" stop-color="#17101f"/></linearGradient></defs><rect x="3" y="3" width="90" height="90" rx="18" fill="url(#roam-blessing-bg)" stroke="#c9a5ff" stroke-width="2"/><path d="M23 58c9 1 15-5 20-17l11 9c7 5 13 7 20 7 5 0 8 4 8 9v7H17v-7c0-4 2-7 6-8Z" fill="#b88cff" stroke="#f0e5ff" stroke-width="3"/><path d="M21 67h57M43 48l-3 6M53 52l-2 4" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="m68 17 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" fill="#fff0b2"/></svg>`)
+      : "";
     const iconSource = item.id === "retribution"
       ? new URL("assets/retribution.svg", window.location.href).href
       : item.imageFile
