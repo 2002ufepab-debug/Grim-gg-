@@ -107,8 +107,8 @@ require('class="item-original-name"' in script and 'summary>Оригинальн
         "Original equipment names should remain available on demand")
 require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
-require('"lesley": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Lesley/Deadly%20Sniper.png"' in script,
-        "Lesley must use a full-resolution original splash-art image")
+require('"lesley": "Lesley/Deadly Sniper.png"' in script and "images.weserv.nl/?url=" in script,
+        "Lesley must use optimized high-resolution splash artwork with a CDN fallback")
 require('item.id === "retribution"\n      ? "https://raw.githubusercontent.com/Alexandre221178/alexandregames/main/img-MLBB/spells/retribution-ca%C3%A7ar.webp"' in script,
         "Base Retribution must use a verified game-spell icon source")
 require("Array.isArray(payload?.records)" in talents and "skill?.icon_url" in talents,
