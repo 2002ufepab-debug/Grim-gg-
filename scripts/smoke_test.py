@@ -105,6 +105,14 @@ require('class="item-original-name"' in script and 'summary>Оригинальн
         "Original equipment names should remain available on demand")
 require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
+require('"lesley": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Lesley/Deadly%20Sniper.png"' in script,
+        "Lesley must use a full-resolution original splash-art image")
+require('item.id === "retribution"\n      ? "https://raw.githubusercontent.com/Alexandre221178/alexandregames/main/img-MLBB/spells/retribution-ca%C3%A7ar.webp"' in script,
+        "Base Retribution must use a verified game-spell icon source")
+require("Array.isArray(payload?.records)" in talents and "skill?.icon_url" in talents,
+        "Talent icon loader must handle alternate public API response shapes")
+require("grid-template-columns: repeat(3, minmax(0, 1fr))" in wide_styles and "object-fit: cover" in wide_styles,
+        "Hero directory must show larger game-like portraits in a three-column phone grid")
 
 # Ensure every first-party script/style/icon referenced by index.html exists.
 for attr, value in re.findall(r'\b(href|src)="([^"]+)"', html):
