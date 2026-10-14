@@ -1181,3 +1181,105 @@
     height: 54px !important;
   }
 }
+
+
+/* FINAL avatar fix: the catalogue portraits are intentionally clipped to circles.
+   Earlier 3:4 portrait rules were overriding the circle treatment, so enforce the
+   circle on the frame AND the clickable wrapper, then crop/zoom the actual artwork. */
+#main-content .hero-grid .hero-image-wrap,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar),
+#heroGrid.hero-grid .hero-image-wrap,
+#favoritesGrid.hero-grid .hero-image-wrap {
+  display: grid !important;
+  place-items: center !important;
+  width: min(100%, 156px) !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 8px auto 10px !important;
+  overflow: hidden !important;
+  border-radius: 50% !important;
+  clip-path: circle(50% at 50% 50%) !important;
+  isolation: isolate;
+}
+#main-content .hero-grid .hero-image-wrap::before,
+#main-content .hero-grid .hero-image-wrap::after,
+#heroGrid.hero-grid .hero-image-wrap::before,
+#favoritesGrid.hero-grid .hero-image-wrap::before {
+  border-radius: 50% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash) .hero-image-open,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait) .hero-image-open,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar) .hero-image-open,
+#heroGrid.hero-grid .hero-image-wrap .hero-image-open,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image-open {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 50% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image,
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--splash,
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--portrait,
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--avatar,
+#heroGrid.hero-grid .hero-image-wrap .hero-image,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  object-fit: cover !important;
+  object-position: center 24% !important;
+  border-radius: 50% !important;
+  transform: scale(1.24) !important;
+  transform-origin: center 27% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image--splash,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
+  object-position: center 30% !important;
+  transform: scale(1.12) !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image[alt="Aldous"],
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image[alt="Alice"],
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image[alt="Angela"] {
+  transform: scale(1.08) !important;
+}
+.build-hero-avatar-art .hero-image--avatar,
+.build-hero-avatar-art .hero-image--portrait {
+  transform: scale(1.32) !important;
+  transform-origin: center 25% !important;
+}
+.build-hero-avatar-art .hero-image--splash {
+  transform: scale(1.18) !important;
+  object-position: center 30% !important;
+}
+.item-image-wrap .item-image-vector[aria-label="Роум-благословение"] {
+  width: 86px !important;
+  height: 86px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+@media (max-width: 650px) {
+  #main-content .hero-grid .hero-image-wrap,
+  #main-content .hero-grid .hero-image-wrap:has(.hero-image--splash),
+  #main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait),
+  #main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar),
+  #heroGrid.hero-grid .hero-image-wrap,
+  #favoritesGrid.hero-grid .hero-image-wrap {
+    width: min(100%, 118px) !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+}
