@@ -914,3 +914,12 @@
   object-fit: cover !important;
   object-position: center 28% !important;
 }
+
+
+/* Arlott's splash artwork frames the character too small for a circular avatar. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"] {
+  transform: scale(1.18) !important;
+  transform-origin: center 42% !important;
+}
