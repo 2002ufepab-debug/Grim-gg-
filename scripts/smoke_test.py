@@ -97,6 +97,12 @@ require(".hero-image-wrap::after" in styles and "display: none !important" in st
         "Hero portrait cards must not retain a dark overlay after labels are removed")
 require("linear-gradient(145deg, #30232d 0%, #241b27 58%, #30212a 100%)" in styles,
         "Hero portrait background must be brighter than the previous near-black tint")
+require("translateEquipmentName(name)" in script and "ru:translateEquipmentName(name)" in script,
+        "External equipment catalog names must be translated to Russian")
+require("EQUIPMENT_RU_NAMES" in script and "Original" not in script,
+        "Russian equipment-name dictionary must exist without a hardcoded English card label")
+require('class="item-original-name"' in script and 'summary>Оригинальное название</summary>' in script,
+        "Original equipment names should remain available on demand")
 require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
 
