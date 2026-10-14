@@ -42,12 +42,12 @@ try {
   check("Homepage renders", await page.locator("#home").isVisible());
   check("Main navigation exists", await page.locator("#nav a").count() >= 8);
   const roster = page.locator(".hero-roster");
-  check("Homepage features several heroes instead of a single main", await roster.isVisible()
+  const rosterText = await roster.innerText();
+  check("Homepage features four different heroes", await roster.isVisible()
     && await page.locator(".roster-card").count() === 4
-    && ["CLINT", "FANNY", "KADITA", "BELERICK"].every(name => (roster.innerText().then ? true : true)));
-  check("Roster shows heroes across different roles", /СТРЕЛОК/.test(await roster.innerText())
-    && /УБИЙЦА/.test(await roster.innerText()) && /МАГ/.test(await roster.innerText())
-    && /ТАНК/.test(await roster.innerText()));
+    && ["CLINT", "FANNY", "KADITA", "BELERICK"].every(name => rosterText.includes(name)));
+  check("Roster shows heroes across different roles", /СТРЕЛОК/.test(rosterText)
+    && /УБИЙЦА/.test(rosterText) && /МАГ/.test(rosterText) && /ТАНК/.test(rosterText));
   await page.waitForFunction(() => {
     const images = Array.from(document.querySelectorAll(".roster-card img"));
     return images.length === 4 && images.every(image => image.complete);
