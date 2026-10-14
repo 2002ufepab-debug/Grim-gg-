@@ -169,6 +169,25 @@ for attr, value in re.findall(r'\b(href|src)="([^"]+)"', html):
         continue
     require((ROOT / path).is_file(), f"Broken local {attr} reference: {value}")
 
+# Keep full local catalog snapshots so a third-party API outage does not collapse the site to a short list.
+require("fetchCatalogWithLocalFallback" in script
+        and '"data/hero-catalog.json"' in script
+        and '"data/equipment-catalog.json"' in script,
+        "Hero and equipment loaders must fall back to local catalog snapshots")
+try:
+    hero_catalog = json.loads((ROOT / "data" / "hero-catalog.json").read_text(encoding="utf-8"))
+    equipment_catalog = json.loads((ROOT / "data" / "equipment-catalog.json").read_text(encoding="utf-8"))
+    require(isinstance(hero_catalog, list) and len(hero_catalog) >= 130,
+            "Local hero snapshot must retain the full 130+ hero community catalog")
+    require(isinstance(equipment_catalog, list) and len(equipment_catalog) >= 100,
+            "Local equipment snapshot must retain the full 100+ item community catalog")
+    require(all(isinstance(row.get("name_hero"), str) and row.get("images-hero") for row in hero_catalog),
+            "Every local hero catalog entry must include a name and image filename")
+    require(all(isinstance(row.get("name-equipment"), str) and row.get("logo-equipment") for row in equipment_catalog),
+            "Every local equipment entry must include a name and image filename")
+except (OSError, json.JSONDecodeError, AttributeError) as exc:
+    errors.append(f"Could not validate local catalog snapshots: {exc}")
+
 # The talent planner must populate all roles from the full community catalog and avoid
 # injecting externally sourced hero names into HTML.
 require("const roleLabels = {" in talents and "discoveredByRole" in talents and "heroesByRole[role].splice" in talents,
