@@ -75,6 +75,13 @@ require('id="talentCopy"' in talents and 'id="talentReset"' in talents,
         "Talent planner copy/reset actions are missing")
 require("const emblemNames" in talents and "КЛЮЧЕВОЙ" in talents and "Weapon Master" in talents,
         "Talent planner must include emblem families and talent tiers")
+require("https://openmlbb.fastapicloud.dev/api/academy/emblems?lang=en&size=100" in talents and "https://mlbb.rone.dev/api/academy/emblems?lang=en&size=100" in talents,
+        "Talent planner must try both public academy endpoints for original talent icons")
+require("skill?.skillicon" in talents and "talent-original-icon" in talents and "talent-icon-fallback-hidden" in talents,
+        "Talent planner must load original talent icons and retain a visible fallback")
+require("new MutationObserver" in talents and "refreshIcons" in talents,
+        "Dynamically rendered talent icons must be enhanced after the API responds")
+
 require("@media(max-width:700px)" in talent_css, "Talent planner needs a mobile layout")
 require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
