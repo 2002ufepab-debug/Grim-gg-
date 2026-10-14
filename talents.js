@@ -139,10 +139,25 @@
     if (heroArtLoaded) return;
     heroArtLoaded = true;
     try {
-      const response = await fetch("https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/hero.json", {cache:"force-cache"});
-      if (!response.ok) throw new Error("hero catalog unavailable");
-      const rows = await response.json();
-      if (!Array.isArray(rows) || !rows.length) throw new Error("hero catalog has an invalid format");
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 7000);
+      let rows;
+      try {
+        const response = await fetch("https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/hero.json", {
+          cache: "force-cache",
+          signal: controller.signal
+        });
+        if (!response.ok) throw new Error("hero catalog unavailable");
+        rows = await response.json();
+        if (!Array.isArray(rows) || !rows.length) throw new Error("hero catalog has an invalid format");
+      } catch (remoteError) {
+        const fallbackResponse = await fetch("data/hero-catalog.json", { cache: "no-cache" });
+        if (!fallbackResponse.ok) throw remoteError;
+        rows = await fallbackResponse.json();
+        if (!Array.isArray(rows) || !rows.length) throw new Error("local hero catalog has an invalid format");
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
 
       const roleLabels = {
         assassin: "Убийца",
