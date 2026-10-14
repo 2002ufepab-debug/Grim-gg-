@@ -1373,9 +1373,15 @@ function renderItemCards(filtered, grid, emptyMessage) {
     // Показываем только изображения из набора оригинальных игровых иконок.
     // Если оригинального файла нет или он недоступен, не подменяем его самодельной пиктограммой.
     const missingIcon = '<div class="item-symbol item-symbol-fallback" role="img" aria-label="Оригинальная иконка недоступна"><span style="font:600 10px/1.4 sans-serif;text-align:center;padding:6px">Нет оригинальной иконки</span></div>';
+    // Retribution is a battle spell, not equipment: its original icon lives in the spell dataset.
+    // Roaming Blessing is a category card, so use the real base-boots icon rather than a made-up file.
     const iconSource = item.imageFile
       ? ITEM_IMAGE_BASE + item.imageFile
-      : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+      : item.name === "Retribution"
+        ? "https://liquipedia.net/commons/images/a/a7/Retribution_ML.png"
+        : item.name === "Roaming Blessing"
+          ? ITEM_IMAGE_BASE + "boots.png"
+          : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = iconSource
       ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-fallback="${escapeHTML(missingIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.outerHTML=this.dataset.fallback">`
       : missingIcon;
