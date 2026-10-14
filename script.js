@@ -641,6 +641,24 @@ const items = [
  stats:"Поддержка · Усиление лечения и щитов",
  desc:"Предмет для некоторых сборок поддержки, связанных с лечением и щитами.",
  tip:"Проверь доступность предмета и его эффект в актуальной версии игры."
+},
+{
+ id:"winter-crown",name:"Winter Crown",ru:"Корона зимы",cat:"Magic",
+ stats:"Защита · Временная неуязвимость",
+ desc:"Ситуативный защитный вариант для героев, которым важно пережить опасный момент.",
+ tip:"Рассматривай против взрывного урона или контроля; проверь актуальный эффект в игре."
+},
+{
+ id:"wind-of-nature",name:"Wind of Nature",ru:"Ветер природы",cat:"Defense",
+ stats:"Защита от физического урона",
+ desc:"Ситуативный предмет для стрелков против сильного физического урона.",
+ tip:"Выбирай по угрозам соперника и сверяй доступность эффекта в текущем патче."
+},
+{
+ id:"malefic-gun",name:"Malefic Gun",ru:"Зловещий пистолет",cat:"Attack",
+ stats:"Дальность атак · Физический урон",
+ desc:"Атакующий предмет для сборок, где важны дальность и физический урон.",
+ tip:"Проверяй взаимодействие с героями дальнего боя и актуальные характеристики предмета."
 }
 ];
 
@@ -908,6 +926,69 @@ function getHeroTalentPreset(heroName, roles, style = "Командные бои
   };
 }
 
+const lateGameItemChoices = {
+  "Clint":["Wind of Nature","Sea Halberd","Blade of the Heptaseas","Rose Gold Meteor"],
+  "Fanny":["Sky Piercer","Hunter Strike","Athena's Shield","Blade of Despair"],
+  "Claude":["Wind of Nature","Sea Halberd","Rose Gold Meteor","Blade of Despair"],
+  "Belerick":["Blade Armor","Radiant Armor","Athena's Shield","Guardian Helmet"],
+  "Miya":["Wind of Nature","Sea Halberd","Rose Gold Meteor","Blade of Despair"],
+  "Layla":["Wind of Nature","Rose Gold Meteor","Sea Halberd","Blade of Despair"],
+  "Bruno":["Wind of Nature","Sea Halberd","Rose Gold Meteor","Blade of Despair"],
+  "Brody":["Wind of Nature","Rose Gold Meteor","Hunter Strike","Blade of Despair"],
+  "Moskov":["Wind of Nature","Sea Halberd","Rose Gold Meteor","Blade of Despair"],
+  "Karrie":["Wind of Nature","Sea Halberd","Rose Gold Meteor","Blade of Despair"],
+  "Beatrix":["Wind of Nature","Rose Gold Meteor","Blade of Despair","Hunter Strike"],
+  "Vexana":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"],
+  "Nana":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"],
+  "Eudora":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"],
+  "Aurora":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"],
+  "Odette":["Winter Crown","Genius Wand","Holy Crystal","Athena's Shield"],
+  "Cecilion":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"],
+  "Lylia":["Winter Crown","Blood Wings","Glowing Wand","Athena's Shield"],
+  "Kagura":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"],
+  "Terizla":["Blade Armor","Radiant Armor","Athena's Shield","Guardian Helmet"],
+  "Ruby":["Blade Armor","Athena's Shield","Radiant Armor","Guardian Helmet"],
+  "Dyrroth":["Rose Gold Meteor","Queen's Wings","Wind of Nature","Immortality"],
+  "Yu Zhong":["Blade Armor","Athena's Shield","Radiant Armor","Guardian Helmet"],
+  "Alpha":["Dominance Ice","Athena's Shield","Blade Armor","Guardian Helmet"],
+  "Balmond":["Dominance Ice","Athena's Shield","Blade Armor","Guardian Helmet"],
+  "Fredrinn":["Blade Armor","Guardian Helmet","Radiant Armor","Dominance Ice"],
+  "Tigreal":["Blade Armor","Radiant Armor","Guardian Helmet","Immortality"],
+  "Khufra":["Blade Armor","Radiant Armor","Guardian Helmet","Immortality"],
+  "Atlas":["Blade Armor","Radiant Armor","Guardian Helmet","Immortality"],
+  "Franco":["Blade Armor","Radiant Armor","Guardian Helmet","Immortality"],
+  "Lolita":["Blade Armor","Radiant Armor","Guardian Helmet","Immortality"],
+  "Angela":["Flask of the Oasis","Winter Crown","Guardian Helmet","Immortality"],
+  "Estes":["Flask of the Oasis","Winter Crown","Guardian Helmet","Immortality"],
+  "Diggie":["Winter Crown","Guardian Helmet","Oracle","Athena's Shield"],
+  "Sun":["Wind of Nature","Rose Gold Meteor","Sea Halberd","Queen's Wings"],
+  "Kadita":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield"]
+};
+const lateGameRoleChoices = {
+  "Убийца":["Rose Gold Meteor","Immortality","Sky Piercer","Hunter Strike","Malefic Roar"],
+  "Маг":["Winter Crown","Blood Wings","Genius Wand","Athena's Shield","Divine Glaive"],
+  "Стрелок":["Wind of Nature","Rose Gold Meteor","Sea Halberd","Blade of Despair","Immortality"],
+  "Боец":["Queen's Wings","Rose Gold Meteor","Athena's Shield","Blade Armor","Immortality"],
+  "Танк":["Blade Armor","Radiant Armor","Guardian Helmet","Athena's Shield","Immortality"],
+  "Поддержка":["Flask of the Oasis","Winter Crown","Oracle","Athena's Shield","Immortality"]
+};
+function getLateGameItems(heroName, roles, build) {
+  const role = resolveBuildRole(roles);
+  const candidates = [
+    ...(lateGameItemChoices[heroName] || []),
+    ...(lateGameRoleChoices[role] || lateGameRoleChoices["Боец"]),
+    "Immortality","Rose Gold Meteor","Athena's Shield","Blade Armor","Winter Crown"
+  ];
+  const current = new Set((build?.items || []).map(name=>String(name).toLowerCase()));
+  const unique = [];
+  for (const name of candidates) {
+    if (!items.some(item=>item.name===name) || current.has(name.toLowerCase()) || unique.includes(name)) continue;
+    unique.push(name);
+    if (unique.length === 2) break;
+  }
+  return unique;
+}
+
 function renderHeroDetailContent(hero, target) {
   if (!hero || !target) return;
   const roles = getHeroClasses(hero);
@@ -917,10 +998,18 @@ function renderHeroDetailContent(hero, target) {
   const build = getHeroBuild(hero.name, roles);
   const buildRows = build.items.map((name,index)=>{
     const item = items.find(entry=>entry.name===name);
-    const iconSlug = item ? itemIconSlug(item.name) : null;
+    const iconSlug = item ? itemIconSlug(item.name) : itemIconSlug(name);
     const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
     return `<div class="build-item-row"><span class="hero-build-order">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
+  }).join("");
+  const lateGameItems = getLateGameItems(hero.name, roles, build);
+  const lateGameRows = lateGameItems.map(name=>{
+    const item = items.find(entry=>entry.name===name);
+    const iconSlug = item ? itemIconSlug(item.name) : itemIconSlug(name);
+    const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : ITEM_IMAGE_BASE + iconSlug + ".png";
+    const icon = `<img class="late-game-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'late-game-item-fallback',textContent:'⚔'}))">`;
+    return `<div class="late-game-item-card">${icon}<span>${escapeHTML(item?item.ru:name)}</span></div>`;
   }).join("");
   const talentRoleDefaults = {
     "Убийца": "Приоритет: физический урон и пробивание; дополнительный талант — под быстрое устранение тонких целей. Для леса выбирай настройки, усиливающие темп фарма и ранние ганги.",
@@ -959,6 +1048,11 @@ function renderHeroDetailContent(hero, target) {
     <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
     <div class="build-item-list">${buildRows}</div>
     <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
+    <div class="hero-late-game">
+      <h4>Предметы на замену в лейт-гейме</h4>
+      <div class="late-game-item-list">${lateGameRows}</div>
+      <p>В конце игры можно продать менее полезный предмет и заменить его одним из этих вариантов.</p>
+    </div>
     <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Другие варианты сборки ↗</button>
   </div>`;
   const profileQuickNav = target.id === "heroDetailPage" ? `
@@ -1335,7 +1429,7 @@ const roleBuildTemplates = {
   "Стрелок": {role:"Стрелок", goal:"Стабильный урон обычными атаками", items:["Swift Boots","Demon Hunter Sword","Golden Staff","Corrosion Scythe","Malefic Roar","Immortality"], emblem:"Эмблема стрелка; таланты под скорость атаки или критический урон.", spell:"Вдохновение или Вспышка — в зависимости от героя и угроз.", note:"Не каждый стрелок играет через скорость атаки: проверь механику персонажа."},
   "Боец": {role:"Боец", goal:"Баланс урона и выживаемости", items:["Tough Boots","Endless Battle","War Axe","Antique Cuirass","Malefic Roar","Immortality"], emblem:"Эмблема бойца; таланты зависят от роли и стиля боя.", spell:"Возмездие для леса, Вспышка или Исполнение для подходящей линии.", note:"Подбирай защиту под главный источник урона соперника."},
   "Танк": {role:"Танк", goal:"Выживаемость и помощь команде", items:["Tough Boots","Cursed Helmet","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality"], emblem:"Эмблема танка; защитные таланты — базовая отправная точка.", spell:"Возмездие для леса или Вспышка/Возмездие духа по ситуации и набору навыков.", note:"Не покупай все защитные предметы автоматически: оцени физический и магический урон врагов."},
-  "Поддержка": {role:"Поддержка", goal:"Помощь союзникам и выживаемость", items:["Tough Boots","Dominance Ice","Oracle","Athena's Shield","Immortality"], emblem:"Эмблема поддержки или подходящая защитная эмблема.", spell:"Исцеление или Вспышка — в зависимости от набора навыков.", note:"Состав предметов зависит от того, лечит герой, даёт щиты, контроль или начинает бой."}
+  "Поддержка": {role:"Поддержка", goal:"Помощь союзникам и выживаемость", items:["Tough Boots","Flask of the Oasis","Dominance Ice","Oracle","Athena's Shield","Immortality"], emblem:"Эмблема поддержки или подходящая защитная эмблема.", spell:"Исцеление или Вспышка — в зависимости от набора навыков.", note:"Ролевой стартовый вариант; меняй лечение, защиту и сокращение перезарядки под конкретного героя."}
 };
 const featuredHeroBuilds = {
   "Fanny": {role:"Лес · Убийца", goal:"Мобильность и физический урон", items:["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Rose Gold Meteor","Immortality"], emblem:"Эмблема убийцы — один из возможных вариантов; сверяй таланты с актуальной версией.", spell:"Возмездие для игры в лесу.", note:"Пример для ориентира. Фанни требовательна к энергии и механике; корректируй сборку под матч."},
@@ -1370,7 +1464,10 @@ const featuredHeroBuilds = {
   "Lolita": {role:"Роум · Танк",goal:"Защита союзников и контроль",items:["Tough Boots","Dominance Ice","Athena's Shield","Antique Cuirass","Immortality","Guardian Helmet"],emblem:"Эмблема танка.",talents:"Защитные таланты и устойчивость.",spell:"Возмездие духа или Вспышка.",note:"Оцени, какие атаки и снаряды можно блокировать."},
   "Angela": {role:"Роум · Поддержка",goal:"Щиты, помощь союзнику и выживаемость",items:["Tough Boots","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Эмблема поддержки.",talents:"Командная польза, восстановление и сокращение перезарядки.",spell:"Исцеление или Вспышка.",note:"Выбирай союзника для ультимейта по ситуации, а не автоматически."},
   "Estes": {role:"Роум · Поддержка",goal:"Лечение и защита команды",items:["Tough Boots","Oracle","Dominance Ice","Athena's Shield","Immortality"],emblem:"Эмблема поддержки.",talents:"Восстановление и командная польза.",spell:"Исцеление или Вспышка.",note:"Держись рядом с командой и учитывай антихил соперников."},
-  "Diggie": {role:"Роум · Поддержка",goal:"Снятие контроля и командная поддержка",items:["Tough Boots","Flask of the Oasis","Dominance Ice","Athena's Shield","Immortality"],emblem:"Эмблема поддержки.",talents:"Сокращение перезарядки и командная польза.",spell:"Исцеление или Вспышка.",note:"Сохраняй ультимейт под важный массовый контроль врага."}
+  "Diggie": {role:"Роум · Поддержка",goal:"Снятие контроля и командная поддержка",items:["Tough Boots","Flask of the Oasis","Dominance Ice","Athena's Shield","Immortality","Winter Crown"],emblem:"Эмблема поддержки.",talents:"Сокращение перезарядки и командная польза.",spell:"Исцеление или Вспышка.",note:"Сохраняй ультимейт под важный массовый контроль врага."},
+  "Clint": {role:"Голд · Стрелок",goal:"Критический урон, пробивание и безопасная дальность",items:["Swift Boots","Endless Battle","Berserker's Fury","Malefic Gun","Malefic Roar","Blade of Despair"],emblem:"Эмблема стрелка с упором на физический урон и критические атаки.",talents:"Урон обычных атак и усиление критического стиля; адаптируй последний талант к матчу.",spell:"Вспышка для безопасности; Вдохновение — если нужен дополнительный темп урона.",note:"Ориентир для агрессивного Клинта на Gold Lane. Если важнее ранний взрывной урон, проверь Клинок гептасисов; против физического урона рассматривай Ветер природы."},
+  "Sun": {role:"Лес / EXP · Боец",goal:"Давление клонами и урон по выносливым целям",items:["Tough Boots","Corrosion Scythe","Demon Hunter Sword","Golden Staff","Malefic Roar","Immortality"],emblem:"Эмблема бойца с упором на устойчивый урон.",talents:"Усиление обычных атак и продолжительного боя.",spell:"Возмездие в лесу; Вспышка или Исполнение на линии.",note:"Для леса ориентируйся на скорость фарма и урон клонами; меняй защитный слот по составу врагов."},
+  "Kadita": {role:"Мид · Маг",goal:"Взрывной магический урон и пробивание",items:["Arcane Boots","Genius Wand","Lightning Truncheon","Holy Crystal","Divine Glaive","Immortality"],emblem:"Эмблема мага с упором на магический урон и пробивание.",talents:"Магический взрывной урон; защитный талант выбирай под контроль соперника.",spell:"Вспышка для комбинаций и безопасного выхода.",note:"Ищи момент для комбинации по уязвимой цели; Корона зимы может быть ситуативной заменой урона ради выживания."}
 };
 let activeBuildHeroName = "";
 let activeBuildRoles = [];
