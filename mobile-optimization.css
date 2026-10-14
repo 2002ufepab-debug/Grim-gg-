@@ -229,8 +229,8 @@
   min-width: 0 !important;
   min-height: 0 !important;
   padding: 0 !important;
-  object-fit: contain !important;
-  object-position: center center !important;
+  object-fit: cover !important;
+  object-position: center 22% !important;
   transform: none !important;
   image-rendering: auto !important;
 }
