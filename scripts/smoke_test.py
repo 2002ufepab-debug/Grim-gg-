@@ -59,6 +59,10 @@ require('id="talentHeroPortrait"' in talents and "heroArtByName" in talents,
         "Talent planner must render the selected hero portrait when the source is available")
 require("GrimGGHeroImageUrl" in script and "GrimGGHeroImageUrl" in talents,
         "Talent planner must prefer the shared HD hero image resolver")
+require("fallbackImage:catalogImage" in script and "hero.fallbackImage && hero.fallbackImage !== hero.image" in script,
+        "Hero cards must retain the catalog portrait as an HD-image fallback")
+require("this.dataset.retry!==this.src" in script,
+        "Hero image fallback must not retry the same broken URL")
 require('img.dataset.fallback = catalogUrl && catalogUrl !== url ? catalogUrl : "";' in talents,
         "Talent portrait must retry the catalog image before showing a placeholder")
 require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
