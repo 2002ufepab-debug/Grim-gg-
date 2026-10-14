@@ -366,9 +366,16 @@ html, body { max-width: 100%; }
   aspect-ratio: 1 / 1.75;
   height: auto !important;
 }
-#main-content .hero-grid .hero-image-open .hero-image--splash,
+#main-content .hero-grid .hero-image-open .hero-image--splash {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  object-position: center 42% !important;
+}
 #main-content .hero-grid .hero-image-open .hero-image--portrait,
 #main-content .hero-grid .hero-image-open .hero-image--avatar {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain !important;
