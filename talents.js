@@ -142,11 +142,60 @@
       const response = await fetch("https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/hero.json", {cache:"force-cache"});
       if (!response.ok) throw new Error("hero catalog unavailable");
       const rows = await response.json();
+      if (!Array.isArray(rows) || !rows.length) throw new Error("hero catalog has an invalid format");
+
+      const roleLabels = {
+        assassin: "Убийца",
+        mage: "Маг",
+        marksman: "Стрелок",
+        fighter: "Боец",
+        tank: "Танк",
+        support: "Поддержка"
+      };
+      const localizedNameByEnglish = new Map(
+        Object.entries(heroEnglishNames).map(([localized, english]) => [english.toLowerCase(), localized])
+      );
+      const discoveredByRole = Object.fromEntries(Object.keys(heroesByRole).map(role => [role, []]));
+
       rows.forEach(row => {
-        const english = String(row.name_hero || row.name || "").trim().toLowerCase();
+        const originalName = String(row.name_hero || row.name || "").trim();
+        const english = originalName.toLowerCase();
         const file = String(row["images-hero"] || "").trim().replace(/^images-hero\//, "");
-        if (english && file) heroArtByName.set(english, "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/" + file.split("/").map(part => encodeURIComponent(part)).join("/"));
+        if (english && file) {
+          heroArtByName.set(english, "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/" + file.split("/").map(part => encodeURIComponent(part)).join("/"));
+        }
+        if (!originalName) return;
+
+        const displayName = localizedNameByEnglish.get(english) || originalName;
+        heroEnglishNames[displayName] = originalName;
+        const sourceRoles = Array.isArray(row.role) ? row.role : [row.role || row.roles || ""];
+        sourceRoles.flatMap(value => String(value).split(/[\\/,|]/))
+          .map(value => roleLabels[String(value).trim().toLowerCase()])
+          .filter(Boolean)
+          .forEach(role => {
+            if (!discoveredByRole[role].includes(displayName)) discoveredByRole[role].push(displayName);
+          });
       });
+
+      // Use the full community catalog for every role instead of a hand-maintained partial list.
+      Object.keys(heroesByRole).forEach(role => {
+        if (discoveredByRole[role].length) {
+          heroesByRole[role].splice(0, heroesByRole[role].length, ...discoveredByRole[role]);
+        }
+      });
+
+      // Refresh the visible selector after the catalog arrives, preserving the user's current choice.
+      const roleSelect = document.getElementById("talentRole");
+      const heroSelect = document.getElementById("talentHero");
+      if (roleSelect && heroSelect) {
+        const previousHero = heroSelect.value;
+        const availableHeroes = heroesByRole[roleSelect.value] || [];
+        heroSelect.replaceChildren(...availableHeroes.map(name => new Option(name, name)));
+        heroSelect.value = availableHeroes.includes(previousHero)
+          ? previousHero
+          : availableHeroes.includes("Клинт") ? "Клинт" : (availableHeroes[0] || "");
+        heroSelect.dispatchEvent(new Event("change", { bubbles: true }));
+      }
     } catch (_) {
       // The planner remains usable when the optional portrait catalog is offline.
     }
@@ -156,7 +205,7 @@
     const portrait = document.getElementById("talentHeroPortrait");
     const select = document.getElementById("talentHero");
     if (!portrait || !select) return;
-    const english = heroEnglishNames[select.value];
+    const english = heroEnglishNames[select.value] || select.value;
     const catalogUrl = english ? heroArtByName.get(english.toLowerCase()) : "";
     const sharedUrl = english && typeof window.GrimGGHeroImageUrl === "function"
       ? window.GrimGGHeroImageUrl(english)
@@ -375,8 +424,10 @@
     const styleSelect = section.querySelector("#talentStyle");
     function fillHeroes(preferred) {
       const role = roleSelect.value;
-      heroSelect.innerHTML = heroesByRole[role].map(name => `<option>${name}</option>`).join("");
-      if (preferred && heroesByRole[role].includes(preferred)) heroSelect.value = preferred;
+      const names = heroesByRole[role] || [];
+      // Hero names come from an external catalog: create option nodes instead of injecting HTML.
+      heroSelect.replaceChildren(...names.map(name => new Option(name, name)));
+      if (preferred && names.includes(preferred)) heroSelect.value = preferred;
     }
     function render() {
       const role = roleSelect.value, hero = heroSelect.value, style = styleSelect.value;
