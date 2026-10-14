@@ -249,15 +249,15 @@ require("AbortController" in script and "window.setTimeout(() => controller.abor
 
 # Every item named by role templates, featured hero builds and situational variants
 # must exist in either the built-in catalog or the full local fallback catalog.
-static_items_match = re.search(r"const items = \\[(.*?)\\n\\];", script, re.S)
+static_items_match = re.search(r"const items = \[(.*?)\n\];", script, re.S)
 if static_items_match:
     static_item_names = {
-        name.casefold() for name in re.findall(r"""\\bname:\\s*["']([^"']+)["']""", static_items_match.group(1))
+        name.casefold() for name in re.findall(r"""\bname:\s*["']([^"']+)["']""", static_items_match.group(1))
     }
     available_item_names = static_item_names | {
         str(row.get("name-equipment", "")).strip().casefold() for row in equipment_catalog
     }
-    build_item_arrays = re.findall(r"""\\bitems\\s*:\\s*\\[([^\\]]*)\\]""", script)
+    build_item_arrays = re.findall(r"""\bitems\s*:\s*\[([^\]]*)\]""", script)
     build_item_names = [
         name.casefold()
         for block in build_item_arrays
