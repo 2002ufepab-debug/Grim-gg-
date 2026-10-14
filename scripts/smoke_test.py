@@ -201,7 +201,10 @@ for attr, value in re.findall(r'\b(href|src)="([^"]+)"', html):
     path = urlparse(value).path
     if not path:
         continue
-    require((ROOT / path).is_file(), f"Broken local {attr} reference: {value}")
+    local_path = ROOT / path
+    if local_path.is_dir():
+        local_path = local_path / "index.html"
+    require(local_path.is_file(), f"Broken local {attr} reference: {value}")
 
 # Keep full local catalog snapshots so a third-party API outage does not collapse the site to a short list.
 require("fetchCatalogWithLocalFallback" in script
