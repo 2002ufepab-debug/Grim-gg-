@@ -156,9 +156,8 @@ const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]
 // High-resolution hero splash artwork, optimized to responsive WebP for faster loading.
 // Each source path was checked against the image repository; the portrait set remains the fallback.
 const HERO_SPLASH_ART_OVERRIDES = {
-  // These heroes use the tighter in-game portrait/avatar framing in the catalog.
-  // Their splash art has too much surrounding scenery for a clean circular avatar.
-
+  // Aamon, Alpha and Alucard use tighter portrait sources in the circular catalog.
+  "arlott": "Arlott/Lone Lancer.png",
   "argus": "Argus/Dark Angel.png",
   "atlas": "Atlas/Ocean Gladiator.png",
   "badang": "Badang/Tribal Warrior.png",
