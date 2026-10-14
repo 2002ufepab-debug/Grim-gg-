@@ -267,19 +267,19 @@ const heroSplashImageUrl = path => {
   const source = "raw.githubusercontent.com/Sparkies01/Splash/main/" +
     String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
   return "https://images.weserv.nl/?url=" + encodeURIComponent(source) +
-    "&w=640&h=900&fit=contain&output=webp&q=82";
+    "&w=900&h=1200&fit=contain&output=webp&q=90";
 };
 const heroSplashDirectImageUrl = path =>
   "https://raw.githubusercontent.com/Sparkies01/Splash/main/" +
   String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
-  // Prefer the same tall, clean portrait style used by Akai for consistent hero cards.
-  // Use splash art only when a matching HD portrait is not available.
-  const file = HERO_HD_IMAGE_FILES[key];
-  if (file) return "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file);
+  // Prefer higher-resolution official-style splash artwork where available.
+  // Fall back to the tall portrait set, then to the base hero icon in heroImageUrl().
   const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
-  return splashPath ? heroSplashImageUrl(splashPath) : "";
+  if (splashPath) return heroSplashImageUrl(splashPath);
+  const file = HERO_HD_IMAGE_FILES[key];
+  return file ? "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file) : "";
 };
 
 // Shared image resolver so hero cards, profiles and the talent planner use the same HD source.
