@@ -1743,6 +1743,18 @@ const EQUIPMENT_RU_NAMES = {
   "broken heart": "Разбитое сердце",
   "throw forbidden": "Запретный бросок"
 };
+Object.assign(EQUIPMENT_RU_NAMES, {
+  "ogre tomahawk": "Томагавк огра",
+  "regular spear": "Обычное копьё",
+  "dagger": "Кинжал",
+  "iron hunting bow": "Железный охотничий лук",
+  "javelin": "Метательное копьё",
+  "knife": "Нож",
+  "magic wand": "Волшебная палочка",
+  "magic potion": "Магическое зелье",
+  "demon boots": "Демонические ботинки",
+  "boots": "Ботинки"
+});
 function translateEquipmentName(name) { const key = String(name || '').trim().toLocaleLowerCase(); return EQUIPMENT_RU_NAMES[key] || name; }
 
 async function loadExternalItems() {
