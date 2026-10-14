@@ -153,7 +153,7 @@ const HERO_HD_IMAGE_FILES = {
   "zilong": "Zilong - Hero161.png"
 };
 const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-// Original-resolution hero splash artwork, optimized to responsive WebP for faster loading.
+// High-resolution hero splash artwork, optimized to responsive WebP for faster loading.
 // Each source path was checked against the image repository; the portrait set remains the fallback.
 const HERO_SPLASH_ART_OVERRIDES = {
   "aamon": "Aamon/Duke of Shards.png",
