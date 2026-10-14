@@ -632,3 +632,81 @@
   #main-content .hero-grid .hero-card-content h3,
   #main-content .hero-grid .hero-card-content .hero-name { font-size: 9px !important; }
 }
+
+
+/* Hero detail compact mode — optimize the full profile for phone screens. */
+@media (max-width: 650px) {
+  #heroDetailPage { padding: 8px !important; }
+  #heroDetailPage .hero-detail-layout { gap: 8px !important; }
+  #heroDetailPage .hero-detail-art {
+    height: 112px !important;
+    max-height: 112px !important;
+    margin: 4px 0 8px !important;
+    overflow: hidden !important;
+    border-radius: 8px !important;
+  }
+  #heroDetailPage .hero-detail-art .hero-image,
+  #heroDetailPage .hero-detail-art img {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 112px !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+  #heroDetailPage .hero-detail-copy { padding: 8px 4px !important; }
+  #heroDetailPage .hero-detail-copy > .eyebrow { font-size: 8px !important; letter-spacing: .1em !important; }
+  #heroDetailPage .hero-detail-copy h2.hero-profile-name {
+    gap: 8px !important;
+    margin: 5px 0 !important;
+    font-size: clamp(19px, 5.2vw, 25px) !important;
+    line-height: 1.15 !important;
+  }
+  #heroDetailPage .hero-profile-name-avatar {
+    flex-basis: 34px !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-width: 1px !important;
+  }
+  #heroDetailPage .hero-detail-copy .hero-role { margin: 4px 0 !important; font-size: 10px !important; }
+  #heroDetailPage .hero-detail-copy .hero-tags { gap: 4px !important; margin: 5px 0 7px !important; }
+  #heroDetailPage .hero-detail-copy .hero-tags span { padding: 3px 6px !important; font-size: 9px !important; }
+  #heroDetailPage .hero-profile-jump-links { gap: 6px !important; margin: 7px 0 9px !important; }
+  #heroDetailPage .hero-profile-jump-links .hero-profile-jump-primary {
+    flex: 1 1 calc(50% - 6px) !important;
+    min-height: 39px !important;
+    padding: 6px 5px !important;
+    font-size: 10px !important;
+  }
+  #heroDetailPage .hero-profile-jump-links .hero-profile-jump-secondary {
+    min-height: 30px !important;
+    padding: 4px 6px !important;
+    font-size: 9px !important;
+  }
+  #heroDetailPage .hero-detail-section {
+    margin-top: 7px !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+  }
+  #heroDetailPage .hero-detail-section h3,
+  #heroDetailPage .hero-detail-section h2 { font-size: 15px !important; line-height: 1.25 !important; }
+  #heroDetailPage .hero-detail-section p { font-size: 11px !important; line-height: 1.55 !important; }
+  #heroDetailPage .hero-build-inline { gap: 7px !important; }
+  #heroDetailPage .hero-build-inline .build-item-row { gap: 7px !important; padding: 7px !important; }
+  #heroDetailPage .hero-build-inline .build-item-row img { width: 36px !important; height: 36px !important; flex: 0 0 36px !important; }
+  #heroDetailPage .hero-build-inline .build-item-row strong { font-size: 10px !important; }
+  #heroDetailPage .hero-build-inline .build-item-row small,
+  #heroDetailPage .hero-build-inline .build-item-row p { font-size: 9px !important; line-height: 1.4 !important; }
+  #heroDetailPage .hero-talents-section img,
+  #heroDetailPage .hero-talents-section .talent-icon,
+  #heroDetailPage .hero-talents-section .emblem-icon { max-width: 42px; }
+  #heroDetailPage .hero-talent-footer-actions { gap: 6px !important; margin-top: 8px !important; }
+  #heroDetailPage .hero-talent-footer-actions .btn { min-height: 34px !important; padding: 6px 4px !important; font-size: 9px !important; }
+}
+@media (max-width: 380px) {
+  #heroDetailPage { padding: 6px !important; }
+  #heroDetailPage .hero-detail-art { height: 92px !important; max-height: 92px !important; }
+  #heroDetailPage .hero-detail-art .hero-image,
+  #heroDetailPage .hero-detail-art img { max-height: 92px !important; }
+  #heroDetailPage .hero-detail-section { padding: 8px !important; }
+  #heroDetailPage .hero-build-inline .build-item-row img { width: 32px !important; height: 32px !important; flex-basis: 32px !important; }
+}
