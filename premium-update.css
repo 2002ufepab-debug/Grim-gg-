@@ -272,3 +272,71 @@ footer { border-top: 1px solid rgba(255,54,84,.18); background: #090a0f; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+
+/* GRIM_MLBB home hub — role-first navigation instead of four featured heroes. */
+.home-hub {
+  align-self: stretch; width: 100%; max-width: 720px; justify-self: end;
+  padding: clamp(18px, 2.4vw, 30px); border: 1px solid rgba(255,99,121,.24);
+  border-radius: 18px;
+  background: radial-gradient(ellipse at 82% 0%, rgba(255,54,84,.13), transparent 48%), linear-gradient(145deg, rgba(24,20,29,.97), rgba(10,11,16,.98));
+  box-shadow: 0 28px 90px rgba(0,0,0,.38), 0 0 42px rgba(255,54,84,.045);
+}
+.home-hub-heading { margin-bottom: 18px; }
+.home-hub-heading h2 { margin: 9px 0 5px; font-size: clamp(22px, 2.3vw, 31px); line-height: 1.2; letter-spacing: -.045em; }
+.home-hub-heading h2 span { color: var(--gg-red-bright); }
+.home-hub-heading p { margin: 0; color: var(--gg-muted); font-size: 12px; }
+.home-lane-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+.home-lane-card {
+  position: relative; display: grid; grid-template-columns: 48px minmax(0,1fr) 18px; grid-template-rows: auto auto;
+  align-items: center; gap: 1px 11px; min-height: 78px; padding: 12px;
+  border: 1px solid rgba(255,255,255,.085); border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,.045), rgba(255,255,255,.012));
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.home-lane-card:hover, .home-lane-card:focus-visible {
+  transform: translateY(-2px); border-color: rgba(255,99,121,.55);
+  background: linear-gradient(135deg, rgba(255,54,84,.11), rgba(255,255,255,.018));
+}
+.home-lane-icon {
+  grid-row: 1 / span 2; display: grid; place-items: center; width: 46px; height: 46px;
+  border: 1px solid rgba(255,99,121,.3); border-radius: 9px; background: rgba(255,54,84,.08);
+  color: #ff8295; font: 900 10px Orbitron, sans-serif; letter-spacing: -.02em;
+}
+.home-lane-card strong { align-self: end; font-size: 12px; line-height: 1.3; color: #f7f4f8; }
+.home-lane-card small { align-self: start; color: #a7a4b1; font-size: 10px; line-height: 1.4; }
+.home-lane-arrow { color: var(--gg-red-bright); font-size: 16px; font-weight: 800; }
+.home-lane-wide { grid-column: 1 / -1; min-height: 68px; }
+.home-feature-links { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 13px; }
+.home-feature-link {
+  display: flex; align-items: center; gap: 10px; min-width: 0; padding: 12px;
+  border: 1px solid rgba(255,255,255,.08); border-radius: 10px; background: rgba(255,255,255,.02);
+}
+.home-feature-link:hover { border-color: rgba(255,99,121,.42); background: rgba(255,54,84,.055); }
+.home-feature-mark { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 8px; color: #ff8295; background: rgba(255,54,84,.1); font-size: 17px; }
+.home-feature-link > span:nth-child(2) { display: grid; gap: 3px; min-width: 0; }
+.home-feature-link strong { font-size: 11px; line-height: 1.35; }
+.home-feature-link small { color: #a7a4b1; font-size: 9px; line-height: 1.4; }
+.home-feature-link .home-lane-arrow { margin-left: auto; }
+.home-all-heroes {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  margin-top: 13px; padding: 13px 15px; border: 1px solid rgba(255,99,121,.45); border-radius: 9px;
+  color: #fff; background: linear-gradient(110deg, rgba(255,54,84,.22), rgba(255,54,84,.055));
+  font-size: 10px; font-weight: 900; letter-spacing: .09em;
+}
+.home-all-heroes span { color: var(--gg-red-bright); font-size: 17px; }
+.home-all-heroes:hover { background: rgba(255,54,84,.18); border-color: rgba(255,99,121,.75); }
+@media (max-width: 1000px) { .home-hub { max-width: none; justify-self: stretch; } }
+@media (max-width: 760px) {
+  .home-hub { padding: 16px; }
+  .home-lane-card { grid-template-columns: 42px minmax(0,1fr) 14px; gap: 1px 8px; padding: 10px; min-height: 74px; }
+  .home-lane-icon { width: 40px; height: 40px; font-size: 9px; }
+  .home-feature-links { grid-template-columns: 1fr; }
+}
+@media (max-width: 390px) {
+  .home-lane-grid { gap: 7px; }
+  .home-lane-card { grid-template-columns: 34px minmax(0,1fr) 12px; padding: 8px; }
+  .home-lane-icon { width: 32px; height: 32px; font-size: 8px; }
+  .home-lane-card strong { font-size: 11px; }
+  .home-lane-card small { font-size: 9px; }
+}
