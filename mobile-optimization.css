@@ -616,7 +616,7 @@
   #main-content .section-heading h2 { font-size: clamp(18px, 4.8vw, 23px) !important; }
   #main-content .section-heading p,
   #main-content .hero-desc { font-size: 11px !important; line-height: 1.55 !important; }
-  #main-content .hero-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 6px !important; }
+  #main-content .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 6px !important; }
   #main-content .hero-grid .hero-card-content { padding: 6px 4px !important; }
   #main-content .hero-grid .hero-card-content h3,
   #main-content .hero-grid .hero-card-content .hero-name { font-size: 10px !important; line-height: 1.25 !important; }
