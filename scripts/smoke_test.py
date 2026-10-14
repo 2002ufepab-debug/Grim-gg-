@@ -235,6 +235,11 @@ require('fetch("data/hero-catalog.json"' in talents
 require("heroEnglishNames[select.value] || select.value" in talents,
         "Talent planner must resolve portraits for heroes without a Russian display-name mapping")
 
+scraper = (ROOT / "scripts" / "update_esports_news.py").read_text(encoding="utf-8")
+require('heading = anchor.find(["h1", "h2", "h3", "h4", "h5"])' in scraper
+        and "if not published:" in scraper and "continue" in scraper,
+        "News scraper must extract clean headings and exclude undated footer pages")
+
 feed_path = ROOT / "data" / "esports-news.json"
 try:
     feed = json.loads(feed_path.read_text(encoding="utf-8"))
@@ -244,8 +249,13 @@ try:
         require(isinstance(article.get("title"), str) and bool(article["title"].strip()),
                 "Every esports article needs a title")
         url = article.get("url", "")
-        require(url.startswith("https://en.moonton.com/news/"),
-                f"Unexpected esports source URL: {url}")
+        require(re.fullmatch(r"https://en\\.moonton\\.com/news/\\d+\\.html", url) is not None,
+                f"Unexpected esports source URL or non-article page: {url}")
+        published = article.get("published", "")
+        require(re.fullmatch(r"20\\d{2}-\\d{2}-\\d{2}", published) is not None,
+                f"Esports article is missing a valid publication date: {url}")
+        require(re.match(r"^20\\d{2}[/-]\\d{1,2}[/-]\\d{1,2}\\s", article["title"]) is None,
+                f"Esports headline must not include a date prefix: {url}")
 except (OSError, json.JSONDecodeError, AttributeError) as exc:
     errors.append(f"Could not validate esports feed: {exc}")
 
