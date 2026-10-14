@@ -1,0 +1,136 @@
+/* GRIM_GG mobile typography and layout optimization.
+   Scoped to small screens so desktop layout and existing features stay unchanged. */
+@media (max-width: 650px) {
+  html { scroll-padding-top: 72px; }
+  body {
+    font-size: 14px;
+    line-height: 1.55;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  #main-content, #main-content * {
+    min-width: 0;
+    word-break: normal;
+    hyphens: none;
+  }
+  #main-content p,
+  #main-content li,
+  #main-content label,
+  #main-content small,
+  #main-content strong,
+  #main-content span,
+  #main-content h1,
+  #main-content h2,
+  #main-content h3,
+  #main-content h4 {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+  }
+  .site-header { gap: 10px; padding: 10px 4%; }
+  .brand { gap: 8px; font-size: 14px; letter-spacing: .5px; }
+  .brand small { font-size: 7px; letter-spacing: 1.2px; }
+  .menu-toggle { flex: 0 0 auto; min-width: 42px; min-height: 42px; }
+  .hero-section { padding: 34px 4% 38px; }
+  .hero-copy h1 { font-size: clamp(30px, 8.8vw, 44px); line-height: 1.08; letter-spacing: -.035em; }
+  .hero-desc { max-width: 100%; font-size: 14px; line-height: 1.65; }
+  .eyebrow { font-size: 9px; letter-spacing: .08em; line-height: 1.5; }
+  .hero-actions .btn { min-height: 42px; font-size: 12px; line-height: 1.35; }
+  .quick-hero-search label { display: block; font-size: 10px; line-height: 1.5; }
+  .quick-hero-search input,
+  .search,
+  input[type="search"],
+  select { max-width: 100%; min-height: 44px; font-size: 14px; }
+  .hero-shortcuts a { white-space: normal; line-height: 1.35; text-align: center; }
+  .hero-stats { gap: 8px; }
+  .hero-stats strong { font-size: 20px; }
+  .hero-stats span { font-size: 10px; line-height: 1.4; }
+  .home-hub { width: 100%; max-width: 100%; padding: 14px; }
+  .home-hub-heading h2 { font-size: clamp(19px, 5.5vw, 26px); line-height: 1.2; }
+  .home-hub-heading p { font-size: 12px; line-height: 1.55; }
+  .home-lane-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .home-lane-wide { grid-column: 1 / -1; }
+  .home-lane-card { grid-template-columns: 34px minmax(0,1fr) 12px; gap: 3px 7px; padding: 9px; min-height: 66px; }
+  .home-lane-icon { width: 32px; height: 32px; font-size: 8px; }
+  .home-lane-card strong { font-size: 11px; line-height: 1.3; }
+  .home-lane-card small { font-size: 9px; line-height: 1.35; }
+  .home-feature-link { gap: 9px; padding: 10px; }
+  .home-feature-link strong { font-size: 11px; line-height: 1.4; }
+  .home-feature-link small { font-size: 10px; line-height: 1.4; }
+  #main-content > section:not(.hero-section) {
+    width: 100%;
+    margin-inline: 0;
+    padding: 32px 4% !important;
+  }
+  .section-heading { gap: 8px; }
+  .section-heading h2 { font-size: clamp(20px, 5.7vw, 28px); line-height: 1.2; }
+  .section-heading > p,
+  .section-heading p { font-size: 12px; line-height: 1.6; }
+  .filter-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 7px;
+    max-width: 100%;
+    padding: 3px 1px 9px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .filter-row .filter {
+    flex: 0 0 auto;
+    min-height: 38px;
+    max-width: 85vw;
+    padding: 8px 11px;
+    font-size: 11px;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+  #main-content .hero-grid,
+  #main-content .item-grid,
+  #main-content .tier-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px;
+  }
+  #main-content .hero-grid .hero-image-wrap { aspect-ratio: 3 / 4; height: auto !important; }
+  #main-content .hero-card-content,
+  #main-content .item-content,
+  #main-content .tier-card-content { padding: 10px 8px; }
+  #main-content .hero-card h3,
+  #main-content .item-card h3,
+  #main-content .tier-card h3 { font-size: 12px; line-height: 1.35; }
+  #main-content .hero-role,
+  #main-content .hero-tags span { font-size: 10px; line-height: 1.4; }
+  #main-content .hero-card-actions { gap: 6px; }
+  #main-content .hero-card-actions .btn,
+  #main-content .favorite-btn { min-height: 40px; padding: 8px 6px; font-size: 10px; line-height: 1.35; white-space: normal; }
+  #main-content .item-card p,
+  #main-content .tier-card p,
+  #main-content .hero-card p { font-size: 11px; line-height: 1.55; }
+  .item-tools { display: grid; grid-template-columns: minmax(0,1fr); gap: 10px; }
+  .item-sort-label, .item-favorites-toggle { min-width: 0; }
+  .item-sort { width: 100%; }
+  .talent-lab .section-heading { align-items: flex-start; }
+  .talent-result-head { align-items: flex-start; flex-wrap: wrap; }
+  .talent-chip { white-space: normal; }
+  .talent-slot-label h4 { font-size: 13px; line-height: 1.4; }
+  .talent-slot-description { overflow-wrap: break-word; }
+  .join-banner { flex-direction: column; align-items: flex-start; padding: 18px; margin: 24px 4%; }
+  .footer { padding: 22px 4%; }
+}
+@media (max-width: 380px) {
+  .hero-section { padding-inline: 12px; }
+  #main-content > section:not(.hero-section) { padding-inline: 12px !important; }
+  .home-lane-grid { grid-template-columns: minmax(0,1fr); }
+  .home-lane-wide { grid-column: auto; }
+  #main-content .hero-grid,
+  #main-content .item-grid,
+  #main-content .tier-grid { gap: 8px; }
+  #main-content .hero-card-content,
+  #main-content .item-content,
+  #main-content .tier-card-content { padding: 8px 6px; }
+  #main-content .hero-card-actions { grid-template-columns: minmax(0,1fr); }
+  .hero-stats { gap: 5px; }
+  .hero-stats span { font-size: 9px; }
+}
