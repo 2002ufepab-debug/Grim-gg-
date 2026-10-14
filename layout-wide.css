@@ -87,3 +87,45 @@ main > .section {
   .hero-image-wrap { height: 132px; }
   .hero-card-content, .item-content, .tier-card-content { padding: 8px; }
 }
+
+
+/* Final cascade guard: this file loads after the legacy stylesheet.
+   Keep the main content fluid and prevent older duplicate grid rules from winning. */
+html, body { max-width: 100%; }
+#main-content { display: block; width: 100%; max-width: 1920px; margin-left: auto; margin-right: auto; }
+#main-content > .section:not(.hero-section) {
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: clamp(12px, 2.1vw, 36px) !important;
+  padding-right: clamp(12px, 2.1vw, 36px) !important;
+}
+#main-content .hero-grid,
+#main-content .item-grid,
+#main-content .tier-grid {
+  width: 100%;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+@media (min-width: 1600px) {
+  #main-content .hero-grid,
+  #main-content .item-grid,
+  #main-content .tier-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (min-width: 651px) and (max-width: 1199px) {
+  #main-content .hero-grid,
+  #main-content .item-grid,
+  #main-content .tier-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  #main-content > .section:not(.hero-section) {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  #main-content .hero-grid,
+  #main-content .item-grid,
+  #main-content .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #main-content > .hero-section {
+    grid-template-columns: minmax(0, 1fr);
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
