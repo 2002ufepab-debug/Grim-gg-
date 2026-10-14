@@ -255,7 +255,6 @@ const HERO_SPLASH_ART_OVERRIDES = {
   "yisunshin": "Yi Sun-shin/Fleet Warden.png",
   "yuzhong": "Yu Zhong/Black Dragon.png",
   "yve": "Yve/Astrowarden.png",
-  "zilong": "Zilong/Eastern Warrior.png"
   "zetian": "Zetian/Celestial Empress.png",
   "zhuxin": "Zhuxin/Emberwisp Mystic.png",
   "zilong": "Zilong/Eastern Warrior.png"
