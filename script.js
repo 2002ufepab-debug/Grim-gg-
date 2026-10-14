@@ -1173,14 +1173,15 @@ function renderItemCards(filtered, grid, emptyMessage) {
     // в наборе нет отдельного файла с таким названием.
     const vectorIcon = item.id === "roam-boots" ? effectIconMarkup(item) : "";
     const iconSource = item.id === "retribution"
-      ? "https://raw.githubusercontent.com/Alexandre221178/alexandregames/main/img-MLBB/spells/retribution-ca%C3%A7ar.webp"
+      ? new URL("assets/retribution.svg", window.location.href).href
       : item.imageFile
         ? ITEM_IMAGE_BASE + item.imageFile
         : item.id === "roam-boots"
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const retrySource = item.id === "retribution" ? "" : ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : "");
     const iconMarkup = vectorIcon || (iconSource
-      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : ""))}" data-fallback="${escapeHTML(fallbackIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(retrySource)}" data-fallback="${escapeHTML(fallbackIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
       : fallbackIcon);
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
