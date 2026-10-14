@@ -254,10 +254,12 @@ const heroSplashImageUrl = path => {
 };
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
-  const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
-  if (splashPath) return heroSplashImageUrl(splashPath);
+  // Prefer the same tall, clean portrait style used by Akai for consistent hero cards.
+  // Use splash art only when a matching HD portrait is not available.
   const file = HERO_HD_IMAGE_FILES[key];
-  return file ? "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file) : "";
+  if (file) return "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file);
+  const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
+  return splashPath ? heroSplashImageUrl(splashPath) : "";
 };
 
 // Shared image resolver so hero cards, profiles and the talent planner use the same HD source.
