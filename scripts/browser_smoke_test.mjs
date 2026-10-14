@@ -63,9 +63,9 @@ try {
   const hubText = await hub.innerText();
   check("Homepage shows all five lanes", await page.locator(".home-lane-card").count() === 5
     && ["EXP Lane", "Jungle", "Mid Lane", "Gold Lane", "Roam"].every(name => hubText.includes(name)));
-  check("Homepage links to builds, talents and full hero catalogue",
+  check("Homepage links to combined builds/talents and full hero catalogue",
     await page.locator(".home-feature-link[href='?page=builds']").count() === 1
-    && await page.locator(".home-feature-link[href='?page=talents']").count() === 1
+    && await page.locator(".home-feature-link[href='?page=builds#talentLab']").count() === 1
     && await page.locator(".home-all-heroes[href='?page=heroes']").count() === 1);
 
   // New Premium Dark Esports quick search: a Russian alias should narrow results to one hero,
@@ -193,7 +193,7 @@ try {
   await menuToggle.click();
   check("Mobile menu opens accessibly", await menuToggle.getAttribute("aria-expanded") === "true"
     && await page.locator("#nav").evaluate(node => node.classList.contains("open")));
-  await page.locator("#nav a[href='?page=talents']").click();
+  await page.locator("#nav a[href='?page=builds']").click();
   await page.locator("#talentLab").waitFor({ state: "visible", timeout: 20000 });
   check("Mobile navigation closes after selection", await menuToggle.getAttribute("aria-expanded") === "false"
     && !(await page.locator("#nav").evaluate(node => node.classList.contains("open"))));
