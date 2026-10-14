@@ -21,8 +21,10 @@ script = (ROOT / "script.js").read_text(encoding="utf-8")
 talents = (ROOT / "talents.js").read_text(encoding="utf-8")
 talent_css = (ROOT / "talents.css").read_text(encoding="utf-8")
 
-for asset in ("styles.css?v=50", "talents.css?v=3", "layout-wide.css?v=4", "script.js?v=50", "talents.js?v=6"):
-    require(asset in html, f"index.html must load {asset.split('?')[0]} with the current cache key")
+# Cache keys intentionally change during fixes; validate the asset paths, not hard-coded version numbers.
+for asset in ("styles.css", "talents.css", "layout-wide.css", "script.js", "talents.js"):
+    require(bool(re.search(r'(?:href|src)="' + re.escape(asset) + r'\\?v=\\d+"', html)),
+            f"index.html must load {asset} with a versioned cache key")
 
 # Catch duplicate static IDs and accidentally unbalanced CSS before publishing.
 static_ids = re.findall(r"""\bid=["']([^"']+)["']""", html)
@@ -41,8 +43,8 @@ for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "fa
 
 require('href="?page=talents"' in html, "Talent page must be reachable from the main navigation")
 require('href="favicon.svg"' in html, "Main page favicon reference is missing")
-require('styles.css?v=50' in (ROOT / "404.html").read_text(encoding="utf-8"),
-        "404 page must use the current main stylesheet cache key")
+require(bool(re.search(r'href="/Grim-gg-/styles\\.css\\?v=\\d+"', (ROOT / "404.html").read_text(encoding="utf-8"))),
+        "404 page must load a versioned main stylesheet")
 require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must use the correct GitHub Pages favicon path")
 for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "counterpicks", "esports"):
