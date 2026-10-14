@@ -63,6 +63,8 @@ require("fallbackImage:catalogImage" in script and "hero.fallbackImage && hero.f
         "Hero cards must retain the catalog portrait as an HD-image fallback")
 require("this.dataset.retry!==this.src" in script,
         "Hero image fallback must not retry the same broken URL")
+require('this.dataset.retry!==this.src' in script and "item-image" in script,
+        "Item image fallback must avoid retrying the same broken URL")
 require('img.dataset.fallback = catalogUrl && catalogUrl !== url ? catalogUrl : "";' in talents,
         "Talent portrait must retry the catalog image before showing a placeholder")
 require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
