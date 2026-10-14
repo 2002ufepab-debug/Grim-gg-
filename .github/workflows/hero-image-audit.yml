@@ -27,6 +27,12 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install image processor dependency
+        run: python -m pip install --disable-pip-version-check "Pillow>=10,<13"
+
+      - name: Test image processor with synthetic fixtures
+        run: python tools/hero_images/process_images.py --self-test
+
       - name: Audit image sources
         run: python tools/hero_images/audit_sources.py --workers 8 --timeout 12 --retries 1
 
