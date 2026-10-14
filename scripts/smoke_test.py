@@ -83,6 +83,10 @@ require("new MutationObserver" in talents and "refreshIcons" in talents,
         "Dynamically rendered talent icons must be enhanced after the API responds")
 
 require("@media(max-width:700px)" in talent_css, "Talent planner needs a mobile layout")
+require(".hero-image-wrap::after" in styles and "display: none !important" in styles and "background: none !important" in styles,
+        "Hero portrait cards must not retain a dark overlay after labels are removed")
+require("linear-gradient(145deg, #30232d 0%, #241b27 58%, #30212a 100%)" in styles,
+        "Hero portrait background must be brighter than the previous near-black tint")
 require("onerror" in script and "hero-image-fallback" in script,
         "Hero image errors must have a visible fallback")
 
