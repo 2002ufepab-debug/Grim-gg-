@@ -478,7 +478,7 @@ const items = [
  tip:"Выбирай, учитывая состав врага и актуальные свойства обуви."
 },
 {
- id:"ms",name:"Magic Shoes",ru:"Магические ботинки",cat:"Movement",
+ id:"ms",name:"Magic Boots",ru:"Магические ботинки",cat:"Movement",
  stats:"Передвижение · Перезарядка",
  desc:"Обувь, которую рассматривают, когда важна более частая доступность навыков.",
  tip:"Сравни пользу сокращения перезарядки с защитными вариантами обуви."
@@ -496,7 +496,7 @@ const items = [
  tip:"Сравни с обувью, дающей защиту или сокращение перезарядки."
 },
 {
- id:"roam-boots",name:"Roaming Blessing",ru:"Роум-благословение",cat:"Movement",
+ id:"roam-boots",name:"Roaming Blessing",ru:"Роум-благословение",cat:"Roam",
  stats:"Роум-эффект, связанный с обувью",
  desc:"Справочная карточка: роум-эффект выбирается для поддержки команды и связан с ботинками. Это не отдельная пара обуви для покупки.",
  tip:"Открой вкладку «Перки», чтобы сравнить четыре эффекта: Скрытность, Поощрение, Благословение и Меткий удар. Перед матчем сверяй доступность и правила с текущей версией игры."
@@ -616,7 +616,7 @@ const items = [
  tip:"Проверь текущие свойства предмета и нужна ли герою дополнительная выживаемость."
 },
 {
- id:"ds",name:"Demon Shoes",ru:"Демонические ботинки",cat:"Movement",
+ id:"ds",name:"Demon Boots",ru:"Демонические ботинки",cat:"Movement",
  stats:"Передвижение · Восстановление маны",
  desc:"Обувь для героев, которым важно поддерживать запас маны.",
  tip:"Сравни с обувью на пробивание или сокращение перезарядки."
@@ -745,8 +745,8 @@ function getHeroClasses(hero) {
 
 function itemIconSlug(name) {
   const overrides = {
-    "Magic Shoes":"magic_boots",
-    "Demon Shoes":"demon_boots",
+    "Magic Boots":"magic_boots",
+    "Demon Boots":"demon_boots",
     "Retribution":"retribution",
     "Ice Retribution":"ice_retribution",
     "Flame Retribution":"flame_retribution",
@@ -1269,8 +1269,8 @@ const featuredHeroBuilds = {
   "Eudora": {role:"Мид · Маг",goal:"Взрывной магический урон",items:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Lightning Truncheon","Immortality"],emblem:"Эмблема мага.",talents:"Таланты на магическую мощь и взрывной урон.",spell:"Вспышка для выхода из опасности или поиска позиции.",note:"Не трать комбинацию на танка, если рядом есть приоритетная цель."},
   "Aurora": {role:"Мид · Маг",goal:"Магический урон и контроль",items:["Arcane Boots","Glowing Wand","Holy Crystal","Divine Glaive","Lightning Truncheon","Immortality"],emblem:"Эмблема мага.",talents:"Магический урон; подбирай последний талант под частоту навыков.",spell:"Вспышка.",note:"Сохраняй контроль для начала боя или защиты союзников."},
   "Odette": {role:"Мид · Маг",goal:"Урон по области",items:["Arcane Boots","Lightning Truncheon","Holy Crystal","Divine Glaive","Blood Wings","Immortality"],emblem:"Эмблема мага.",talents:"Магическая мощь и урон навыков.",spell:"Вспышка — для позиции перед ультимейтом.",note:"Следи за навыками контроля соперников перед использованием ультимейта."},
-  "Cecilion": {role:"Мид · Маг",goal:"Масштабирование и магический урон",items:["Demon Shoes","Clock of Destiny","Lightning Truncheon","Holy Crystal","Divine Glaive","Immortality"],emblem:"Эмблема мага.",talents:"Магическая мощь и мана/перезарядка, если доступны в актуальной версии.",spell:"Вспышка.",note:"Стабильно фарми и не затягивай рискованные размены в начале."},
-  "Lylia": {role:"Мид · Маг",goal:"Частые навыки и магический урон",items:["Magic Shoes","Glowing Wand","Genius Wand","Holy Crystal","Divine Glaive","Immortality"],emblem:"Эмблема мага.",talents:"Сокращение перезарядки и магический урон.",spell:"Вспышка.",note:"Сохраняй ультимейт для безопасного выхода из опасной ситуации."},
+  "Cecilion": {role:"Мид · Маг",goal:"Масштабирование и магический урон",items:["Demon Boots","Clock of Destiny","Lightning Truncheon","Holy Crystal","Divine Glaive","Immortality"],emblem:"Эмблема мага.",talents:"Магическая мощь и мана/перезарядка, если доступны в актуальной версии.",spell:"Вспышка.",note:"Стабильно фарми и не затягивай рискованные размены в начале."},
+  "Lylia": {role:"Мид · Маг",goal:"Частые навыки и магический урон",items:["Magic Boots","Glowing Wand","Genius Wand","Holy Crystal","Divine Glaive","Immortality"],emblem:"Эмблема мага.",talents:"Сокращение перезарядки и магический урон.",spell:"Вспышка.",note:"Сохраняй ультимейт для безопасного выхода из опасной ситуации."},
   "Kagura": {role:"Мид · Маг",goal:"Комбинации и магическое пробивание",items:["Arcane Boots","Genius Wand","Holy Crystal","Divine Glaive","Lightning Truncheon","Immortality"],emblem:"Эмблема мага.",talents:"Магический урон и пробивание.",spell:"Вспышка.",note:"Тренируй комбинации и держи навык отхода."},
   "Terizla": {role:"EXP · Боец",goal:"Выживаемость и урон по области",items:["Tough Boots","War Axe","Queen's Wings","Antique Cuirass","Dominance Ice","Immortality"],emblem:"Эмблема бойца.",talents:"Устойчивость и урон в затяжном бою.",spell:"Вспышка или Исполнение по ситуации.",note:"Подбирай защиту под тип урона соперника на линии."},
   "Ruby": {role:"EXP · Боец",goal:"Контроль, восстановление и выживаемость",items:["Tough Boots","War Axe","Queen's Wings","Oracle","Dominance Ice","Immortality"],emblem:"Эмблема бойца или танка.",talents:"Устойчивость и таланты, помогающие в продолжительном бою.",spell:"Вспышка для комбинаций и выхода из опасности.",note:"Меняй защиту под состав врагов и свою роль в командных боях."},
@@ -1728,6 +1728,7 @@ Object.assign(EQUIPMENT_RU_NAMES, {
   "magic wand": "Волшебная палочка",
   "magic potion": "Магическое зелье",
   "demon boots": "Демонические ботинки",
+  "magic boots": "Магические ботинки",
   "boots": "Ботинки"
 });
 Object.assign(EQUIPMENT_RU_NAMES, {
@@ -1822,12 +1823,14 @@ async function loadExternalItems() {
     const existingNames = new Set(items.map(item=>String(item.name).toLocaleLowerCase()));
     const categoryFor = (name,index) => {
       const value = String(name).toLocaleLowerCase();
-      if (/retribution|conceal|dire hit|encourage|favor|allow throw|broken heart|throw forbidden/.test(value)) return "Roam";
+      if (/retribution/.test(value)) return "Jungle";
+      if (/conceal|dire hit|encourage|favor/.test(value)) return "Roam";
+      if (/allow throw|broken heart|throw forbidden/.test(value)) return "Movement";
       if (/boots|shoes/.test(value)) return "Movement";
-      if (/wand|crystal|codex|tome|magic necklace|magic blade|book of sages|flower of hope|lantern of hope|wishing lantern|concentrated energy|starlium|lightning truncheon|holy crystal|divine glaive|genius wand|glowing wand|ice queen|blood wings|feather of heaven|clock of destiny|enchanted talisman|mystic container|azure blade|elegant gem|exotic veil/.test(value)) return "Magic";
-      if (/armor|shield|helmet|breastplate|guardian|immortality|oracle|wings|belt|cloak|jerkin|legplates|vitality|healing necklace|rock potion|black ice|dreadnaught|molten essence|silence robe|chastise|thunder belt|dominance|athena|antique|radiant|cursed|queen's wings/.test(value)) return "Defense";
+      if (/wand|crystal|codex|tome|magic necklace|book of sages|flower of hope|lantern of hope|wishing lantern|concentrated energy|starlium|lightning truncheon|holy crystal|divine glaive|genius wand|glowing wand|ice queen|blood wings|feather of heaven|clock of destiny|enchanted talisman|mystic container|azure blade|elegant gem|exotic veil|fleeting time|winter crown|flask of the oasis|magic potion/.test(value)) return "Magic";
+      if (/armor|shield|helmet|breastplate|guardian|immortality|oracle|wings|belt|cloak|jerkin|legplates|vitality|healing necklace|rock potion|black ice|dreadnaught|molten essence|silence robe|chastise|thunder belt|dominance|athena|antique|radiant|cursed|queen's wings|hero's ring/.test(value)) return "Defense";
       if (/potion/.test(value)) return "Attack";
-      if (/dagger|spear|sword|bow|glove|scythe|malefic|fury|corrosion|despair|heptaseas|hunter strike|wind of nature|windtalker|sky piercer|hunting bow|knife|crossbow|vampire mallet|ogre tomahawk|regular spear|rogue meteor|hass's claws|berserker/.test(value)) return "Attack";
+      if (/dagger|spear|sword|bow|glove|scythe|malefic|fury|corrosion|despair|heptaseas|hunter strike|wind of nature|windtalker|sky piercer|hunting bow|knife|crossbow|vampire mallet|ogre tomahawk|regular spear|rogue meteor|haas's claws|berserker|endless battle|golden staff|rose gold meteor|sea halberd|war axe|javelin|magic blade/.test(value)) return "Attack";
       return "Other";
     };
     data.forEach((entry,index)=>{
@@ -1852,11 +1855,7 @@ async function loadExternalItems() {
     renderPerks();
     renderBuilds();
     renderFavorites();
-    const count = $("itemCount");
-    if (count) {
-      const total = items.filter(item=>item.cat!=="Jungle" && item.cat!=="Roam").length;
-      count.textContent = `Предметов в справочнике: ${total}${catalogSource === "local" ? " · резервный каталог" : ""}`;
-    }
+    // renderItems() owns the visible count so active search, category and favorites filters stay accurate.
   } catch (error) {
     console.warn("Grim_gg: внешний каталог предметов недоступен.",error);
   }
