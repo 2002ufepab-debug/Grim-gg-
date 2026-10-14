@@ -1981,7 +1981,7 @@ async function loadExternalHeroes() {
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
   const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","esports","hero"];
-  const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
+  const page = pageIds.includes(requestedPage) ? requestedPage : "home";
   const visibleSection = page === "hero" ? "hero-detail" : page === "talents" ? "talentLab" : page;
 
   document.querySelectorAll("main > section").forEach(section => {
