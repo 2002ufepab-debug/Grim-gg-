@@ -24,6 +24,8 @@ jobs:
         run: |
           node --check script.js
           node --check talents.js
+      - name: Check Python syntax
+        run: python -m py_compile scripts/update_esports_news.py scripts/smoke_test.py
       - name: Validate news JSON
         run: python -m json.tool data/esports-news.json > /dev/null
       - name: Run static smoke tests
