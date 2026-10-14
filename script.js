@@ -1385,9 +1385,12 @@ function renderItemCards(filtered, grid, emptyMessage) {
         : item.name === "Roaming Blessing"
           ? ITEM_IMAGE_BASE + "boots.png"
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
-    const iconMarkup = iconSource
+    // Use the locally-rendered vector artwork for battle spells and Roam effects.
+    // This avoids missing remote icons and keeps those special cards visually consistent.
+    const vectorMarkup = effectIconMarkup(item);
+    const iconMarkup = vectorMarkup || (iconSource
       ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(retrySource)}" data-fallback="${escapeHTML(missingIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
-      : missingIcon;
+      : missingIcon);
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
       <div class="item-content">
