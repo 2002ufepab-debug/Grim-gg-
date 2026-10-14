@@ -215,11 +215,14 @@
         const response = await fetch(endpoint, {cache:"force-cache"});
         if (!response.ok) continue;
         const payload = await response.json();
-        const records = Array.isArray(payload?.data?.records) ? payload.data.records : [];
+        const records = Array.isArray(payload?.data?.records) ? payload.data.records
+          : Array.isArray(payload?.records) ? payload.records
+          : Array.isArray(payload?.data) ? payload.data
+          : Array.isArray(payload) ? payload : [];
         for (const record of records) {
-          const skill = record?.data?.emblemskill;
-          const name = normalizeTalentName(skill?.skillname);
-          const icon = safeImageUrl(skill?.skillicon);
+          const skill = record?.data?.emblemskill || record?.emblemskill || record?.data || record;
+          const name = normalizeTalentName(skill?.skillname || skill?.name || skill?.talentName || skill?.talent_name);
+          const icon = safeImageUrl(skill?.skillicon || skill?.icon || skill?.iconUrl || skill?.icon_url || skill?.image);
           if (!name || !icon) continue;
           talentIconByName.set(name, icon);
           if (name.endsWith("s")) talentIconByName.set(name.slice(0, -1), icon);
