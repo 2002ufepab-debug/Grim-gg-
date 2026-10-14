@@ -569,33 +569,6 @@ note:"Подбирай защиту под главный источник ур�
 }
 ];
 
-const counters = {
-  Fanny:{
-    picks:["Khufra","Minsitthar","Kaja"],
-    reason:"Контроль и ограничения мобильности могут осложнить перемещения Фанни. Учитывай тайминги навыков и опыт игроков."
-  },
-  Claude:{
-    picks:["Kaja","Franco","Saber"],
-    reason:"Надёжный контроль может ограничить свободу действий Клода. Важно не расходовать контроль до его входа."
-  },
-  Ling:{
-    picks:["Khufra","Minsitthar","Kaja"],
-    reason:"Контроль перемещений и своевременная реакция команды могут ограничить мобильность Линга."
-  },
-  Miya:{
-    picks:["Lolita","Saber","Franco"],
-    reason:"Рассматривай защиту от атак или надёжный контроль. Результат зависит от позиции и состава команд."
-  },
-  Layla:{
-    picks:["Saber","Franco","Lolita"],
-    reason:"Герои с надёжным сближением или контролем могут создавать давление на Лейлу, если команда помогает реализовать атаку."
-  },
-  Gusion:{
-    picks:["Khufra","Franco","Kaja"],
-    reason:"Контроль может прервать удобный для Госсена вход. Следи за тем, когда он потратил навыки."
-  }
-};
-
 let heroes = fallbackHeroes.map(h=>({...h}));
 let heroDataSource = "fallback";
 let heroQuery = "";
@@ -1432,131 +1405,6 @@ function updateFavorite(type,id) {
   }
 }
 
-function renderCounterpicks() {
-  const enemySelect = $("enemySelect");
-  const ownSelect = $("ownHeroSelect");
-  if (!enemySelect) return;
-  const names = [...new Set(heroes.map(h=>h.name))].sort((a,b)=>a.localeCompare(b));
-  const fillSelect = (select, placeholder) => {
-    if (!select) return;
-    const current = select.value;
-    select.innerHTML = `<option value="">${placeholder}</option>` +
-      names.map(name=>`<option value="${escapeHTML(name)}">${escapeHTML(name)}</option>`).join("");
-    if (names.includes(current)) select.value = current;
-  };
-  fillSelect(enemySelect,"Выбери вражеского героя...");
-  fillSelect(ownSelect,"Выбери своего героя...");
-}
-
-function inferHeroRole(name) {
-  const hero = heroes.find(h=>h.name.toLowerCase()===String(name).toLowerCase());
-  if (!hero) return "";
-  const roles = getHeroClasses(hero);
-  return roles.find(role=>["Убийца","Маг","Стрелок","Боец","Танк","Поддержка"].includes(role)) || "";
-}
-
-function getCounterPicks(enemy, enemyRole) {
-  const exactEntry = Object.entries(counters).find(([name]) =>
-    name.toLocaleLowerCase() === String(enemy).toLocaleLowerCase()
-  );
-  const availableNames = new Set(heroes.map(hero=>hero.name.toLocaleLowerCase()));
-  if (exactEntry) {
-    const [ , exact ] = exactEntry;
-    return {
-      picks: exact.picks.filter(name=>availableNames.has(name.toLocaleLowerCase())),
-      reason: exact.reason
-    };
-  }
-  const rolePicks = {
-    "Убийца":["Khufra","Franco","Saber"],
-    "Маг":["Lolita","Chou","Saber"],
-    "Стрелок":["Saber","Franco","Lolita"],
-    "Боец":["Khufra","Kaja","Franco"],
-    "Танк":["Karrie","Claude","Dyrroth"],
-    "Поддержка":["Saber","Franco","Chou"]
-  };
-  const suggested = rolePicks[enemyRole] || ["Khufra","Franco","Saber"];
-  const picks = suggested.filter(name=>availableNames.has(name.toLocaleLowerCase()));
-  const reason = `Для героя «${enemy}» нет отдельной проверенной записи. Это предварительные варианты по классу «${enemyRole || "неизвестная роль"}». Учитывай способности героев, составы команд и текущий патч.`;
-  return {picks,reason};
-}
-
-function getSituationalItems(ownHero, ownRole, enemy, enemyRole) {
-  const key = String(ownHero || "").toLowerCase();
-  let names;
-  let reason;
-  if (["fanny","фанни"].includes(key)) {
-    names = ["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Immortality"];
-    if (enemyRole === "Маг") {
-      names = ["Tough Boots","Blade of the Heptaseas","Malefic Roar","Rose Gold Meteor","Athena's Shield","Immortality"];
-      reason = "Против сильного магического взрывного урона рассмотри Athena's Shield; Rose Gold Meteor может дать дополнительную защиту. Не забывай, что Фанни зависит от энергии и темпа.";
-    } else if (enemyRole === "Танк") {
-      names = ["Tough Boots","Blade of the Heptaseas","Malefic Roar","War Axe","Sea Halberd","Immortality"];
-      reason = "Против выносливых целей рассмотри физическое пробивание; Sea Halberd имеет смысл против сильного лечения/щитов, если подходит ситуации.";
-    } else if (enemyRole === "Стрелок" || enemyRole === "Убийца") {
-      names = ["Tough Boots","Blade of the Heptaseas","Malefic Roar","Rose Gold Meteor","Immortality"];
-      reason = "Сохраняй взрывной урон, но добавь защитный слот, если соперник быстро отвечает уроном. Против опасного физического урона оцени защитные альтернативы.";
-    } else {
-      reason = "Это базовый ориентир для Фанни. Меняй защитный слот по типу урона врага и не копируй одну сборку во все матчи.";
-    }
-  } else if (ownRole === "Маг") {
-    names = ["Arcane Boots","Glowing Wand","Holy Crystal","Divine Glaive","Immortality"];
-    if (enemyRole === "Танк") names = ["Arcane Boots","Glowing Wand","Divine Glaive","Holy Crystal","Immortality"];
-    reason = enemyRole === "Танк" ? "Против танков чаще полезно магическое пробивание; сверяй предметы с их магической защитой." : "Базовый магический вариант. Если враг легко добирается до тебя, замени атакующий слот на подходящую защиту.";
-  } else if (ownRole === "Стрелок") {
-    names = ["Swift Boots","Demon Hunter Sword","Corrosion Scythe","Malefic Roar","Immortality"];
-    if (enemyRole === "Танк") names = ["Swift Boots","Demon Hunter Sword","Malefic Roar","Corrosion Scythe","Immortality"];
-    reason = enemyRole === "Танк" ? "Против выносливых целей рассмотри урон по здоровью и физическое пробивание." : "Сохраняй дистанцию; защитный слот нужен, если вражеский герой может быстро ворваться.";
-  } else if (ownRole === "Танк" || ownRole === "Поддержка") {
-    names = ["Tough Boots","Dominance Ice","Antique Cuirass","Athena's Shield","Immortality"];
-    if (enemyRole === "Маг") names = ["Tough Boots","Athena's Shield","Radiant Armor","Dominance Ice","Immortality"];
-    if (enemyRole === "Стрелок" || enemyRole === "Убийца") names = ["Tough Boots","Antique Cuirass","Blade Armor","Dominance Ice","Immortality"];
-    reason = enemyRole === "Маг" ? "Против магического урона оцени Athena's Shield или Radiant Armor по характеру урона." : "Подбирай защиту под главный источник урона соперника; это не обязательный порядок покупки.";
-  } else {
-    names = ["Tough Boots","Endless Battle","War Axe","Antique Cuirass","Malefic Roar","Immortality"];
-    if (enemyRole === "Маг") names = ["Tough Boots","Endless Battle","Athena's Shield","War Axe","Immortality"];
-    reason = "Базовый ориентир для бойца. Подстрой защитные слоты под урон врага и особенности своего героя.";
-  }
-  const uniqueItems = [...new Set(names)].map(name=>items.find(item=>item.name===name)).filter(Boolean);
-  return {items:uniqueItems,reason:reason || "Сборка — ориентир, а не жёсткий порядок покупок. Меняй предметы по ходу матча."};
-}
-
-function showCounterpick() {
-  const enemy = $("enemySelect")?.value;
-  const ownHero = $("ownHeroSelect")?.value;
-  const result = $("counterResult");
-  if (!result) return;
-  if (!enemy) {
-    result.innerHTML = '<div class="result-icon">!</div><div><strong>Выбери героя противника</strong><p>Укажи героя, к встрече с которым хочешь подготовиться.</p></div>';
-    return;
-  }
-  const enemyRole = inferHeroRole(enemy);
-  const counterData = getCounterPicks(enemy,enemyRole);
-  const pickNames = counterData.picks;
-  const pickButtons = pickNames.map(name=>{
-    const found = heroes.find(h=>h.name.toLowerCase()===name.toLowerCase());
-    const actualName = found ? found.name : name;
-    const role = found ? getHeroClasses(found).join(" / ") : "Контрпик";
-    return `<span class="counter-pick-chip"><strong>${escapeHTML(actualName)}</strong><small>${escapeHTML(role)}</small></span>`;
-  }).join("");
-  let buildBlock = "";
-  if (ownHero) {
-    const ownRole = inferHeroRole(ownHero);
-    const situational = getSituationalItems(ownHero,ownRole,enemy,enemyRole);
-    const itemRows = situational.items.map((item,index)=>`<div class="counter-item-row"><span class="build-slot">0${index+1}</span><div><strong>${escapeHTML(item.ru)}</strong><small>${escapeHTML(item.stats)}</small></div></div>`).join("");
-    buildBlock = `<div class="counter-build"><h3>Предметы для ${escapeHTML(ownHero)} против ${escapeHTML(enemy)}</h3><div class="counter-item-list">${itemRows}</div><p>${escapeHTML(situational.reason)}</p></div>`;
-  } else {
-    buildBlock = '<p class="counter-help">Чтобы увидеть предметы именно для своего героя, выбери его во втором списке.</p>';
-  }
-  result.innerHTML = `<div class="counter-result-inner">
-    <strong>Кого выбрать против ${escapeHTML(enemy)}?</strong>
-    ${pickButtons ? `<div class="counter-pick-list">${pickButtons}</div>` : '<p class="counter-help">В загруженном каталоге не нашлось подходящих вариантов для этой роли. Попробуй другой выбор и учитывай навыки соперника.</p>'}
-    <p class="counter-reason">${escapeHTML(counterData.reason)}</p>
-    ${buildBlock}
-    <p class="fine-print">Подсказки носят ориентировочный характер. Выбор героя и предметов зависит от текущего патча, линии, союзников и состава команды противника.</p>
-  </div>`;
-}
-
 let activeComboRole = "Все";
 function renderComboGuides() {
   const grid = $("comboGrid");
@@ -1885,7 +1733,6 @@ async function loadExternalHeroes() {
     renderTierList();
     renderBuilds();
     renderComboGuides();
-    renderCounterpicks();
     renderFavorites();
     if (new URLSearchParams(window.location.search).get("page") === "hero") {
       renderHeroFullPage(new URLSearchParams(window.location.search).get("name"));
@@ -2195,7 +2042,6 @@ function init() {
   renderPerks();
   renderBuilds();
   renderComboGuides();
-  renderCounterpicks();
   renderFavorites();
 
   loadExternalHeroes();
