@@ -1899,7 +1899,7 @@ async function loadExternalHeroes() {
 
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
-  const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","counterpicks","esports","hero"];
+  const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","esports","hero"];
   const page = requestedPage && pageIds.includes(requestedPage) ? requestedPage : null;
   const visibleSection = page === "hero" ? "hero-detail" : page === "talents" ? "talentLab" : page;
 
@@ -1927,7 +1927,6 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     builds: "Сборки",
     favorites: "Избранное",
     guides: "Комбо и гайды",
-    counterpicks: "Контрпики",
     esports: "Киберспорт",
     hero: "Профиль героя"
   };
@@ -2127,7 +2126,6 @@ function init() {
     renderPerks();
   });
 
-  $("counterBtn").addEventListener("click",showCounterpick);
   $("favHeroesTab").addEventListener("click",()=>{
     favoriteTab = "heroes";
     renderFavorites();
