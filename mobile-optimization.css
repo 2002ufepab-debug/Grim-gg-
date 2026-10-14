@@ -1038,3 +1038,35 @@
   transform: scale(1.08) !important;
   transform-origin: center 38% !important;
 }
+
+/* GRIM_GG FIX: the general :has() image-normalization rule above used
+   transform:none!important, which silently cancelled every earlier hero zoom.
+   These higher-specificity rules run last, so the intended character framing
+   is finally applied without changing the size of the shared card/frame. */
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Aamon"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Alpha"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Alucard"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Argus"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Atlas"]) .hero-image {
+  transform: scale(1.18) !important;
+  transform-origin: center 36% !important;
+}
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Arlott"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Beatrix"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Benedetta"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Carmilla"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Cecilion"]) .hero-image {
+  transform: scale(1.2) !important;
+  transform-origin: center 36% !important;
+}
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Badang"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Bane"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Bruno"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Chip"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Chou"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Cici"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Cyclops"]) .hero-image,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image[alt="Khufra"]) .hero-image {
+  transform: scale(1.14) !important;
+  transform-origin: center 38% !important;
+}
