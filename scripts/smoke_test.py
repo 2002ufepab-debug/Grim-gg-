@@ -126,17 +126,17 @@ require(".hero-grid .hero-card-actions { grid-template-columns: repeat(2, minmax
 # can silently overwrite mappings or create broken images despite valid JavaScript syntax.
 for catalog_name in ("HERO_HD_IMAGE_FILES", "HERO_SPLASH_ART_OVERRIDES"):
     match = re.search(
-        rf"const\\s+{catalog_name}\\s*=\\s*\\{{(.*?)^\\}};",
+        rf"const\s+{catalog_name}\s*=\s*\{{(.*?)^\}};",
         script,
         re.MULTILINE | re.DOTALL,
     )
     require(match is not None, f"Missing hero image catalog: {catalog_name}")
     if match:
         body = match.group(1)
-        keys = re.findall(r"""["']([^"']+)["']\\s*:""", body)
+        keys = re.findall(r"""["']([^"']+)["']\s*:""", body)
         require(len(keys) == len(set(keys)),
                 f"{catalog_name} contains duplicate keys that overwrite earlier images")
-        values = re.findall(r"""["']([^"']+)["']\\s*:\\s*["']([^"']+)["']""", body)
+        values = re.findall(r"""["']([^"']+)["']\s*:\s*["']([^"']+)["']""", body)
         require(bool(values), f"{catalog_name} contains no image mappings")
         for key, path in values:
             require(bool(key.strip()), f"{catalog_name} contains an empty hero key")
