@@ -280,6 +280,12 @@ if static_items_match:
 else:
     require(False, "Could not locate the built-in item catalog for build validation")
 
+# The base Retribution spell uses a local SVG so it remains visible even when the remote
+# equipment icon CDN has no matching asset.
+require((ROOT / "assets" / "retribution.svg").is_file()
+        and 'new URL("assets/retribution.svg", window.location.href).href' in script,
+        "Retribution must retain its local fallback icon asset")
+
 # The latest hero additions with verified art in the splash repository must not fall back
 # to low-resolution catalog thumbnails.
 require('"chip": "Chip/Nexus Engineer.png"' in script
