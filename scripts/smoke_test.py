@@ -26,6 +26,27 @@ for asset in ("styles.css", "talents.css", "layout-wide.css", "script.js", "tale
     require(any(f"{asset}?v=" in line for line in html.splitlines()),
             f"index.html must load {asset} with a versioned cache key")
 
+# Validate navigation anchors and direct JavaScript DOM lookups against the static HTML.
+id_set = set(re.findall(r"""\\bid=["']([^"']+)["']""", html))
+hash_targets = re.findall(r"""\\bhref=["']#([^"']+)["']""", html)
+require(all(target in id_set for target in hash_targets),
+        "index.html contains an in-page link whose target ID does not exist")
+direct_dom_ids = set(re.findall(r"""\\$\\(["']([^"']+)["']\\)""", script))
+require(direct_dom_ids.issubset(id_set),
+        "script.js directly selects an element ID that is missing from index.html: "
+        + ", ".join(sorted(direct_dom_ids - id_set)))
+local_asset_refs = [
+    ref for ref in re.findall(r"""\\b(?:src|href)=["']([^"']+)["']""", html)
+    if ref and not re.match(r"^(?:https?:|mailto:|tel:|data:|javascript:|#|\\?)", ref)
+    and re.search(r"\\.(?:js|css|json|svg|png|jpe?g|webp|ico)(?:\\?|$)", ref, re.I)
+]
+missing_local_assets = [
+    ref for ref in local_asset_refs
+    if not (ROOT / ref.split("?", 1)[0].lstrip("/")).is_file()
+]
+require(not missing_local_assets,
+        "index.html references local assets that do not exist: " + ", ".join(missing_local_assets))
+
 # Catch duplicate static IDs and accidentally unbalanced CSS before publishing.
 static_ids = re.findall(r"""\bid=["']([^"']+)["']""", html)
 require(len(static_ids) == len(set(static_ids)), "index.html contains duplicate element IDs")
