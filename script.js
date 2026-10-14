@@ -910,8 +910,6 @@ function renderHeroes() {
       <div class="hero-image-wrap">
         <button type="button" class="hero-image-open" data-open-hero="${escapeHTML(id)}" aria-label="Открыть профиль героя ${escapeHTML(hero.name)}">
           ${heroImageMarkup(hero)}
-          <span class="hero-id">HERO / ${escapeHTML(id)}</span>
-          <span class="hero-image-hint">Открыть профиль ↗</span>
         </button>
       </div>
       <div class="hero-card-content">
