@@ -1,0 +1,32 @@
+name: Grim_gg Lighthouse audit
+
+on:
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: "17 9 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: grim-gg-lighthouse-audit
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Audit the published site
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Run Lighthouse against GitHub Pages
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://2002ufepab-debug.github.io/Grim-gg-/
+          uploadArtifacts: true
+          temporaryPublicStorage: true
