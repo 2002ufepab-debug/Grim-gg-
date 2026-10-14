@@ -246,12 +246,6 @@
     "logo-equipment": "flask_of_the_oasis.png"
   },
   {
-    "id_equip": 42,
-    "name-equipment": "Fleeting Time",
-    "prize-gold": 2050,
-    "logo-equipment": "fleeting_time.png"
-  },
-  {
     "id_equip": 43,
     "name-equipment": "Genius Wand",
     "prize-gold": 2000,
@@ -282,22 +276,10 @@
     "logo-equipment": "lightning_truncheon.png"
   },
   {
-    "id_equip": 48,
-    "name-equipment": "Sky Piercer",
-    "prize-gold": 1500,
-    "logo-equipment": "sky_piercer.png"
-  },
-  {
     "id_equip": 49,
     "name-equipment": "Starlium Scythe",
     "prize-gold": 2220,
     "logo-equipment": "starlium_scythe.png"
-  },
-  {
-    "id_equip": 50,
-    "name-equipment": "Winter Crown",
-    "prize-gold": 1910,
-    "logo-equipment": "winter_crown.png"
   },
   {
     "id_equip": 51,
@@ -340,12 +322,6 @@
     "name-equipment": "Book of Sages",
     "prize-gold": 450,
     "logo-equipment": "book_of_sages.png"
-  },
-  {
-    "id_equip": 58,
-    "name-equipment": "Expert Gloves",
-    "prize-gold": 500,
-    "logo-equipment": "expert_gloves.png"
   },
   {
     "id_equip": 59,
@@ -430,12 +406,6 @@
     "name-equipment": "Dominance Ice",
     "prize-gold": 2010,
     "logo-equipment": "dominance_ice.png"
-  },
-  {
-    "id_equip": 73,
-    "name-equipment": "Fleeting Time",
-    "prize-gold": 2050,
-    "logo-equipment": "fleeting_time.png"
   },
   {
     "id_equip": 74,
