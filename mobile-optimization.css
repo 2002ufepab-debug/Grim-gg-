@@ -911,3 +911,14 @@
   object-position: center 28% !important;
   transform: scale(1.08) !important;
 }
+
+
+/* Aamon's full-body splash art is taller than the circular viewport.
+   Show the complete artwork instead of zooming/cropping his body. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"] {
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+}
