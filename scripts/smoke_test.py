@@ -215,6 +215,8 @@ require('let itemDataSource = "static";' in script
         "Item count must disclose local fallback while retaining the active filter count")
 require('renderItems();\n    renderPerks();\n    renderBuilds();\n    renderFavorites();\n    // renderItems() owns the visible count' in script,
         "Catalog refresh must not overwrite the active item-filter count")
+require(not (ROOT / "section-tabs.js").exists() and "section-tabs.js" not in html,
+        "Obsolete hash-based section router must not be reintroduced")
 require("контрпик" not in html.lower(),
         "Page metadata must not advertise the removed counterpick section")
 require("AbortController" in script and "window.setTimeout(() => controller.abort(), 7000)" in script,
