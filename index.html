@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="styles.css?v=57">
   <link rel="stylesheet" href="talents.css?v=10">
   <link rel="stylesheet" href="layout-wide.css?v=17">
+  <link rel="stylesheet" href="visual-refresh.css?v=1">
   <script src="script.js?v=76" defer></script>
   <script src="talents.js?v=22" defer></script>
 </head>
@@ -60,6 +61,7 @@
     <nav class="hero-shortcuts" aria-label="Быстрый доступ к разделам">
       <a href="?page=heroes"><span class="shortcut-icon" aria-hidden="true">◈</span> Герои <span aria-hidden="true">↗</span></a>
       <a href="?page=builds"><span class="shortcut-icon" aria-hidden="true">⚔</span> Сборки <span aria-hidden="true">↗</span></a>
+      <a href="?page=talents"><span class="shortcut-icon" aria-hidden="true">✦</span> Таланты <span aria-hidden="true">↗</span></a>
     </nav>
     <div class="hero-stats">
       <div><strong>01</strong><span>Изучи героев</span></div>
@@ -67,13 +69,15 @@
       <div><strong>03</strong><span>Продумай тактику</span></div>
     </div>
   </div>
-  <div class="hero-art" aria-hidden="true">
-    <div class="art-ring ring-one"></div>
-    <div class="art-ring ring-two"></div>
-    <div class="art-cross">✕</div>
-    <div class="art-core">G<span>_GG</span></div>
-    <div class="art-label label-top">TACTICAL DATABASE /// 001</div>
-    <div class="art-label label-bottom">WIN WITH A PLAN</div>
+  <div class="hero-art hero-feature" aria-label="Герой недели — Клинт, стрелок Gold Lane">
+    <div class="hero-feature-topline"><span>HERO SPOTLIGHT / 001</span><span>GOLD LANE</span></div>
+    <img class="hero-feature-image" src="https://raw.githubusercontent.com/Lara3924/Lara_Image/main/Clint%20-%20Hero131.png" alt="Клинт из Mobile Legends" fetchpriority="high" decoding="async">
+    <div class="hero-feature-panel">
+      <div class="hero-feature-label">MARKSMAN / CRITICAL DAMAGE</div>
+      <div class="hero-feature-name">CLINT</div>
+      <div class="hero-feature-meta"><span>Критический урон</span><span>Агрессивный стиль</span></div>
+      <a class="hero-feature-link" href="?page=builds">СМОТРЕТЬ СБОРКИ <span aria-hidden="true">↗</span></a>
+    </div>
   </div>
   <div class="hero-bottom-line"><span>МЕНЬШЕ СЛУЧАЙНОСТИ — БОЛЬШЕ ТАКТИКИ</span><a href="?page=heroes">ИССЛЕДОВАТЬ ↓</a></div>
 </section>
