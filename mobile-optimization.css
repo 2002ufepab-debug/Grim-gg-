@@ -493,6 +493,34 @@
   .hero-profile-jump-links a { flex-basis: 135px; min-height: 44px; padding: 9px 7px; font-size: 11px; }
   #heroDetailPage .hero-detail-section { padding: 13px; }
 
+  /* Keep the two match-preparation actions prominent and the guide link quieter. */
+  .hero-profile-jump-links { gap: 7px; }
+  .hero-profile-jump-links .hero-profile-jump-primary {
+    flex: 1 1 calc(50% - 7px);
+    min-width: 0;
+    min-height: 48px;
+    padding: 9px 8px;
+    background: linear-gradient(145deg, #351923, #21131a);
+    border-color: #754052;
+    font-size: 12px;
+  }
+  .hero-profile-jump-links .hero-profile-jump-secondary {
+    flex: 1 1 100%;
+    min-height: 36px;
+    padding: 6px 9px;
+    color: #d9cbd3;
+    background: #171219;
+    border-color: #392837;
+    font-size: 10px;
+  }
+  .hero-profile-jump-links .hero-profile-jump-secondary span { font-size: 12px; }
+  #heroDetailPage .hero-detail-copy h2 { margin-top: 7px; margin-bottom: 5px; }
+  #heroDetailPage .hero-detail-copy .hero-tags { margin: 8px 0 10px; }
+  #heroDetailPage .hero-detail-actions { gap: 6px; }
+  #heroDetailPage .hero-detail-actions .btn,
+  #heroDetailPage .hero-detail-actions .favorite-btn { min-height: 38px; }
+  #heroDetailPage .hero-detail-section { margin-top: 10px; }
+
   /* Put the useful match setup first on phones; the large artwork follows it. */
   #heroDetailPage {
     display: grid;
@@ -505,7 +533,7 @@
   #heroDetailPage .hero-profile-jump-links { order: 2; }
   #heroDetailPage .hero-build-inline { order: 3; }
   #heroDetailPage .hero-talents-section { order: 4; }
-  #heroDetailPage .hero-detail-art { order: 5; height: 230px; margin-top: 14px; }
+  #heroDetailPage .hero-detail-art { order: 5; height: 190px; margin-top: 10px; }
   #heroDetailPage #profile-hero-skills { order: 6; }
   #heroDetailPage .hero-detail-tip-bottom { order: 7; }
 }

@@ -959,9 +959,9 @@ function renderHeroDetailContent(hero, target) {
   </div>`;
   const profileQuickNav = target.id === "heroDetailPage" ? `
     <nav class="hero-profile-jump-links" aria-label="Быстрый переход по профилю героя">
-      <a href="#profile-hero-build"><span aria-hidden="true">⚔</span> Сборка предметов</a>
-      <a href="#profile-hero-talents"><span aria-hidden="true">✦</span> Таланты и эмблема</a>
-      <a href="#profile-hero-skills"><span aria-hidden="true">⌁</span> Навыки и комбо</a>
+      <a class="hero-profile-jump-primary" href="#profile-hero-build"><span aria-hidden="true">⚔</span> Сборка</a>
+      <a class="hero-profile-jump-primary" href="#profile-hero-talents"><span aria-hidden="true">✦</span> Эмблема и таланты</a>
+      <a class="hero-profile-jump-secondary" href="#profile-hero-skills"><span aria-hidden="true">⌁</span> Навыки и комбо</a>
     </nav>` : "";
   target.innerHTML = `
     <div class="hero-detail-layout">
