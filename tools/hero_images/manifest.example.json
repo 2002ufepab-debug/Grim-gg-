@@ -1,0 +1,19 @@
+{
+  "canvas": {
+    "width": 600,
+    "height": 800,
+    "format": "WEBP",
+    "quality": 90
+  },
+  "heroes": [
+    {
+      "hero": "Clint",
+      "source": "clint-approved-source.png",
+      "output": "clint.webp",
+      "type": "transparent",
+      "scale": 1.0,
+      "focal_x": 0.5,
+      "focal_y": 0.5
+    }
+  ]
+}
