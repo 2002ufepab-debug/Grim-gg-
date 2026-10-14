@@ -1085,7 +1085,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = vectorIcon || (iconSource
-      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : ""))}" data-fallback="${escapeHTML(fallbackIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(ITEM_IMAGE_BASE + (iconSlug ? iconSlug + ".png" : ""))}" data-fallback="${escapeHTML(fallbackIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
       : fallbackIcon);
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
