@@ -87,7 +87,10 @@
     line-height: 1.3;
     white-space: nowrap;
   }
-  #main-content .hero-grid,
+  #main-content .hero-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px;
+  }
   #main-content .item-grid,
   #main-content .tier-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -124,7 +127,7 @@
   #main-content > section:not(.hero-section) { padding-inline: 12px !important; }
   .home-lane-grid { grid-template-columns: minmax(0,1fr); }
   .home-lane-wide { grid-column: auto; }
-  #main-content .hero-grid,
+  #main-content .hero-grid { gap: 6px; }
   #main-content .item-grid,
   #main-content .tier-grid { gap: 8px; }
   #main-content .hero-card-content,
