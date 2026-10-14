@@ -63,10 +63,11 @@ try {
   const hubText = await hub.innerText();
   check("Homepage shows all five lanes", await page.locator(".home-lane-card").count() === 5
     && ["EXP Lane", "Jungle", "Mid Lane", "Gold Lane", "Roam"].every(name => hubText.includes(name)));
-  check("Homepage links to combined builds/talents and full hero catalogue",
-    await page.locator(".home-feature-link[href='?page=builds']").count() === 1
-    && await page.locator(".home-feature-link[href='?page=builds#talentLab']").count() === 1
-    && await page.locator(".home-all-heroes[href='?page=heroes']").count() === 1);
+  check("Homepage sends build/talent discovery through the hero catalogue",
+    await page.locator(".home-feature-link[href='?page=heroes']").count() === 1
+    && await page.locator(".home-feature-link[href='?page=guides']").count() === 1
+    && await page.locator(".home-all-heroes[href='?page=heroes']").count() === 1
+    && await page.locator("#nav a[href='?page=builds']").count() === 0);
 
   // New Premium Dark Esports quick search: a Russian alias should narrow results to one hero,
   // and choosing that result must open the correct profile.
@@ -147,6 +148,16 @@ try {
     && await page.locator("#heroGrid .hero-card").count() === 1
     && /clint/i.test(heroGridAfter),
     "searching for Клинт should return the Clint hero card");
+  await page.locator("#heroGrid .hero-image-open").click();
+  await page.locator("#hero-detail").waitFor({ state: "visible", timeout: 20000 });
+  await page.locator("#profile-hero-build").waitFor({ state: "visible", timeout: 10000 });
+  await page.locator("#profile-hero-talents").waitFor({ state: "visible", timeout: 10000 });
+  check("Tapping a hero opens one profile with build and talents together",
+    new URL(page.url()).searchParams.get("page") === "hero"
+    && /Клинт/i.test(await page.locator("#heroDetailPage").innerText())
+    && await page.locator("#profile-hero-build").isVisible()
+    && await page.locator("#profile-hero-talents").isVisible()
+    && await page.locator(".hero-profile-jump-links a").count() === 3);
 
   await page.goto(BASE_URL + "?page=items", { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.locator("#itemGrid").waitFor({ state: "visible", timeout: 20000 });
@@ -193,8 +204,8 @@ try {
   await menuToggle.click();
   check("Mobile menu opens accessibly", await menuToggle.getAttribute("aria-expanded") === "true"
     && await page.locator("#nav").evaluate(node => node.classList.contains("open")));
-  await page.locator("#nav a[href='?page=builds']").click();
-  await page.locator("#talentLab").waitFor({ state: "visible", timeout: 20000 });
+  await page.locator("#nav a[href='?page=heroes']").click();
+  await page.locator("#heroes").waitFor({ state: "visible", timeout: 20000 });
   check("Mobile navigation closes after selection", await menuToggle.getAttribute("aria-expanded") === "false"
     && !(await page.locator("#nav").evaluate(node => node.classList.contains("open"))));
 

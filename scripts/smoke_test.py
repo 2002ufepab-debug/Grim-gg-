@@ -62,8 +62,11 @@ for stylesheet_name, stylesheet in (
 for section_id in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "esports"):
     require(f'id="{section_id}"' in html, f"Missing core section #{section_id}")
 
-require('href="?page=builds">Сборки и таланты</a>' in html and 'href="?page=builds#talentLab"' in html,
-        "Combined Builds + Talents workspace must be reachable from navigation and homepage")
+require('href="?page=builds">Сборки и таланты</a>' not in html
+        and 'href="?page=builds#talentLab"' not in html
+        and 'href="?page=heroes">Герои</a>' in html
+        and 'Сборка и таланты героя' in html,
+        "Builds and talents should be opened from each hero profile, not a separate navigation tab")
 require('href="favicon.svg"' in html, "Main page favicon reference is missing")
 require('id="counterpicks"' not in html and 'href="?page=counterpicks"' not in html,
         "Removed counterpick section must not reappear in the page or navigation")
@@ -77,8 +80,13 @@ require('window.location.replace("/Grim-gg-/")' in (ROOT / "404.html").read_text
         "404 JavaScript redirect must use the correct GitHub Pages project path")
 require('href="/Grim-gg-/"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 fallback link must use the correct GitHub Pages project path")
-for route in ("home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "esports"):
+for route in ("home", "heroes", "tierlist", "items", "perks", "favorites", "guides", "esports"):
     require(f'href="?page={route}"' in html, f"Main navigation is missing route ?page={route}")
+require('data-open-hero-full="${escapeHTML(hero.name)}"' in script
+        and 'id="${profilePrefix}-hero-build"' in script
+        and 'id="${profilePrefix}-hero-talents"' in script
+        and 'id="${profilePrefix}-hero-skills"' in script,
+        "Hero cards must open a profile that groups build, talents and skills in one place")
 require('requestedPage === "talents" ? "builds"' in script,
         "Legacy talent links must route to the combined Builds + Talents workspace")
 
@@ -384,4 +392,4 @@ if errors:
     raise SystemExit(1)
 
 print("GRIM_GG SMOKE TEST: PASS")
-print("Checked core sections, talent routing/controls, local asset references and esports feed.")
+print("Checked core sections, hero profile build/talent navigation, local asset references and esports feed.")

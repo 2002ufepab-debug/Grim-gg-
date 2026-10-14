@@ -913,13 +913,14 @@ function renderHeroDetailContent(hero, target) {
   const roles = getHeroClasses(hero);
   const tip = heroTips[hero.name] || "Учитывай дальность навыков, следи за мини-картой и подстраивай тактику под состав команды соперника.";
   const headingId = target.id === "heroDetailModalContent" ? "heroDetailModalTitle" : "heroDetailPageTitle";
+  const profilePrefix = target.id === "heroDetailModalContent" ? "modal" : "profile";
   const build = getHeroBuild(hero.name, roles);
   const buildRows = build.items.map((name,index)=>{
     const item = items.find(entry=>entry.name===name);
     const iconSlug = item ? itemIconSlug(item.name) : null;
     const iconUrl = item && item.imageFile ? ITEM_IMAGE_BASE + item.imageFile : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const icon = iconUrl ? `<img class="build-item-icon" src="${escapeHTML(iconUrl)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'build-item-icon-fallback',textContent:'⚔'}))">` : '<span class="build-item-icon-fallback">⚔</span>';
-    return `<div class="build-item-row">${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
+    return `<div class="build-item-row"><span class="hero-build-order">0${index+1}</span>${icon}<div><strong>${escapeHTML(item?item.ru:name)}</strong><span>${escapeHTML(item?item.stats:"Проверь предмет в актуальной версии игры.")}</span></div></div>`;
   }).join("");
   const talentRoleDefaults = {
     "Убийца": "Приоритет: физический урон и пробивание; дополнительный талант — под быстрое устранение тонких целей. Для леса выбирай настройки, усиливающие темп фарма и ранние ганги.",
@@ -936,7 +937,7 @@ function renderHeroDetailContent(hero, target) {
   const talentCards = talentPreset.talents.length
     ? talentPreset.talents.map((talent,index)=>`<article class="hero-talent-pick"><span class="hero-talent-pick-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][index] || "ТАЛАНТ"}</span><div class="hero-talent-pick-icon" aria-hidden="true">${talentIconMarkupForBuild(talent[1],index)}</div><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("")
     : `<p>${escapeHTML(talentText)}</p>`;
-  const talentSection = `<div class="hero-detail-section hero-talents-section">
+  const talentSection = `<div id="${profilePrefix}-hero-talents" class="hero-detail-section hero-talents-section">
     <span class="eyebrow">GRIM_GG / EMBLEM & TALENTS</span>
     <h3>Эмблема, таланты и боевой навык</h3>
     <div class="hero-talent-grid">
@@ -948,20 +949,23 @@ function renderHeroDetailContent(hero, target) {
   </div>`;
   const combo = comboGuides.find(entry => String(entry.key || entry.hero).toLocaleLowerCase() === String(hero.name).toLocaleLowerCase());
   const skillsSection = combo
-    ? `<div class="hero-detail-section"><h3>Навыки и комбо</h3><p class="fine-print">Комбо: ${combo.skills.map(escapeHTML).join(" → ")}</p><ol class="hero-skill-steps">${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><p>${escapeHTML(combo.tip)}</p></div>`
-    : `<div class="hero-detail-section"><h3>Навыки героя</h3><p class="fine-print">Подробные описания навыков этого героя ещё не подключены к справочнику. Не показываем выдуманные данные.</p><a class="btn btn-ghost" href="?page=guides">Открыть комбо и гайды ↗</a></div>`;
-  const buildSection = `<div class="hero-detail-section hero-build-inline">
+    ? `<div id="${profilePrefix}-hero-skills" class="hero-detail-section"><h3>Навыки и комбо</h3><p class="fine-print">Комбо: ${combo.skills.map(escapeHTML).join(" → ")}</p><ol class="hero-skill-steps">${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><p>${escapeHTML(combo.tip)}</p></div>`
+    : `<div id="${profilePrefix}-hero-skills" class="hero-detail-section"><h3>Навыки героя</h3><p class="fine-print">Подробные описания навыков этого героя ещё не подключены к справочнику. Не показываем выдуманные данные.</p><a class="btn btn-ghost" href="?page=guides">Открыть комбо и гайды ↗</a></div>`;
+  const buildSection = `<div id="${profilePrefix}-hero-build" class="hero-detail-section hero-build-inline">
     <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
     <div class="build-item-list">${buildRows}</div>
     <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
     <button type="button" class="btn btn-red" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(roles.join(","))}">Другие варианты сборки ↗</button>
   </div>`;
+  const profileQuickNav = target.id === "heroDetailPage" ? `
+    <nav class="hero-profile-jump-links" aria-label="Быстрый переход по профилю героя">
+      <a href="#profile-hero-build"><span aria-hidden="true">⚔</span> Сборка предметов</a>
+      <a href="#profile-hero-talents"><span aria-hidden="true">✦</span> Таланты и эмблема</a>
+      <a href="#profile-hero-skills"><span aria-hidden="true">⌁</span> Навыки и комбо</a>
+    </nav>` : "";
   target.innerHTML = `
     <div class="hero-detail-layout">
-      <div class="hero-detail-left">
-        <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
-        ${buildSection}
-      </div>
+      <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
       <div class="hero-detail-copy">
         <span class="eyebrow">GRIM_GG / HERO PROFILE</span>
         <h2 id="${headingId}">${escapeHTML(hero.name)}</h2>
@@ -969,14 +973,15 @@ function renderHeroDetailContent(hero, target) {
         <div class="hero-tags">${roles.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <div class="hero-detail-actions">
           ${favoriteButton("hero",String(hero.id),favoriteHeroes.has(String(hero.id)))}
-          <button type="button" class="btn btn-ghost" data-open-hero-full="${escapeHTML(hero.name)}">Полная страница ↗</button>
           <a class="btn btn-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель ↗</a>
           <a class="btn btn-ghost" href="?page=guides">Комбо и гайды ↗</a>
         </div>
       </div>
     </div>
-    ${skillsSection}
+    ${profileQuickNav}
+    ${buildSection}
     ${talentSection}
+    ${skillsSection}
     <div class="hero-detail-section hero-detail-tip hero-detail-tip-bottom"><strong>Совет Grim_gg</strong><p>${escapeHTML(tip)}</p></div>`;
 }
 
@@ -1085,16 +1090,16 @@ function renderHeroes() {
 
     return `<article class="hero-card">
       <div class="hero-image-wrap">
-        <button type="button" class="hero-image-open" data-open-hero="${escapeHTML(id)}" aria-label="Открыть профиль героя ${escapeHTML(hero.name)}">
+        <button type="button" class="hero-image-open" data-open-hero-full="${escapeHTML(hero.name)}" aria-label="Открыть сборку и таланты героя ${escapeHTML(hero.name)}">
           ${heroImageMarkup(hero)}
         </button>
       </div>
       <div class="hero-card-content">
-        <h3><button type="button" class="hero-name-open" data-open-hero="${escapeHTML(id)}">${escapeHTML(hero.name)}</button></h3>
+        <h3><button type="button" class="hero-name-open" data-open-hero-full="${escapeHTML(hero.name)}">${escapeHTML(hero.name)}</button></h3>
         <p class="hero-role">${escapeHTML(hero.role || getHeroClasses(hero).join(" / "))}</p>
         <div class="hero-tags">${heroClasses.map(role=>`<span>${escapeHTML(role)}</span>`).join("")}</div>
         <div class="hero-card-actions">
-          <button type="button" class="btn btn-red hero-build-btn" data-open-build="${escapeHTML(hero.name)}" data-build-roles="${escapeHTML(heroClasses.join(","))}">Сборка ↗</button>
+          <button type="button" class="btn btn-red hero-build-btn" data-open-hero-full="${escapeHTML(hero.name)}">Сборка и таланты ↗</button>
           <a class="btn btn-3d hero-card-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель</a>
         </div>
         <details><summary>Игровой совет ↗</summary><p>${escapeHTML(tip)}</p></details>

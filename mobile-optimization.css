@@ -428,3 +428,68 @@
   .build-hero-avatar-art { width: 54px; height: 58px; }
   #main-content .talent-lab { padding: 28px 12px; }
 }
+
+
+/* Hero profile: one clear destination for equipment, talents and skills. */
+.hero-profile-jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  max-width: 980px;
+  margin: 16px auto 2px;
+}
+.hero-profile-jump-links a {
+  display: flex;
+  flex: 1 1 155px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 10px 12px;
+  color: #f4e8ef;
+  background: linear-gradient(145deg, #251720, #171218);
+  border: 1px solid #523040;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+.hero-profile-jump-links a span { color: #ff7b8b; font-size: 15px; }
+.hero-profile-jump-links a:hover,
+.hero-profile-jump-links a:focus-visible {
+  border-color: #ff3048;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255,48,72,.15);
+}
+#heroDetailPage .hero-detail-section {
+  max-width: 980px;
+  margin-right: auto;
+  margin-left: auto;
+  scroll-margin-top: 18px;
+}
+#heroDetailPage .hero-detail-layout { margin-bottom: 0; }
+.hero-build-inline .build-item-row { position: relative; }
+.hero-build-order {
+  align-self: flex-start;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  min-height: 19px;
+  padding: 2px 5px;
+  color: #ffb3c0;
+  background: #35141e;
+  border: 1px solid #713042;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+}
+.hero-build-inline .build-item-row > div > span { display: none; }
+@media (max-width: 650px) {
+  .hero-profile-jump-links { gap: 7px; margin-top: 12px; }
+  .hero-profile-jump-links a { flex-basis: 135px; min-height: 44px; padding: 9px 7px; font-size: 11px; }
+  #heroDetailPage .hero-detail-section { padding: 13px; }
+}
