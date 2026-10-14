@@ -153,19 +153,109 @@ const HERO_HD_IMAGE_FILES = {
   "zilong": "Zilong - Hero161.png"
 };
 const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]/g, "");
-// Small quality pilot: original-resolution base-skin splash art for five heroes.
-// Keep the existing portrait source as a fallback if an external art URL fails.
+// Original-resolution hero splash artwork, optimized to responsive WebP for faster loading.
+// Each source path was checked against the image repository; the portrait set remains the fallback.
 const HERO_SPLASH_ART_OVERRIDES = {
-  "aamon": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Aamon/Duke%20of%20Shards.png",
-  "layla": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Layla/Classic%20Malefic%20Gunner.png",
-  "miya": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Miya/Moonlight%20Archer.png",
-  "alucard": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Alucard/Demon%20Hunter.png",
-  "chou": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Chou/Kung%20Fu%20Boy.png",
-  "lesley": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Lesley/Deadly%20Sniper.png"
+  "aamon": "Aamon/Duke of Shards.png",
+  "alpha": "Alpha/Onimusha Commander.png",
+  "alucard": "Alucard/Demon Hunter.png",
+  "argus": "Argus/Dark Angel.png",
+  "atlas": "Atlas/Ocean Gladiator.png",
+  "badang": "Badang/Tribal Warrior.png",
+  "bane": "Bane/Frozen King.png",
+  "beatrix": "Beatrix/Dawnbreak Soldier.png",
+  "benedetta": "Benedetta/Death Oath.png",
+  "bruno": "Bruno/The Protector.png",
+  "carmilla": "Carmilla/Shadow of Twilight.png",
+  "cecilion": "Cecilion/Embrace of Night.png",
+  "chou": "Chou/Kung Fu Boy.png",
+  "claude": "Claude/Plunderous Pirate.png",
+  "cyclops": "Cyclops/Starsoul Magician.png",
+  "diggie": "Diggie/Circus Clown.png",
+  "dyrroth": "Dyrroth/Prince of the Abyss.png",
+  "edith": "Edith/Ancient Guard.png",
+  "esmeralda": "Esmeralda/Astrologer.png",
+  "estes": "Estes/White Crane.png",
+  "fanny": "Fanny/Blade Dancer.png",
+  "faramis": "Faramis/Soul Binder.png",
+  "floryn": "Floryn/Fluffy Dream.png",
+  "franco": "Franco/Apocalypse.png",
+  "fredrinn": "Fredrinn/Rogue Appraiser.png",
+  "freya": "Freya/Valkyrie.png",
+  "gatotkaca": "Gatotkaca/Mighty Legend.png",
+  "gloo": "Gloo/Verdant Enchanter.png",
+  "gord": "Gord/Professor of the Mystics.png",
+  "granger": "Granger/Death Chanter.png",
+  "grock": "Grock/Grave Guardian.png",
+  "guinevere": "Guinevere/Amethyst Dance.png",
+  "gusion": "Gusion/Holy Blade.png",
+  "hanabi": "Hanabi/Scarlet Flower.png",
+  "hayabusa": "Hayabusa/Shadow of Obscurity.png",
+  "helcurt": "Helcurt/Shadowbringer.png",
+  "hilda": "Hilda/Power of Wildness.png",
+  "hylos": "Hylos/Grand Warden.png",
+  "irithel": "Irithel/Jungle Heart.png",
+  "jawhead": "Jawhead/Steel Sweetheart.png",
+  "johnson": "Johnson/Wreck King.png",
+  "kadita": "Kadita/Ocean Goddess.png",
+  "kagura": "Kagura/Onmyouji Master.png",
+  "kaja": "Kaja/Skyblocker.png",
+  "karina": "Karina/Shadow Blade.png",
+  "karrie": "Karrie/Bladed Mantis.png",
+  "khaleed": "Khaleed/Desert Scimitar.png",
+  "khufra": "Khufra/Desert Tyrant.png",
+  "lapulapu": "Lapu-Lapu/Courageous Blade.png",
+  "layla": "Layla/Classic Malefic Gunner.png",
+  "leomord": "Leomord/Hell Knight.png",
+  "lesley": "Lesley/Deadly Sniper.png",
+  "ling": "Ling/Cyan Finch.png",
+  "lolita": "Lolita/Steel Elf.png",
+  "lunox": "Lunox/Twilight Goddess.png",
+  "luoyi": "Luo Yi/Yin-yang Geomancer.png",
+  "lylia": "Lylia/Little Witch.png",
+  "martis": "Martis/Ashura King.png",
+  "masha": "Masha/Wild-oats Fist.png",
+  "mathilda": "Mathilda/Swift Plume.png",
+  "melissa": "Melissa/Cursed Needle.png",
+  "minsitthar": "Minsitthar/King of War.png",
+  "miya": "Miya/Moonlight Archer.png",
+  "moskov": "Moskov/Spear of Quiescence.png",
+  "nana": "Nana/Sweet Leonin.png",
+  "natalia": "Natalia/Bright Claw.png",
+  "odette": "Odette/Swan Princess.png",
+  "pharsa": "Pharsa/Peony Bloom.png",
+  "phoveus": "Phoveus/Chains of Sin.png",
+  "rafaela": "Rafaela/Flower Fairy.png",
+  "roger": "Roger/Dire Wolf Hunter.png",
+  "ruby": "Ruby/Cat Girl.png",
+  "saber": "Saber/Force Warrior.png",
+  "silvanna": "Silvanna/Imperial Knightess.png",
+  "sun": "Sun/Monkey King.png",
+  "terizla": "Terizla/Abyss Guard.png",
+  "thamuz": "Thamuz/Lord Lava.png",
+  "tigreal": "Tigreal/Warrior of Dawn.png",
+  "uranus": "Uranus/Celestial Bastion.png",
+  "vale": "Vale/Cerulean Winds.png",
+  "valentina": "Valentina/Archmagister.png",
+  "vexana": "Vexana/Shimmer of Hope.png",
+  "wanwan": "Wanwan/Agile Tiger.png",
+  "xavier": "Xavier/Defier of Light.png",
+  "yin": "Yin/Martial Genius.png",
+  "yisunshin": "Yi Sun-shin/Fleet Warden.png",
+  "yuzhong": "Yu Zhong/Black Dragon.png",
+  "yve": "Yve/Astrowarden.png",
+  "zilong": "Zilong/Eastern Warrior.png"
+};
+const heroSplashImageUrl = path => {
+  const source = "raw.githubusercontent.com/Sparkies01/Splash/main/" +
+    String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
+  return "https://images.weserv.nl/?url=" + encodeURIComponent(source) +
+    "&w=640&h=900&fit=contain&output=webp&q=82";
 };
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
-  if (HERO_SPLASH_ART_OVERRIDES[key]) return HERO_SPLASH_ART_OVERRIDES[key];
+  const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
+  if (splashPath) return heroSplashImageUrl(splashPath);
   const file = HERO_HD_IMAGE_FILES[key];
   return file ? "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(file) : "";
 };
