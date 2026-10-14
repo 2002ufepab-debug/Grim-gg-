@@ -1364,10 +1364,10 @@
   transform-origin: center 22% !important;
 }
 
-/* GRIM_GG emergency image-layout repair (2026-10-15).
-   Previous patches repeatedly overrode each other: cover + transform zoom
-   followed contain rules, while mobile also forced a square frame. This final
-   rule set is intentionally simple: stable portrait frame, no zoom/cropping. */
+
+/* GRIM_GG circular avatar repair (2026-10-15).
+   One circular frame for every hero; cover fills the circle without extra zoom.
+   Position portrait art toward the face/upper body to avoid the old double-crop. */
 #main-content .hero-grid .hero-image-wrap,
 #heroGrid.hero-grid .hero-image-wrap,
 #favoritesGrid.hero-grid .hero-image-wrap {
@@ -1375,10 +1375,11 @@
   display: block !important;
   width: 100% !important;
   height: auto !important;
-  aspect-ratio: 3 / 4 !important;
+  aspect-ratio: 1 / 1 !important;
   min-width: 0 !important;
   min-height: 0 !important;
   overflow: hidden !important;
+  border-radius: 50% !important;
   box-sizing: border-box !important;
 }
 #main-content .hero-grid .hero-image-open,
@@ -1387,36 +1388,38 @@
   position: absolute !important;
   inset: 0 !important;
   display: flex !important;
-  align-items: flex-end !important;
+  align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
   height: 100% !important;
   padding: 0 !important;
   overflow: hidden !important;
+  border-radius: 50% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image,
 #heroGrid.hero-grid .hero-image-wrap .hero-image,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image {
   display: block !important;
-  flex: 0 1 auto !important;
+  flex: 0 0 100% !important;
   width: 100% !important;
   height: 100% !important;
   max-width: 100% !important;
   max-height: 100% !important;
   min-width: 0 !important;
   min-height: 0 !important;
-  padding: 2px 0 0 !important;
+  padding: 0 !important;
   box-sizing: border-box !important;
-  object-fit: contain !important;
-  object-position: center bottom !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
   transform: none !important;
   transform-origin: center center !important;
+  border-radius: 50% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image--splash,
 #heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
-  object-fit: contain !important;
-  object-position: center center !important;
+  object-fit: cover !important;
+  object-position: center 18% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
 #heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
@@ -1435,14 +1438,21 @@
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Angela"] {
   transform: none !important;
 }
+.build-hero-avatar-art {
+  border-radius: 50% !important;
+  overflow: hidden !important;
+}
 .build-hero-avatar-art .hero-image--avatar,
 .build-hero-avatar-art .hero-image--portrait,
 .build-hero-avatar-art .hero-image--splash {
+  width: 100% !important;
+  height: 100% !important;
   max-width: 100% !important;
   max-height: 100% !important;
-  object-fit: contain !important;
-  object-position: center center !important;
+  object-fit: cover !important;
+  object-position: center 20% !important;
   transform: none !important;
+  border-radius: 50% !important;
 }
 @media (max-width: 650px) {
   #main-content .hero-grid,
@@ -1456,6 +1466,7 @@
     width: 100% !important;
     max-width: none !important;
     height: auto !important;
-    aspect-ratio: 3 / 4 !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
   }
 }
