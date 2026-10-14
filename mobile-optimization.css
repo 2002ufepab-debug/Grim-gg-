@@ -886,39 +886,31 @@
 }
 
 
-/* Normalize perceived character size inside the shared circular hero viewport.
-   Source files mix full splash art, tall transparent renders, and square avatars. */
+/* Consistent image fitting for every hero in the circular catalog.
+   Avoid per-source zoom multipliers: they made some heroes oversized and others tiny.
+   Tall transparent character renders use contain; splash art and square avatars fill the circle. */
 #main-content .hero-grid .hero-image-wrap .hero-image,
 #heroGrid.hero-grid .hero-image-wrap .hero-image,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image {
-  transform-origin: center 30% !important;
+  transform: none !important;
+  transform-origin: center center !important;
+  object-position: center 24% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image--splash,
 #heroGrid.hero-grid .hero-image-wrap .hero-image--splash,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image--splash {
-  object-position: center 18% !important;
-  transform: scale(1.02) !important;
+  object-fit: cover !important;
+  object-position: center 22% !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image--portrait,
 #heroGrid.hero-grid .hero-image-wrap .hero-image--portrait,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image--portrait {
-  object-position: center 18% !important;
-  transform: scale(1.14) !important;
+  object-fit: contain !important;
+  object-position: center center !important;
 }
 #main-content .hero-grid .hero-image-wrap .hero-image--avatar,
 #heroGrid.hero-grid .hero-image-wrap .hero-image--avatar,
 #favoritesGrid.hero-grid .hero-image-wrap .hero-image--avatar {
+  object-fit: cover !important;
   object-position: center 28% !important;
-  transform: scale(1.08) !important;
-}
-
-
-/* Aamon's full-body splash art is taller than the circular viewport.
-   Show the complete artwork instead of zooming/cropping his body. */
-#main-content .hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
-#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"],
-#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Aamon"] {
-  object-fit: contain !important;
-  object-position: center center !important;
-  transform: none !important;
 }
