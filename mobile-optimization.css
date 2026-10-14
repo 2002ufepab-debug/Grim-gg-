@@ -923,3 +923,25 @@
   transform: scale(1.18) !important;
   transform-origin: center 42% !important;
 }
+
+/* Individual framing corrections for heroes whose character silhouette
+   appears too small inside the circular catalog avatar. Leave good-fitting
+   portraits (for example Aldous, Alice and Angela) unchanged. */
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alpha"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alpha"] {
+  transform: scale(1.22) !important;
+  transform-origin: center 48% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Alucard"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Alucard"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Alucard"] {
+  transform: scale(1.22) !important;
+  transform-origin: center 46% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#heroGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"],
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image[alt="Arlott"] {
+  transform: scale(1.24) !important;
+  transform-origin: center 42% !important;
+}
