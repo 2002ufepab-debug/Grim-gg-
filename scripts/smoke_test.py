@@ -249,12 +249,12 @@ try:
         require(isinstance(article.get("title"), str) and bool(article["title"].strip()),
                 "Every esports article needs a title")
         url = article.get("url", "")
-        require(re.fullmatch(r"https://en\\.moonton\\.com/news/\\d+\\.html", url) is not None,
+        require(re.fullmatch(r"https://en\.moonton\.com/news/\d+\.html", url) is not None,
                 f"Unexpected esports source URL or non-article page: {url}")
         published = article.get("published", "")
-        require(re.fullmatch(r"20\\d{2}-\\d{2}-\\d{2}", published) is not None,
+        require(re.fullmatch(r"20\d{2}-\d{2}-\d{2}", published) is not None,
                 f"Esports article is missing a valid publication date: {url}")
-        require(re.match(r"^20\\d{2}[/-]\\d{1,2}[/-]\\d{1,2}\\s", article["title"]) is None,
+        require(re.match(r"^20\d{2}[/-]\d{1,2}[/-]\d{1,2}\s", article["title"]) is None,
                 f"Esports headline must not include a date prefix: {url}")
 except (OSError, json.JSONDecodeError, AttributeError) as exc:
     errors.append(f"Could not validate esports feed: {exc}")
