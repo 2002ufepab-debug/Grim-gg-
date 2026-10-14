@@ -1375,15 +1375,18 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const missingIcon = '<div class="item-symbol item-symbol-fallback" role="img" aria-label="Оригинальная иконка недоступна"><span style="font:600 10px/1.4 sans-serif;text-align:center;padding:6px">Нет оригинальной иконки</span></div>';
     // Retribution is a battle spell, not equipment: its original icon lives in the spell dataset.
     // Roaming Blessing is a category card, so use the real base-boots icon rather than a made-up file.
-    const iconSource = item.imageFile
-      ? ITEM_IMAGE_BASE + item.imageFile
-      : item.name === "Retribution"
-        ? "https://liquipedia.net/commons/images/a/a7/Retribution_ML.png"
+    const retrySource = item.id === "retribution" ? "" : item.name === "Roaming Blessing"
+      ? ITEM_IMAGE_BASE + "boots.png"
+      : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const iconSource = item.id === "retribution"
+      ? new URL("assets/retribution.svg", window.location.href).href
+      : item.imageFile
+        ? ITEM_IMAGE_BASE + item.imageFile
         : item.name === "Roaming Blessing"
           ? ITEM_IMAGE_BASE + "boots.png"
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const iconMarkup = iconSource
-      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-fallback="${escapeHTML(missingIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.outerHTML=this.dataset.fallback">`
+      ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(retrySource)}" data-fallback="${escapeHTML(missingIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
       : missingIcon;
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
