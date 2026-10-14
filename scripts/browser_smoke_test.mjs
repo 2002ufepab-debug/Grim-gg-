@@ -27,7 +27,8 @@ try {
       waitUntil: "domcontentloaded", timeout: 60000
     });
     if (await page.locator(".hero-feature").count() > 0
-      && (await page.locator(".hero-feature").innerText()).includes("HERO SPOTLIGHT / 001")) {
+      && (await page.locator(".hero-feature").innerText()).includes("HERO SPOTLIGHT / 001")
+      && await page.locator("#main-content").getAttribute("data-ui-version") === "search-aliases-1") {
       publishedRevision = true;
       break;
     }
