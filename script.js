@@ -1145,7 +1145,8 @@ function renderPerks() {
     const haystack = `${item.name} ${item.ru} ${item.desc} ${item.stats} ${item.tip}`.toLocaleLowerCase();
     return matchesCategory && haystack.includes(perkQuery);
   });
-  $("perkCount").textContent = `Заклинаний и эффектов: ${filtered.length}`;
+  const count = $("perkCount");
+  if (count) count.textContent = `Заклинаний и эффектов: ${filtered.length}`;
   renderItemCards(filtered,grid,"В этом разделе ничего не найдено.");
 }
 
