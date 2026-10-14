@@ -1785,14 +1785,18 @@ function translateEquipmentName(name) { const key = String(name || '').trim().to
 
 async function fetchCatalogWithLocalFallback(remoteUrl, localUrl, label) {
   let remoteError;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 7000);
   try {
-    const response = await fetch(remoteUrl, { cache: "no-cache" });
+    const response = await fetch(remoteUrl, { cache: "no-cache", signal: controller.signal });
     if (!response.ok) throw new Error(label + ": внешний источник недоступен");
     const data = await response.json();
     if (!Array.isArray(data) || !data.length) throw new Error(label + ": неверный формат внешнего каталога");
     return { data, source: "external" };
   } catch (error) {
     remoteError = error;
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 
   try {
