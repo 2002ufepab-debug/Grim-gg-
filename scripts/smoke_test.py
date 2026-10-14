@@ -217,10 +217,10 @@ try:
     equipment_ids = [row.get("id_equip") for row in equipment_catalog]
     require(len(hero_ids) == len(set(hero_ids)) and len(hero_names) == len(set(hero_names)),
             "Local hero snapshot must not contain duplicate IDs or names")
-    featured_build_block = re.search(r"const featuredHeroBuilds = \\{(.*?)\\n\\};", script, re.S)
+    featured_build_block = re.search(r"const featuredHeroBuilds = \{(.*?)\n\};", script, re.S)
     if featured_build_block:
         featured_build_names = {
-            name.casefold() for name in re.findall(r"""^\\s*"([^"]+)"\\s*:\\s*\\{""",
+            name.casefold() for name in re.findall(r"""^\s*"([^"]+)"\s*:\s*\{""",
                                                    featured_build_block.group(1), re.M)
         }
         require(featured_build_names.issubset(set(hero_names)),
