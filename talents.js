@@ -311,7 +311,7 @@
       <div class="talent-result" aria-live="polite">
         <div class="talent-result-head"><div class="talent-hero-heading"><div class="talent-hero-portrait" id="talentHeroPortrait" role="img" aria-label="Портрет героя"><span class="talent-portrait-placeholder">GG</span></div><div><h3 id="talentResultTitle">Таланты для Клинта</h3><p id="talentResultDesc" class="talent-intro">Рекомендуемая стартовая комбинация.</p></div></div><span class="talent-chip" id="talentRoleChip">СТРЕЛОК</span></div>
         <div class="talent-slots" id="talentSlots"></div>
-        <p class="talent-note" id="talentNote">Ориентир по системе талантов патча 2.2.16. Перед матчем сверь эффекты в клиенте MLBB и адаптируй выбор под соперников.</p>
+        <p class="talent-note" id="talentNote">Перед матчем сверь эффекты и доступность талантов в актуальном клиенте MLBB и адаптируй выбор под соперников.</p>
         <div class="talent-actions"><button type="button" id="talentCopy">Копировать комбинацию</button><button type="button" class="secondary" id="talentReset">Сбросить выбор</button></div>
         <p class="talent-status" id="talentStatus" role="status"></p>
       </div>`;
