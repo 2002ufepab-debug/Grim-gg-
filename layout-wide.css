@@ -153,3 +153,104 @@ html, body { max-width: 100%; }
   #main-content .item-grid,
   #main-content .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+
+/* GRIM_GG polish pass: sharper artwork, clearer cards and comfortable mobile controls. */
+#main-content .hero-card,
+#main-content .item-card,
+#main-content .tier-card {
+  min-width: 0;
+  height: 100%;
+}
+#main-content .hero-image-open {
+  min-width: 0;
+  min-height: 0;
+  touch-action: manipulation;
+}
+#main-content .hero-image-open .hero-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+#main-content .hero-card-content,
+#main-content .item-content,
+#main-content .tier-card-content {
+  overflow-wrap: anywhere;
+}
+#main-content .hero-card-actions > *,
+#main-content .item-card button,
+#main-content .hero-card button,
+#main-content .filter-row .filter {
+  touch-action: manipulation;
+}
+#main-content .hero-card-actions .btn {
+  min-width: 0;
+  min-height: 38px;
+  padding: 9px 7px;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+#main-content .item-image {
+  display: block;
+  max-width: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+}
+#main-content .hero-card details,
+#main-content .item-card details {
+  line-height: 1.55;
+}
+#main-content .hero-card summary,
+#main-content .item-card summary {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+#main-content :is(a, button, input, select, summary):focus-visible {
+  outline: 2px solid #ff6579;
+  outline-offset: 3px;
+}
+@media (max-width: 650px) {
+  #main-content .hero-card-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #main-content .hero-card-actions .btn {
+    width: 100%;
+    min-height: 40px;
+    font-size: 11px;
+  }
+  #main-content .hero-card-content,
+  #main-content .item-content,
+  #main-content .tier-card-content {
+    padding: 10px 9px;
+  }
+  #main-content .hero-tags {
+    gap: 4px;
+  }
+  #main-content .hero-tags span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  #main-content .item-description,
+  #main-content .item-stats {
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-width: 360px) {
+  #main-content .hero-image-wrap { height: 140px; }
+  #main-content .hero-card-actions .btn { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #main-content *,
+  #main-content *::before,
+  #main-content *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
