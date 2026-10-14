@@ -267,19 +267,55 @@
     });
   }
 
+  // Official-looking in-game talent artwork mirrored by mlbb.tools. If an image is unavailable,
+  // the Grim_gg SVG fallback stays visible and the optional academy API can still enhance it.
+  const talentArtworkSlugs = {
+    "Agility":"agility", "Bargain Hunter":"bargain-hunter", "Brave Smite":"brave-smite",
+    "Concussive Blast":"concussive-blast", "Fatal":"fatal", "Festival of Blood":"festival-of-blood",
+    "Firmness":"firmness", "Focusing Mark":"focusing-mark", "Impure Rage":"impure-rage",
+    "Inspire":"inspire", "Killing Spree":"killing-spree", "Lethal Ignition":"lethal-ignition",
+    "Master Assassin":"master-assassin", "Pull Yourself Together":"pull-yourself-together",
+    "Quantum Charge":"quantum-charge", "Rupture":"rupture", "Seasoned Hunter":"seasoned-hunter",
+    "Swift":"swift", "Temporal Reign":"temporal-reign", "Tenacity":"tenacity",
+    "Thrill":"thrill", "Vitality":"vitality", "War Cry":"war-cry",
+    "Weapon Master":"weapon-master", "Weakness Finder":"weakness-finder",
+    "Wilderness Blessing":"wilderness-blessing"
+  };
+
   function talentIconMarkup(name,index) {
-    const key = String(name).toLowerCase();
-    const glyph = /swift|agility|quantum|speed|мобиль|стрельб/.test(key) ? "↗"
-      : /rupture|master assassin|lethal|ignition|пробив|урон|weapon/.test(key) ? "✦"
-      : /firmness|tenacity|vitality|smite|защит|стойк|здоров/.test(key) ? "⬡"
-      : /hunter|bargain|seasoned|эконом/.test(key) ? "◈"
-      : /festival|blood|rage|восстанов/.test(key) ? "✚"
-      : /focusing|pull yourself|support|команд|помощ/.test(key) ? "◎" : ["✦","⬡","◈"][index];
-    const safeName = String(name).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return '<span class="talent-icon talent-icon-art" data-talent-name="' + safeName + '" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><path d="M32 11 48 20v24L32 53 16 44V20Z" fill="none" stroke="#ff8795" stroke-opacity=".4"/><text x="32" y="40" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
+    const key = String(name);
+    const glyph = /swift|agility|quantum|speed|мобиль|стрельб/i.test(key) ? "↗"
+      : /rupture|master assassin|lethal|ignition|пробив|урон|weapon/i.test(key) ? "✦"
+      : /firmness|tenacity|vitality|smite|защит|стойк|здоров/i.test(key) ? "⬡"
+      : /hunter|bargain|seasoned|эконом/i.test(key) ? "◈"
+      : /festival|blood|rage|восстанов/i.test(key) ? "✚"
+      : /focusing|pull yourself|support|команд|помощ/i.test(key) ? "◎" : ["✦","⬡","◈"][index];
+    const safeName = key.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const slug = talentArtworkSlugs[key];
+    const art = slug
+      ? '<img class="talent-original-icon" src="https://mlbb.tools/emblems/talents/' + slug + '.webp" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
+      : "";
+    return '<span class="talent-icon talent-icon-art" data-talent-name="' + safeName + '" aria-hidden="true">' + art + '<svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><path d="M32 11 48 20v24L32 53 16 44V20Z" fill="none" stroke="#ff8795" stroke-opacity=".4"/><text x="32" y="40" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
   }
 
-  window.GrimGGTalentData.refreshIcons = () => applyTalentIcons(document);
+  function wireTalentArtFallbacks(root) {
+    if (!root) return;
+    const images = [];
+    if (root.matches?.(".talent-original-icon")) images.push(root);
+    root.querySelectorAll?.(".talent-original-icon").forEach(img => images.push(img));
+    images.forEach(img => {
+      if (img.dataset.fallbackWired) return;
+      img.dataset.fallbackWired = "true";
+      img.addEventListener("load", () => {
+        const fallback = img.parentElement?.querySelector("svg");
+        if (fallback) fallback.classList.add("talent-icon-fallback-hidden");
+      }, {once:true});
+      img.addEventListener("error", () => img.remove(), {once:true});
+    });
+  }
+
+
+  window.GrimGGTalentData.refreshIcons = () => { wireTalentArtFallbacks(document); applyTalentIcons(document); };
   if (typeof MutationObserver !== "undefined") {
     const talentIconObserver = new MutationObserver(records => {
       records.forEach(record => record.addedNodes.forEach(node => {
@@ -382,6 +418,7 @@
     fillHeroes("Клинт");
     render();
     loadHeroArt();
+    wireTalentArtFallbacks(section);
     loadTalentIcons();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
