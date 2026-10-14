@@ -157,7 +157,11 @@
     const select = document.getElementById("talentHero");
     if (!portrait || !select) return;
     const english = heroEnglishNames[select.value];
-    const url = english ? heroArtByName.get(english.toLowerCase()) : "";
+    const catalogUrl = english ? heroArtByName.get(english.toLowerCase()) : "";
+    const sharedUrl = english && typeof window.GrimGGHeroImageUrl === "function"
+      ? window.GrimGGHeroImageUrl(english)
+      : "";
+    const url = sharedUrl || catalogUrl;
     if (!url) {
       portrait.innerHTML = '<span class="talent-portrait-placeholder" aria-hidden="true">GG</span>';
       portrait.setAttribute("aria-label", "Портрет героя временно недоступен");
@@ -168,10 +172,17 @@
     img.alt = "";
     img.loading = "lazy";
     img.decoding = "async";
+    img.dataset.fallback = catalogUrl && catalogUrl !== url ? catalogUrl : "";
     img.addEventListener("error", () => {
+      if (img.dataset.fallback) {
+        const fallback = img.dataset.fallback;
+        img.dataset.fallback = "";
+        img.src = fallback;
+        return;
+      }
       portrait.innerHTML = '<span class="talent-portrait-placeholder" aria-hidden="true">GG</span>';
       portrait.setAttribute("aria-label", "Портрет героя временно недоступен");
-    }, {once:true});
+    });
     portrait.replaceChildren(img);
     portrait.setAttribute("aria-label", "Портрет героя " + select.value);
   }
@@ -219,8 +230,7 @@
     // The main router runs before this dynamically-created section exists.
     // Match the initial URL so the talent page never leaks into another page.
     const requestedPage = new URLSearchParams(window.location.search).get("page");
-    const knownPages = ["home", "heroes", "tierlist", "items", "perks", "builds", "favorites", "guides", "counterpicks", "esports", "hero"];
-    if (knownPages.includes(requestedPage)) section.classList.add("page-hidden");
+    if (requestedPage !== "talents") section.classList.add("page-hidden");
 
     const roleSelect = section.querySelector("#talentRole");
     const heroSelect = section.querySelector("#talentHero");
