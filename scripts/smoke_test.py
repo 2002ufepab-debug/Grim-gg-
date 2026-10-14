@@ -45,7 +45,6 @@ require('href="?page=talents"' in html, "Talent page must be reachable from the 
 require('href="favicon.svg"' in html, "Main page favicon reference is missing")
 require("styles.css?v=" in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must load a versioned main stylesheet")
-        "404 page must load a versioned main stylesheet")
 require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must use the correct GitHub Pages favicon path")
 for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "counterpicks", "esports"):
