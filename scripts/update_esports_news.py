@@ -18,7 +18,7 @@ PAGES = [
     "https://en.moonton.com/news/index1.html",
     "https://en.moonton.com/news/index2.html",
 ]
-NEWS_PATH = re.compile(r"/news/[\w-]+\.html(?:[?#].*)?$", re.I)
+NEWS_PATH = re.compile(r"/news/\d+\.html(?:[?#].*)?$", re.I)
 DATE_RE = re.compile(r"\b(20\d{2})[/-](\d{1,2})[/-](\d{1,2})\b")
 
 def clean(value: str) -> str:
@@ -33,7 +33,18 @@ def extract_page(url: str, html: str) -> list[dict]:
         parsed = urlparse(absolute)
         if parsed.netloc.lower() != "en.moonton.com" or not NEWS_PATH.search(parsed.path) or re.fullmatch(r"index\d*\.html", parsed.path.rsplit("/", 1)[-1], re.I):
             continue
-        title = clean(anchor.get_text(" ", strip=True))
+        heading = anchor.find(["h1", "h2", "h3", "h4", "h5"])
+        anchor_text = clean(anchor.get_text(" ", strip=True))
+        title = clean(heading.get_text(" ", strip=True)) if heading else anchor_text
+        title = re.sub(r"^\s*20\d{2}[/-]\d{1,2}[/-]\d{1,2}\s*", "", title).strip()
+        if not heading:
+            # Some news cards wrap date, heading and summary in a single link.
+            # Prefer a heading node, otherwise cut any embedded paragraph summary from the link text.
+            for paragraph_node in anchor.find_all("p"):
+                paragraph = clean(paragraph_node.get_text(" ", strip=True))
+                if len(paragraph) > 45 and paragraph in title:
+                    title = title.split(paragraph, 1)[0].strip()
+                    break
         if not title or title.lower() in {"view more", "read more", "more"}:
             continue
         article_node = anchor
