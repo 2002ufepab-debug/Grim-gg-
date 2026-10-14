@@ -385,6 +385,7 @@
           </button>
           <p class="talent-slot-description" id="talent-description-${i}" hidden>${t[2]}</p>
         </article>`).join("");
+      wireTalentArtFallbacks(section.querySelector("#talentSlots"));
       section.querySelectorAll(".talent-slot-toggle").forEach(button => {
         button.addEventListener("click", () => {
           const expanded = button.getAttribute("aria-expanded") === "true";
