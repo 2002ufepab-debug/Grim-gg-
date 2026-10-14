@@ -27,18 +27,18 @@ for asset in ("styles.css", "talents.css", "layout-wide.css", "script.js", "tale
             f"index.html must load {asset} with a versioned cache key")
 
 # Validate navigation anchors and direct JavaScript DOM lookups against the static HTML.
-id_set = set(re.findall(r"""\\bid=["']([^"']+)["']""", html))
-hash_targets = re.findall(r"""\\bhref=["']#([^"']+)["']""", html)
+id_set = set(re.findall(r"""\bid=["']([^"']+)["']""", html))
+hash_targets = re.findall(r"""\bhref=["']#([^"']+)["']""", html)
 require(all(target in id_set for target in hash_targets),
         "index.html contains an in-page link whose target ID does not exist")
-direct_dom_ids = set(re.findall(r"""\\$\\(["']([^"']+)["']\\)""", script))
+direct_dom_ids = set(re.findall(r"""\$\(["']([^"']+)["']\)""", script))
 require(direct_dom_ids.issubset(id_set),
         "script.js directly selects an element ID that is missing from index.html: "
         + ", ".join(sorted(direct_dom_ids - id_set)))
 local_asset_refs = [
-    ref for ref in re.findall(r"""\\b(?:src|href)=["']([^"']+)["']""", html)
-    if ref and not re.match(r"^(?:https?:|mailto:|tel:|data:|javascript:|#|\\?)", ref)
-    and re.search(r"\\.(?:js|css|json|svg|png|jpe?g|webp|ico)(?:\\?|$)", ref, re.I)
+    ref for ref in re.findall(r"""\b(?:src|href)=["']([^"']+)["']""", html)
+    if ref and not re.match(r"^(?:https?:|mailto:|tel:|data:|javascript:|#|\?)", ref)
+    and re.search(r"\.(?:js|css|json|svg|png|jpe?g|webp|ico)(?:\?|$)", ref, re.I)
 ]
 missing_local_assets = [
     ref for ref in local_asset_refs
