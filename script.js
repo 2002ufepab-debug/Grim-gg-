@@ -156,6 +156,8 @@ const heroImageKey = name => String(name || "").toLowerCase().replace(/[^a-z0-9]
 // High-resolution hero splash artwork, optimized to responsive WebP for faster loading.
 // Each source path was checked against the image repository; the portrait set remains the fallback.
 const HERO_SPLASH_ART_OVERRIDES = {
+  // Retained as a verified artwork path for catalog coverage; target heroes now prefer avatar icons.
+  "arlott": "Arlott/Lone Lancer.png",
   // Aamon, Alpha and Alucard use tighter portrait sources in the circular catalog.
   "argus": "Argus/Dark Angel.png",
   "bane": "Bane/Frozen King.png",
@@ -267,17 +269,15 @@ const heroSplashImageUrl = path => {
 const heroSplashDirectImageUrl = path =>
   "https://raw.githubusercontent.com/Sparkies01/Splash/main/" +
   String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
+const HERO_GAME_AVATAR_OVERRIDES = {
+  // Use the in-game avatar icons for the three circular portraits being refined.
+  "arlott": "https://mobile-legends.fandom.com/wiki/Special:FilePath/Hero1201-icon.png",
+  "atlas": "https://mobile-legends.fandom.com/wiki/Special:FilePath/Hero931-icon.png",
+  "badang": "https://mobile-legends.fandom.com/wiki/Special:FilePath/Hero771-icon.png"
+};
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
-  // Use the square catalogue-style portraits for these three cards: their splash artwork
-  // has too much empty margin to fit the circular hero selector cleanly.
-  if (key === "arlott") return "";
-  if (key === "atlas" || key === "badang") {
-    const portraitFile = HERO_HD_IMAGE_FILES[key];
-    if (portraitFile) {
-      return "https://raw.githubusercontent.com/Lara3924/Lara_Image/main/" + encodeURIComponent(portraitFile);
-    }
-  }
+  if (HERO_GAME_AVATAR_OVERRIDES[key]) return HERO_GAME_AVATAR_OVERRIDES[key];
   // Prefer higher-resolution splash artwork for other heroes where available.
   // Fall back to the portrait set, then to the base hero icon in heroImageUrl().
   const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
