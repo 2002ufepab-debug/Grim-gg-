@@ -212,8 +212,10 @@
       "https://mlbb.rone.dev/api/academy/emblems?lang=en&size=100"
     ];
     for (const endpoint of endpoints) {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 5000);
       try {
-        const response = await fetch(endpoint, {cache:"force-cache"});
+        const response = await fetch(endpoint, {cache:"force-cache", signal:controller.signal});
         if (!response.ok) continue;
         const payload = await response.json();
         const records = Array.isArray(payload?.data?.records) ? payload.data.records
@@ -233,6 +235,8 @@
         if (talentIconByName.size) break;
       } catch (_) {
         // Optional source: keep the built-in SVG icons if the API is unavailable or blocks browser requests.
+      } finally {
+        window.clearTimeout(timeoutId);
       }
     }
     applyTalentIcons(document);
