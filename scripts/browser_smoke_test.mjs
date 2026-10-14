@@ -148,6 +148,36 @@ try {
     return /Показано:/i.test(count) && document.querySelectorAll("#heroGrid .hero-card").length > 0;
   }, { timeout: 30000 });
   const heroCardsBefore = await page.locator("#heroGrid .hero-card").count();
+  check("Hero catalogue cards include image artwork",
+    await page.locator("#heroGrid .hero-card .hero-image").count() > 0
+    && await page.locator("#heroGrid .hero-card .hero-image[src]").count() > 0);
+
+  // Tank and support roles are the core of many roam picks; make sure filtering them
+  // does not hide or remove the associated hero artwork.
+  for (const role of ["Танк", "Поддержка"]) {
+    const roleButton = page.locator(`#roleFilters [data-role="${role}"]`);
+    await roleButton.click();
+    await page.waitForTimeout(250);
+    const visibleCards = page.locator("#heroGrid .hero-card");
+    check(`Roam-relevant role keeps hero images: ${role}`,
+      await visibleCards.count() > 0
+      && await page.locator("#heroGrid .hero-card .hero-image[src]").count() > 0);
+  }
+  await page.locator('#roleFilters [data-role="Все"]').click();
+  await page.waitForTimeout(250);
+  await page.goto(BASE_URL + "?page=builds", { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.locator("#buildHeroAvatars .build-hero-avatar").first().waitFor({ state: "visible", timeout: 20000 });
+  check("Build hero picker uses circular avatar frames",
+    await page.locator(".build-hero-avatar-art").first().evaluate(el =>
+      getComputedStyle(el).borderRadius === "50%"
+      && Math.abs(el.getBoundingClientRect().width - el.getBoundingClientRect().height) < 1));
+  check("Build hero picker artwork fills its avatar frame",
+    await page.locator(".build-hero-avatar-art .hero-image").count() > 0
+    && await page.locator(".build-hero-avatar-art .hero-image").first().evaluate(img =>
+      getComputedStyle(img).objectFit === "cover"));
+  await page.goto(BASE_URL + "?page=heroes", { waitUntil: "domcontentloaded", timeout: 60000 });
+  await page.locator("#heroGrid").waitFor({ state: "visible", timeout: 20000 });
+  await page.waitForFunction(() => document.querySelectorAll("#heroGrid .hero-card .hero-image").length > 0, { timeout: 30000 });
   const heroGridLayout = await page.locator("#heroGrid").evaluate(grid => {
     const style = getComputedStyle(grid);
     return {
