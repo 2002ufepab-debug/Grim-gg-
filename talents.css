@@ -140,3 +140,190 @@
   .talent-slot-toggle .talent-icon { grid-row: auto; grid-column: auto; }
   .talent-slot-description { margin-left: 53px !important; }
 }
+
+
+/* GRIM_GG talent lab redesign — clean tactical cards with real game artwork */
+.talent-lab {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 88% 0%, rgba(255,48,72,.12), transparent 38%),
+    linear-gradient(145deg, #0b0a0f 0%, #151019 52%, #0d0b11 100%);
+}
+.talent-lab::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff3048 24%, #ff8795 50%, #ff3048 76%, transparent);
+  opacity: .8;
+}
+.talent-lab > * { position: relative; }
+.talent-lab .section-heading { align-items: end; }
+.talent-lab .section-heading h2 { letter-spacing: -.035em; }
+.talent-lab .talent-intro { line-height: 1.7; }
+.talent-controls { gap: 12px; }
+.talent-control {
+  background: linear-gradient(150deg, #19151e, #100e14);
+  border-color: #382934;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+.talent-control label {
+  color: #d9cbd8;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  font-size: 10px;
+}
+.talent-control select {
+  border-color: #493241;
+  background-color: #0e0c12;
+  border-radius: 6px;
+}
+.talent-result {
+  position: relative;
+  padding: clamp(16px, 2.8vw, 28px);
+  border-radius: 14px;
+  border-color: #4b303f;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(255,48,72,.08), transparent 42%),
+    linear-gradient(145deg, #151119, #0f0d13);
+  box-shadow: 0 18px 54px rgba(0,0,0,.22);
+}
+.talent-result-head {
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.talent-hero-heading { gap: 16px; }
+.talent-hero-portrait {
+  flex-basis: 84px;
+  width: 84px;
+  height: 84px;
+  border-radius: 12px;
+  border-color: #815064;
+  box-shadow: 0 0 0 4px rgba(255,48,72,.06), 0 12px 30px #0008;
+}
+.talent-result h3 { font-size: clamp(18px, 2.4vw, 24px); letter-spacing: -.025em; }
+.talent-result-head .talent-intro { margin: 0; }
+.talent-chip {
+  padding: 7px 11px;
+  background: rgba(255,48,72,.08);
+  border-color: rgba(255,101,121,.38);
+  white-space: nowrap;
+}
+.talent-slots { gap: 14px; margin-top: 22px; align-items: stretch; }
+.talent-slot {
+  position: relative;
+  padding: 17px;
+  overflow: hidden;
+  border-radius: 12px;
+  border-color: #382a38;
+  background: linear-gradient(155deg, #201923 0%, #151119 70%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+  transition: border-color .18s ease, transform .18s ease, background .18s ease;
+}
+.talent-slot::after {
+  content: "";
+  position: absolute;
+  inset: auto 16px 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff3048, transparent);
+  opacity: .28;
+}
+.talent-slot:hover,
+.talent-slot:focus-within {
+  border-color: #784154;
+  background: linear-gradient(155deg, #291b28 0%, #17121a 72%);
+}
+.talent-slot-toggle {
+  grid-template-columns: 58px minmax(0,1fr) auto;
+  gap: 12px;
+}
+.talent-slot-toggle .talent-slot-num {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  grid-column: 1 / -1;
+  padding: 5px 8px;
+  border: 1px solid rgba(255,101,121,.2);
+  border-radius: 4px;
+  background: rgba(255,48,72,.06);
+  color: #ff8795;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+.talent-slot .talent-icon {
+  width: 58px;
+  height: 58px;
+  margin: 0;
+  border-radius: 11px;
+  border-color: #754354;
+  background: #100d13;
+  box-shadow: 0 5px 18px #0005;
+}
+.talent-slot .talent-icon svg { transition: opacity .16s ease; }
+.talent-slot .talent-icon .talent-original-icon {
+  padding: 0;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #100d13;
+}
+.talent-slot .talent-icon .talent-icon-fallback-hidden { display: none; }
+.talent-slot-label { min-height: 58px; align-items: center; }
+.talent-slot-label h4 {
+  font-size: 14px;
+  line-height: 1.35;
+  color: #fff4f6;
+}
+.talent-expand-indicator {
+  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
+  border-color: #523746;
+  background: rgba(255,255,255,.025);
+}
+.talent-slot-toggle[aria-expanded="true"] .talent-expand-indicator {
+  transform: rotate(180deg);
+  background: rgba(255,48,72,.13);
+}
+.talent-slot-description {
+  margin: 15px 0 0 !important;
+  padding: 13px 0 2px;
+  border-top-color: rgba(255,255,255,.08);
+  color: #cbbfce !important;
+  font-size: 12px !important;
+  line-height: 1.65;
+}
+.talent-note {
+  border-radius: 0 7px 7px 0;
+  background: linear-gradient(90deg, rgba(255,48,72,.09), rgba(255,48,72,.015));
+  line-height: 1.6;
+}
+.talent-actions button {
+  border-radius: 7px;
+  box-shadow: 0 5px 18px rgba(255,48,72,.12);
+  transition: transform .15s ease, filter .15s ease;
+}
+.talent-actions button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.talent-actions button.secondary { box-shadow: none; }
+.talent-status { line-height: 1.5; }
+@media (max-width: 700px) {
+  .talent-lab { padding: 38px 4.5%; }
+  .talent-controls { gap: 9px; margin: 18px 0; }
+  .talent-control { padding: 13px; }
+  .talent-result { padding: 14px; border-radius: 11px; }
+  .talent-result-head { gap: 12px; padding-bottom: 15px; }
+  .talent-hero-portrait { flex-basis: 62px; width: 62px; height: 62px; }
+  .talent-hero-heading { gap: 11px; }
+  .talent-result h3 { font-size: 17px; }
+  .talent-chip { font-size: 9px; }
+  .talent-slots { grid-template-columns: minmax(0,1fr); gap: 10px; margin-top: 15px; }
+  .talent-slot { padding: 14px; }
+  .talent-slot-toggle { grid-template-columns: 54px minmax(0,1fr) auto; gap: 10px; }
+  .talent-slot .talent-icon { width: 54px; height: 54px; }
+  .talent-slot-label { min-height: 54px; }
+  .talent-slot-description { margin-left: 64px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .talent-slot, .talent-actions button, .talent-slot .talent-icon svg { transition: none; }
+}
