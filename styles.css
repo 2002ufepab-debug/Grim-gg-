@@ -3485,3 +3485,20 @@ img.hero-image,
   .hero-grid .hero-image-wrap,
   .hero-grid .hero-image-wrap .hero-image { transition: none !important; }
 }
+
+
+/* Explicit mobile catalog grid: keep hero and favorites lists at three columns. */
+@media (max-width: 650px) {
+  #heroGrid.hero-grid,
+  #favoritesGrid.hero-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-auto-flow: row;
+    min-width: 0;
+  }
+  #heroGrid.hero-grid > .hero-card,
+  #favoritesGrid.hero-grid > .hero-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
