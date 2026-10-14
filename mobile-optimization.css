@@ -492,4 +492,20 @@
   .hero-profile-jump-links { gap: 7px; margin-top: 12px; }
   .hero-profile-jump-links a { flex-basis: 135px; min-height: 44px; padding: 9px 7px; font-size: 11px; }
   #heroDetailPage .hero-detail-section { padding: 13px; }
+
+  /* Put the useful match setup first on phones; the large artwork follows it. */
+  #heroDetailPage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 0;
+  }
+  #heroDetailPage .hero-detail-layout { display: contents; }
+  #heroDetailPage .hero-detail-copy { order: 1; }
+  #heroDetailPage .hero-profile-jump-links { order: 2; }
+  #heroDetailPage .hero-build-inline { order: 3; }
+  #heroDetailPage .hero-talents-section { order: 4; }
+  #heroDetailPage .hero-detail-art { order: 5; height: 230px; margin-top: 14px; }
+  #heroDetailPage #profile-hero-skills { order: 6; }
+  #heroDetailPage .hero-detail-tip-bottom { order: 7; }
 }
