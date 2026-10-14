@@ -2019,11 +2019,11 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
 function setupPageNavigation() {
   const getRequestedPage = () => new URLSearchParams(window.location.search).get("page");
   const applyRoleFromUrl = () => {
+    if (getRequestedPage() !== "heroes") return;
     const requestedRole = new URLSearchParams(window.location.search).get("role");
     const supportedRoles = ["Убийца","Маг","Стрелок","Боец","Танк","Поддержка"];
-    if (getRequestedPage() !== "heroes" || !supportedRoles.includes(requestedRole)) return;
-    activeRole = requestedRole;
-    syncFilterSelection($("roleFilters"), "[data-role]", $("roleFilters")?.querySelector('[data-role="' + requestedRole + '"]'));
+    activeRole = supportedRoles.includes(requestedRole) ? requestedRole : "Все";
+    syncFilterSelection($("roleFilters"), "[data-role]", $("roleFilters")?.querySelector('[data-role="' + activeRole + '"]'));
     renderHeroes();
   };
   applyPageNavigation(getRequestedPage(), false);
