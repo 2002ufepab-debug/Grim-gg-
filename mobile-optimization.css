@@ -781,3 +781,106 @@
   .late-game-item-card span:last-child { font-size: 10px; }
   .hero-late-game > p { font-size: 10px; }
 }
+
+
+/* FINAL OVERRIDE: enforce the circular portrait mask for every hero card.
+   Kept last in the stylesheet so legacy 3:4 artwork rules cannot override it. */
+#main-content .hero-grid .hero-image-wrap,
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--splash),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--portrait),
+#main-content .hero-grid .hero-image-wrap:has(.hero-image--avatar),
+#heroGrid.hero-grid .hero-image-wrap,
+#favoritesGrid.hero-grid .hero-image-wrap {
+  position: relative !important;
+  display: block !important;
+  width: calc(100% - 16px) !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  min-height: 0 !important;
+  margin: 8px auto 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 76, 107, .68) !important;
+  border-radius: 50% !important;
+  box-sizing: border-box !important;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255, 76, 107, .20), transparent 66%),
+    linear-gradient(145deg, #211720 0%, #100d13 100%) !important;
+  box-shadow: 0 0 0 3px rgba(255, 48, 72, .05), inset 0 0 18px rgba(255, 48, 72, .10) !important;
+}
+#main-content .hero-grid .hero-image-wrap::before,
+#heroGrid.hero-grid .hero-image-wrap::before,
+#favoritesGrid.hero-grid .hero-image-wrap::before {
+  inset: 4px !important;
+  border: 1px solid rgba(255, 209, 219, .22) !important;
+  border-radius: 50% !important;
+  z-index: 2 !important;
+}
+#main-content .hero-grid .hero-image-wrap::after,
+#heroGrid.hero-grid .hero-image-wrap::after,
+#favoritesGrid.hero-grid .hero-image-wrap::after {
+  inset: auto 0 0 !important;
+  height: 24% !important;
+  border-radius: 0 0 50% 50% !important;
+  pointer-events: none !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-open,
+#heroGrid.hero-grid .hero-image-wrap .hero-image-open,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image-open {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  line-height: 0 !important;
+}
+#main-content .hero-grid .hero-image-wrap > .hero-image,
+#main-content .hero-grid .hero-image-wrap .hero-image-open .hero-image,
+#heroGrid.hero-grid .hero-image-wrap .hero-image,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  object-position: center 22% !important;
+  transform: none !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image--avatar,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--avatar,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--avatar {
+  object-position: center 30% !important;
+}
+#main-content .hero-grid .hero-image-wrap .hero-image-fallback,
+#heroGrid.hero-grid .hero-image-wrap .hero-image-fallback,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image-fallback {
+  display: grid !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+}
+@media (max-width: 650px) {
+  #main-content .hero-grid .hero-image-wrap,
+  #heroGrid.hero-grid .hero-image-wrap,
+  #favoritesGrid.hero-grid .hero-image-wrap {
+    width: calc(100% - 8px) !important;
+    margin-top: 5px !important;
+  }
+}
