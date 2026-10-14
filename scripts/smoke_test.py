@@ -225,6 +225,9 @@ require("heroSelect.replaceChildren(...availableHeroes.map(name => new Option(na
 require("heroSelect.replaceChildren(...names.map(name => new Option(name, name)))" in talents
         and "heroSelect.innerHTML = heroesByRole[role]" not in talents,
         "External hero names must be inserted as text options, not HTML")
+require('fetch("data/hero-catalog.json"' in talents
+        and 'window.setTimeout(() => controller.abort(), 7000)' in talents,
+        "Talent planner must use the local hero snapshot if the external image/catalog source times out")
 require("heroEnglishNames[select.value] || select.value" in talents,
         "Talent planner must resolve portraits for heroes without a Russian display-name mapping")
 
