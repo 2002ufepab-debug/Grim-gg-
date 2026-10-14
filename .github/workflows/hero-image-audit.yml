@@ -13,10 +13,6 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: hero-image-audit-\${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   audit:
     name: Check current hero image sources
