@@ -160,7 +160,8 @@ const HERO_SPLASH_ART_OVERRIDES = {
   "layla": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Layla/Classic%20Malefic%20Gunner.png",
   "miya": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Miya/Moonlight%20Archer.png",
   "alucard": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Alucard/Demon%20Hunter.png",
-  "chou": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Chou/Kung%20Fu%20Boy.png"
+  "chou": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Chou/Kung%20Fu%20Boy.png",
+  "lesley": "https://raw.githubusercontent.com/Sparkies01/Splash/main/Lesley/Deadly%20Sniper.png"
 };
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
@@ -1077,10 +1078,10 @@ function renderItemCards(filtered, grid, emptyMessage) {
     // Для общего роум-благословения оставляем собственную векторную пиктограмму:
     // в наборе нет отдельного файла с таким названием.
     const vectorIcon = item.id === "roam-boots" ? effectIconMarkup(item) : "";
-    const iconSource = item.imageFile
-      ? ITEM_IMAGE_BASE + item.imageFile
-      : item.id === "retribution"
-        ? new URL("assets/retribution.svg", window.location.href).href
+    const iconSource = item.id === "retribution"
+      ? "https://raw.githubusercontent.com/Alexandre221178/alexandregames/main/img-MLBB/spells/retribution-ca%C3%A7ar.webp"
+      : item.imageFile
+        ? ITEM_IMAGE_BASE + item.imageFile
         : item.id === "roam-boots"
           ? ""
           : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
