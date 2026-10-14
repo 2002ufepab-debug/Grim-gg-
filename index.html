@@ -41,8 +41,7 @@
     <a href="?page=tierlist">Тир-лист</a>
     <a href="?page=items">Предметы</a>
     <a href="?page=perks">Перки</a>
-    <a href="?page=talents">Таланты</a>
-    <a href="?page=builds">Сборки</a>
+    <a href="?page=builds">Сборки и таланты</a>
     <a href="?page=favorites">Избранное</a>
     <a href="?page=guides">Комбо и гайды</a>
     <a href="?page=esports">Киберспорт</a>
@@ -70,7 +69,7 @@
     <nav class="hero-shortcuts" aria-label="Быстрый доступ к разделам">
       <a href="?page=heroes"><span class="shortcut-icon" aria-hidden="true">◈</span> Герои <span aria-hidden="true">↗</span></a>
       <a href="?page=builds"><span class="shortcut-icon" aria-hidden="true">⚔</span> Сборки <span aria-hidden="true">↗</span></a>
-      <a href="?page=talents"><span class="shortcut-icon" aria-hidden="true">✦</span> Таланты <span aria-hidden="true">↗</span></a>
+      <a href="?page=builds#talentLab"><span class="shortcut-icon" aria-hidden="true">✦</span> Таланты <span aria-hidden="true">↗</span></a>
     </nav>
     <div class="hero-stats">
       <div><strong>01</strong><span>Изучи героев</span></div>
@@ -93,7 +92,7 @@
     </div>
     <div class="home-feature-links">
       <a class="home-feature-link" href="?page=builds"><span class="home-feature-mark">⚔</span><span><strong>Популярные сборки</strong><small>Предметы и варианты экипировки</small></span><span class="home-lane-arrow">↗</span></a>
-      <a class="home-feature-link" href="?page=talents"><span class="home-feature-mark">✦</span><span><strong>Таланты и эмблемы</strong><small>Настройка под роль и стиль игры</small></span><span class="home-lane-arrow">↗</span></a>
+      <a class="home-feature-link" href="?page=builds#talentLab"><span class="home-feature-mark">✦</span><span><strong>Таланты и эмблемы</strong><small>Настройка под роль и стиль игры</small></span><span class="home-lane-arrow">↗</span></a>
     </div>
     <a class="home-all-heroes" href="?page=heroes">ОТКРЫТЬ ВСЕХ ГЕРОЕВ <span aria-hidden="true">↗</span></a>
   </div>
@@ -222,8 +221,12 @@
 
 <section class="section section-muted" id="builds">
   <div class="section-heading">
-    <div><div class="eyebrow">05 / BUILD LAB</div><h2>ЛАБОРАТОРИЯ <span class="red">СБОРОК</span></h2></div>
+    <div><div class="eyebrow">05 / BUILD LAB</div><h2>СБОРКИ <span class="red">И ТАЛАНТЫ</span></h2></div>
     <p>Каталог сборок для всех загруженных героев. Выбирай роль, находи персонажа и открывай варианты экипировки, эмблем и боевых заклинаний.</p>
+  </div>
+  <div class="build-hero-picker">
+    <div class="build-hero-picker-heading"><h3>ПЕРСОНАЖИ</h3><span>Нажми на аватар, чтобы открыть сборку и настроить таланты</span></div>
+    <div class="build-hero-avatars" id="buildHeroAvatars" aria-label="Выбор персонажа для сборки и талантов"></div>
   </div>
   <input class="search build-search" id="buildSearch" type="search" placeholder="Найти героя для сборки..." aria-label="Поиск героя для сборки">
   <div class="filter-row" id="buildFilters" aria-label="Фильтр сборок по роли">
