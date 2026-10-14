@@ -596,3 +596,39 @@
   #heroDetailPage #profile-hero-skills { order: 6; }
   #heroDetailPage .hero-detail-tip-bottom { order: 7; }
 }
+
+
+/* Final cascade override: compact mobile scale and show more content per screen. */
+@media (max-width: 650px) {
+  #main-content > section:not(.hero-section) {
+    width: calc(100% - 8px) !important;
+    margin: 0 auto 8px !important;
+    padding: 18px 8px !important;
+    border-radius: 9px !important;
+    box-sizing: border-box !important;
+  }
+  #main-content > .hero-section {
+    width: 100% !important;
+    padding: 20px 10px 24px !important;
+    gap: 10px !important;
+  }
+  #main-content .section-heading { margin-bottom: 12px !important; gap: 6px !important; }
+  #main-content .section-heading h2 { font-size: clamp(18px, 4.8vw, 23px) !important; }
+  #main-content .section-heading p,
+  #main-content .hero-desc { font-size: 11px !important; line-height: 1.55 !important; }
+  #main-content .hero-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 6px !important; }
+  #main-content .hero-grid .hero-card-content { padding: 6px 4px !important; }
+  #main-content .hero-grid .hero-card-content h3,
+  #main-content .hero-grid .hero-card-content .hero-name { font-size: 10px !important; line-height: 1.25 !important; }
+  #main-content .hero-grid .hero-image-wrap { aspect-ratio: 3 / 4 !important; }
+  #main-content .item-grid,
+  #main-content .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 7px !important; }
+  #main-content .item-card-content,
+  #main-content .tier-card-content { padding: 8px !important; }
+}
+@media (max-width: 380px) {
+  #main-content > section:not(.hero-section) { padding: 15px 6px !important; }
+  #main-content .hero-grid { gap: 4px !important; }
+  #main-content .hero-grid .hero-card-content h3,
+  #main-content .hero-grid .hero-card-content .hero-name { font-size: 9px !important; }
+}
