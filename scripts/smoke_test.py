@@ -57,6 +57,12 @@ require('page === "talents" ? "talentLab"' in script, "Talent route must reveal 
 require('talents: "Таланты и эмблемы"' in script, "Talent route title is missing")
 require('id="talentHeroPortrait"' in talents and "heroArtByName" in talents,
         "Talent planner must render the selected hero portrait when the source is available")
+require("GrimGGHeroImageUrl" in script and "GrimGGHeroImageUrl" in talents,
+        "Talent planner must prefer the shared HD hero image resolver")
+require('img.dataset.fallback = catalogUrl && catalogUrl !== url ? catalogUrl : "";' in talents,
+        "Talent portrait must retry the catalog image before showing a placeholder")
+require('if (requestedPage !== "talents") section.classList.add("page-hidden");' in talents,
+        "Talent Lab must stay hidden except on its own route")
 require('id="talentRole"' in talents and 'id="talentHero"' in talents and 'id="talentStyle"' in talents,
         "Talent planner must expose role, hero and playstyle selectors")
 require('id="talentCopy"' in talents and 'id="talentReset"' in talents,
