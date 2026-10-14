@@ -151,6 +151,19 @@ try {
   check("Hero catalogue cards include image artwork",
     await page.locator("#heroGrid .hero-card .hero-image").count() > 0
     && await page.locator("#heroGrid .hero-card .hero-image[src]").count() > 0);
+  check("Hero catalogue avatars are circular and fill the frame",
+    await page.locator("#heroGrid .hero-image-wrap").first().evaluate(el => {
+      const s = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return s.borderRadius === "50%" && Math.abs(r.width - r.height) < 2
+        && getComputedStyle(el.querySelector(".hero-image")).objectFit === "cover";
+    }));
+  await page.locator('#perkFilters [data-perk-category="Roam"]').click();
+  await page.waitForTimeout(250);
+  check("Roam blessing has a visible dedicated icon",
+    await page.locator('#perkGrid .item-image-vector[aria-label="Роум-благословение"]').count() > 0
+    && await page.locator('#perkGrid .item-image-vector[aria-label="Роум-благословение"]').isVisible());
+  await page.locator('#perkFilters [data-perk-category="Все"]').click();
 
   // Tank and support roles are the core of many roam picks; make sure filtering them
   // does not hide or remove the associated hero artwork.
