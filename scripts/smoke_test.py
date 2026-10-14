@@ -117,6 +117,8 @@ require("grid-template-columns: repeat(3, minmax(0, 1fr))" in wide_styles and "o
         "Hero directory must show larger game-like portraits in a three-column phone grid")
 require("font-size: 9px; line-height: 1.25; min-height: 36px" in wide_styles,
         "Mobile hero-card actions must remain readable and touch-friendly")
+require("counterpick" not in script.lower() and "enemySelect" not in script and "ownHeroSelect" not in script,
+        "Removed counterpick functionality must not leave stale script references")
 require(".hero-grid .hero-card-actions { grid-template-columns: repeat(2, minmax(0, 1fr))" in wide_styles,
         "Three-column hero cards must keep build and 3D actions in a compact two-column row")
 
