@@ -49,6 +49,12 @@ require("styles.css?v=" in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must load a versioned main stylesheet")
 require('href="/Grim-gg-/favicon.svg"' in (ROOT / "404.html").read_text(encoding="utf-8"),
         "404 page must use the correct GitHub Pages favicon path")
+require('url=/Grim-gg-/' in (ROOT / "404.html").read_text(encoding="utf-8"),
+        "404 page must redirect to the correct GitHub Pages project path")
+require('window.location.replace("/Grim-gg-/")' in (ROOT / "404.html").read_text(encoding="utf-8"),
+        "404 JavaScript redirect must use the correct GitHub Pages project path")
+require('href="/Grim-gg-/"' in (ROOT / "404.html").read_text(encoding="utf-8"),
+        "404 fallback link must use the correct GitHub Pages project path")
 for route in ("home", "heroes", "tierlist", "items", "perks", "talents", "builds", "favorites", "guides", "esports"):
     require(f'href="?page={route}"' in html, f"Main navigation is missing route ?page={route}")
 
