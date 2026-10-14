@@ -3236,3 +3236,19 @@ img.hero-image,
   .build-spell-display { align-items:flex-start; font-size:11px; }
   .build-spell-icon { flex-basis:42px; width:42px; height:42px; }
 }
+
+
+/* GRIM_GG portrait cleanup: remove the leftover dark overlay after avatar labels were removed */
+.hero-image-wrap {
+  background:
+    radial-gradient(ellipse at 50% 62%, rgba(173, 42, 73, .20), transparent 68%),
+    linear-gradient(145deg, #30232d 0%, #241b27 58%, #30212a 100%) !important;
+}
+.hero-image-wrap::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+.hero-image-wrap .hero-image {
+  filter: saturate(1.08) contrast(1.04) !important;
+}
