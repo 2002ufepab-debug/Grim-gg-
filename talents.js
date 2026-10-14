@@ -311,6 +311,14 @@
         if (fallback) fallback.classList.add("talent-icon-fallback-hidden");
       }, {once:true});
       img.addEventListener("error", () => img.remove(), {once:true});
+      if (img.complete) {
+        if (img.naturalWidth > 0) {
+          const fallback = img.parentElement?.querySelector("svg");
+          if (fallback) fallback.classList.add("talent-icon-fallback-hidden");
+        } else {
+          img.remove();
+        }
+      }
     });
   }
 
