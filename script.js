@@ -1384,23 +1384,6 @@ function renderTierList() {
   }).join("");
 }
 
-function effectIconMarkup(item) {
-  const art = {
-    "retribution": '<path d="M59 13 34 55h17l-7 29 31-43H57Z" fill="#ff526b" stroke="#ffd0d7" stroke-width="3" stroke-linejoin="round"/><path d="m34 55-11 6 17 7 4-13" fill="#ff9aaa"/><circle cx="48" cy="48" r="36" fill="none" stroke="#ff526b" stroke-opacity=".5" stroke-width="3"/>',
-    "roam-boots": '<path d="M24 54c8 1 14-4 18-15l10 8c7 5 13 7 20 7 5 0 9 4 9 9v8H18v-7c0-5 2-8 6-10Z" fill="#b88cff" stroke="#eadbff" stroke-width="3" stroke-linejoin="round"/><path d="M22 65h55M42 45l-3 8M51 49l-2 5" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
-    "ice-retribution": '<g fill="none" stroke="#8feaff" stroke-width="3" stroke-linecap="round"><path d="M48 22v52M25 35l46 26M71 35L25 61M39 29l9 7 9-7M39 67l9-7 9 7M20 43l5-8 9 1M62 64l9 1 5-8M20 53l5 8 9-1M62 36l9-1 5 8"/></g>',
-    "flame-retribution": '<path d="M49 18c4 14-8 17-2 29 4-7 11-10 12-19 14 13 18 25 12 37-5 11-15 17-27 14-15-3-23-16-17-29 3-7 10-13 12-22 4 5 5 9 4 14 8-6 10-14 6-24Z" fill="#ff9858" stroke="#ffd1a0" stroke-width="3" stroke-linejoin="round"/><path d="M47 51c7 7 10 12 6 19-3 5-10 4-12-1-3-6 2-11 6-18Z" fill="#fff0bf"/>',
-    "bloody-retribution": '<path d="M48 18C39 32 27 43 27 56a21 21 0 0 0 42 0C69 43 57 32 48 18Z" fill="#ff526b" stroke="#ffb2bc" stroke-width="3"/><path d="M37 57c1 6 5 9 10 10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
-    "roam-conceal": '<path d="M17 48s12-19 31-19 31 19 31 19-12 19-31 19-31-19-31-19Z" fill="none" stroke="#c9a5ff" stroke-width="4"/><circle cx="48" cy="48" r="10" fill="#8d63d8" stroke="#eee0ff" stroke-width="3"/><path d="M13 75 75 13" stroke="#c9a5ff" stroke-width="4" stroke-linecap="round"/>',
-    "roam-encourage": '<path d="m48 16 9 20 22 2-17 15 5 22-19-12-19 12 5-22-17-15 22-2 9-20Z" fill="#ffc65e" stroke="#fff0b2" stroke-width="3" stroke-linejoin="round"/>',
-    "roam-favor": '<path d="M48 75 20 49C3 31 26 13 40 30l8 9 8-9c14-17 37 1 20 19L48 75Z" fill="#72e0a2" stroke="#d7ffe4" stroke-width="3" stroke-linejoin="round"/>',
-    "roam-dire-hit": '<circle cx="48" cy="48" r="28" fill="none" stroke="#ff7487" stroke-width="4"/><circle cx="48" cy="48" r="15" fill="none" stroke="#ffb3bf" stroke-width="4"/><circle cx="48" cy="48" r="5" fill="#fff"/><path d="M48 9v17M48 70v17M9 48h17M70 48h17" stroke="#ff7487" stroke-width="4" stroke-linecap="round"/>'
-  }[item.id];
-  if (!art) return "";
-  const glow = item.cat === "Roam" ? "#241a35" : "#172632";
-  return `<svg class="item-image item-image-vector" viewBox="0 0 96 96" role="img" aria-label="${escapeHTML(item.ru)}" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="effect-bg-${escapeHTML(item.id)}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${glow}"/><stop offset="1" stop-color="#100d13"/></linearGradient></defs><rect x="3" y="3" width="90" height="90" rx="18" fill="url(#effect-bg-${escapeHTML(item.id)})" stroke="#765065" stroke-width="2"/><circle cx="48" cy="48" r="35" fill="#ffffff08" stroke="#ffffff18"/>${art}</svg>`;
-}
-
 function itemFallbackIconMarkup(item) {
   const cat = item.cat;
   const icon = cat === "Attack"
