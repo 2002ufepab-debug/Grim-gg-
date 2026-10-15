@@ -34,7 +34,7 @@ try {
     }, { once: true });
   });
   const pageErrors = [];
-  page.on("pageerror", error => pageErrors.push(error.stack || error.message));
+  page.on("pageerror", error => pageErrors.push(JSON.stringify({name: error.name, message: error.message, stack: error.stack || "", url: page.url()})));
 
   // Wait for the role-first homepage revision instead of accidentally testing cached HTML.
   let publishedRevision = false;
