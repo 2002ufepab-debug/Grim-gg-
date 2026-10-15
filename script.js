@@ -1438,7 +1438,7 @@ function renderItemCards(filtered, grid, emptyMessage) {
     const missingIcon = '<div class="item-symbol item-symbol-fallback" role="img" aria-label="Оригинальная иконка недоступна"><span style="font:600 10px/1.4 sans-serif;text-align:center;padding:6px">Нет оригинальной иконки</span></div>';
     // Use real game-icon artwork for jungle spell upgrades and roaming blessings.
     const specialIconSlugs = {
-      "retribution":"retribution",
+      "retribution":"spell-retribution",
       "ice-retribution":"ice-retribution",
       "flame-retribution":"flame-retribution",
       "bloody-retribution":"bloody-retribution",
@@ -1449,9 +1449,11 @@ function renderItemCards(filtered, grid, emptyMessage) {
       "roam-dire-hit":"dire-hit"
     };
     const specialSlug = specialIconSlugs[item.id];
-    const iconSource = specialSlug
-      ? "https://mlbbhub.com/images/items/" + specialSlug + ".png"
-      : item.imageFile
+    const iconSource = specialSlug === "spell-retribution"
+      ? "https://mlbbhub.com/images/spells/retribution.png"
+      : specialSlug
+        ? "https://mlbbhub.com/images/items/" + specialSlug + ".png"
+        : item.imageFile
         ? ITEM_IMAGE_BASE + item.imageFile
         : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
     const retrySource = "";
