@@ -1515,7 +1515,7 @@
   padding: 0 !important;
   border-radius: 50% !important;
   object-fit: cover !important;
-  object-position: center center !important;
+  object-position: center 22% !important;
   transform: none !important;
   filter: none !important;
 }
