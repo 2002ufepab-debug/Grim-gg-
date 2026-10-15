@@ -1236,7 +1236,7 @@ function renderHeroes() {
     return `<article class="hero-card">
       <div class="hero-image-wrap">
         <button type="button" class="hero-image-open" data-open-hero-full="${escapeHTML(hero.name)}" aria-label="Открыть сборку и таланты героя ${escapeHTML(hero.name)}">
-          ${heroCircleImageMarkup(hero)}
+          ${heroImageMarkup(hero)}
         </button>
       </div>
       <div class="hero-card-content">
