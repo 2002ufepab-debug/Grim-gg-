@@ -271,7 +271,7 @@ const heroSplashDirectImageUrl = path =>
   String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
 const HERO_GAME_AVATAR_OVERRIDES = {
   // Use the in-game avatar icons for the three circular portraits being refined.
-  "arlott": "https://static.wikia.nocookie.net/mobile-legends/images/2/22/Hero1201-icon.png/revision/latest?cb=20241021153344",
+  "arlott": "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/arlott.png",
   "atlas": "https://static.wikia.nocookie.net/mobile-legends/images/6/6e/Hero931-icon.png",
   "badang": "https://static.wikia.nocookie.net/mobile-legends/images/a/a4/Hero771-icon.png"
 };
