@@ -423,7 +423,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js?v=11", { scope: "./" })
+        navigator.serviceWorker.register("./sw.js?v=12", { scope: "./" })
           .catch((error) => console.warn("Grim_gg: service worker registration failed", error));
       });
     }
