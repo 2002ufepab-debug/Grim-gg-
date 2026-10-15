@@ -1640,14 +1640,17 @@ function closeHeroBuild() {
 function renderBuildHeroAvatars() {
   const container = $("buildHeroAvatars");
   if (!container) return;
-  if (container.dataset.rendered !== "true") {
-    const sortedHeroes = [...heroes].sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "en", { sensitivity: "base" }));
+  const sortedHeroes = [...heroes].sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "en", { sensitivity: "base" }));
+  const rosterSignature = sortedHeroes.map(hero => String(hero.name || "")).join("|");
+  // Rebuild when the remote catalog replaces the initial offline fallback list.
+  if (container.dataset.rosterSignature !== rosterSignature) {
     container.innerHTML = sortedHeroes.map(hero => `
       <button type="button" class="build-hero-avatar" data-build-hero="${escapeHTML(hero.name)}" aria-pressed="false" aria-label="Выбрать ${escapeHTML(hero.name)}">
         <span class="build-hero-avatar-art">${heroImageMarkup(hero)}</span>
         <span class="build-hero-avatar-name">${escapeHTML(hero.name)}</span>
       </button>`).join("");
     container.dataset.rendered = "true";
+    container.dataset.rosterSignature = rosterSignature;
   }
   const selectedName = buildQuery.trim().toLocaleLowerCase();
   const query = buildHeroPickerQuery.trim().toLocaleLowerCase();
