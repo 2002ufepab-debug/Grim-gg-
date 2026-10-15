@@ -8,7 +8,7 @@ const APP_SHELL = [
   "./layout-wide.css?v=18",
   "./visual-refresh.css?v=2",
   "./premium-update.css?v=6",
-  "./mobile-optimization.css?v=40",
+  "./mobile-optimization.css?v=41",
   "./script.js?v=104",
   "./talents.js?v=23",
   "./favicon.svg",
