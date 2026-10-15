@@ -2172,7 +2172,7 @@ async function loadExternalHeroes() {
 
 
 function applyPageNavigation(requestedPage, shouldScroll = true) {
-  const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","esports","hero"];
+  const pageIds = ["home","heroes","tierlist","items","perks","talents","builds","favorites","guides","esports","download","hero"];
   // Keep old talent-page links working, but show the unified builds + talents workspace.
   const page = requestedPage === "talents" ? "builds" : pageIds.includes(requestedPage) ? requestedPage : "home";
   const visibleSection = page === "hero" ? "hero-detail" : page;
@@ -2202,11 +2202,79 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     favorites: "Избранное",
     guides: "Комбо и гайды",
     esports: "Киберспорт",
+    download: "Скачать приложение",
     hero: "Профиль героя"
   };
   document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — тактическая база Mobile Legends";
 
   if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+
+let deferredInstallPrompt = null;
+
+function setupAppInstall() {
+  const installButton = $("installAndroidApp");
+  const status = $("installStatus");
+  const copyButton = $("copySiteLink");
+  const say = message => { if (status) status.textContent = message; };
+
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    if (installButton) {
+      installButton.disabled = false;
+      installButton.textContent = "Установить приложение";
+    }
+    say("Браузер поддерживает быструю установку Grim_gg — нажми кнопку выше.");
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    if (installButton) {
+      installButton.disabled = true;
+      installButton.textContent = "Приложение установлено";
+    }
+    say("Grim_gg установлен. Ищи его значок на главном экране телефона.");
+  });
+
+  installButton?.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) {
+      say("Быстрая установка сейчас недоступна в этом браузере. На Android открой сайт в Chrome, нажми меню ⋮ и выбери «Установить приложение» или «Добавить на главный экран». На iPhone используй Safari и меню «Поделиться» → «На экран Домой».");
+      return;
+    }
+    deferredInstallPrompt.prompt();
+    const choice = await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    if (choice?.outcome === "accepted") {
+      say("Установка подтверждена. Подожди, пока Grim_gg появится среди приложений.");
+    } else {
+      say("Установка пока не завершена. Ты можешь вернуться и попробовать ещё раз или воспользоваться инструкцией ниже.");
+    }
+  });
+
+  copyButton?.addEventListener("click", async () => {
+    const link = window.location.origin + window.location.pathname;
+    try {
+      await navigator.clipboard.writeText(link);
+      say("Ссылка на Grim_gg скопирована. Отправь её друзьям, чтобы они тоже могли установить сайт.");
+    } catch {
+      say("Скопируй ссылку вручную: " + link);
+    }
+  });
+
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  if (isStandalone) {
+    if (installButton) {
+      installButton.disabled = true;
+      installButton.textContent = "Grim_gg уже установлен";
+    }
+    say("Похоже, Grim_gg уже установлен на этом устройстве. Можешь поделиться ссылкой с друзьями.");
+  } else if (isIOS) {
+    say("Для iPhone: открой эту страницу в Safari → «Поделиться» → «На экран Домой» → «Добавить».");
+  }
 }
 
 function setupPageNavigation() {
@@ -2501,6 +2569,7 @@ function init() {
     }
   });
   setupPageNavigation();
+  setupAppInstall();
   setupBackToTop();
   setupFilters();
   setupMenu();
