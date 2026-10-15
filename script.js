@@ -923,8 +923,9 @@ function heroCircleImageMarkup(hero) {
   if (["aamon", "alpha", "alucard"].includes(key)) return heroImageMarkup(hero);
   const initial = escapeHTML((hero.name || "?").slice(0, 1).toUpperCase());
   const initialJS = heroInitialJS(hero.name);
-  const primaryImage = hero.image || heroHDImageUrl(hero.name) || heroImageUrl(hero.name);
-  const retryImage = hero.fallbackImage && hero.fallbackImage !== primaryImage ? hero.fallbackImage : heroImageUrl(hero.name);
+  const primaryImage = heroImageUrl(hero.name) || hero.image || heroHDImageUrl(hero.name);
+  const retryCandidates = [hero.image, hero.fallbackImage, heroHDImageUrl(hero.name)].filter(src => src && src !== primaryImage);
+  const retryImage = retryCandidates[0] || "";
   return `<img class="hero-image hero-image--avatar hero-image--circle-icon" src="${escapeHTML(primaryImage)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${initialJS},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
@@ -1272,7 +1273,7 @@ function renderHeroes() {
     return `<article class="hero-card">
       <div class="hero-image-wrap">
         <button type="button" class="hero-image-open" data-open-hero-full="${escapeHTML(hero.name)}" aria-label="Открыть сборку и таланты героя ${escapeHTML(hero.name)}">
-          ${heroImageMarkup(hero)}
+          ${heroCircleImageMarkup(hero)}
         </button>
       </div>
       <div class="hero-card-content">
@@ -1778,7 +1779,7 @@ function renderFavorites() {
     const saved = heroes.filter(h=>favoriteHeroes.has(String(h.id)));
     grid.innerHTML = saved.length ? saved.map(hero=>`
       <article class="hero-card">
-        <div class="hero-image-wrap">${heroImageMarkup(hero)}</div>
+        <div class="hero-image-wrap">${heroCircleImageMarkup(hero)}</div>
         <div class="hero-card-content"><h3>${escapeHTML(hero.name)}</h3>
         <p class="hero-role">${escapeHTML(getHeroClasses(hero).join(" / "))}</p>
         <a class="btn btn-3d hero-card-3d" href="${escapeHTML(hero3DModelUrl(hero))}" target="_blank" rel="noopener noreferrer" aria-label="Открыть 3D-модель героя ${escapeHTML(hero.name)}">◈ 3D-модель героя ↗</a>
