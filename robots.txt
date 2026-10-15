@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://2002ufepab-debug.github.io/Grim-gg-/sitemap.xml
+Sitemap: https://mlbbgame.github.io/Grim-gg-/sitemap.xml
