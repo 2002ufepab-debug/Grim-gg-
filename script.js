@@ -1316,30 +1316,44 @@ function renderHeroes() {
 
 
 const tierHighlights = {
-  Fanny:{tier:"S",reason:"Очень высокий потенциал при точном управлении тросами и хорошем понимании карты."},
-  Ling:{tier:"S",reason:"Мобильность позволяет выбирать цели и менять направление атаки; важны ресурсы и тайминг."},
-  Vexana:{tier:"S",reason:"Контроль и урон по области могут заметно влиять на командные сражения."},
-  Claude:{tier:"S",reason:"Силен при хорошем фарме, подходящих предметах и безопасной позиции в бою."},
-  Khufra:{tier:"S",reason:"Контроль и противодействие рывкам полезны против мобильных героев."},
-  Belerick:{tier:"A",reason:"Выносливость и ответ на частые обычные атаки помогают против определённых составов."},
-  Ruby:{tier:"A",reason:"Контроль и восстановление помогают в затяжных боях при правильном выборе момента."},
-  Xavier:{tier:"A",reason:"Дальность навыков помогает наносить урон и поддерживать команду из безопасной позиции."},
-  Karrie:{tier:"A",reason:"Может хорошо справляться с выносливыми целями при подходящих предметах."},
-  Diggie:{tier:"A",reason:"Полезен против составов, которые полагаются на контроль, если вовремя использовать поддержку."},
-  Terizla:{tier:"A",reason:"Выносливость и контроль по области полезны в боях за ключевые цели."},
-  Tigreal:{tier:"B",reason:"Сильное начало боя требует обзора, позиции и согласованных действий команды."},
-  Chou:{tier:"B",reason:"Может изолировать важную цель, но многое зависит от механики и точного тайминга."},
-  Miya:{tier:"B",reason:"Раскрывается при безопасном фарме и надёжном прикрытии союзников."},
-  Layla:{tier:"B",reason:"Высокая дальность помогает наносить урон, но позиция и защита команды особенно важны."},
-  Eudora:{tier:"B",reason:"Опасна при удачной комбинации, однако зависит от возможности добраться до цели."},
-  Nana:{tier:"B",reason:"Контроль мешает соперникам, а эффективность зависит от таймингов и состава команд."},
-  Saber:{tier:"B",reason:"Опасен для одиночных целей, но ему сложнее против слаженной и сгруппированной команды."},
-  Alucard:{tier:"B",reason:"Нуждается в хорошем выборе момента входа и подходящих условиях для сближения."},
-  Hanabi:{tier:"B",reason:"Может наносить урон в командных боях, если получает время и защиту."},
-  Gusion:{tier:"A",reason:"Высокий потенциал быстрого урона при хорошем исполнении комбинаций."},
-  Faramis:{tier:"A",reason:"Командная поддержка и своевременное использование ультимейта могут изменить ход боя."},
-  Lolita:{tier:"A",reason:"Защитные способности особенно ценны против подходящих снарядов и атак соперника."},
+  Fanny:{reason:"Очень высокий механический потолок, но в общей статистике всех рангов её результат сейчас низкий; в высоких рангах оценка может отличаться."},
+  Ling:{reason:"Сильный мобильный лесник, но требует хорошей механики и решений по карте."},
+  Vexana:{reason:"Контроль и урон по области полезны, но текущая общая статистика не относит её к верхнему тир-уровню."},
+  Claude:{reason:"Сильно масштабируется с предметами, однако нуждается в фарме и защите."},
+  Khufra:{reason:"Сильный роум-танк: контроль и противодействие рывкам особенно ценны против мобильных соперников."},
+  Belerick:{reason:"Выносливый роум-танк, особенно полезный против героев с частыми базовыми атаками."},
+  Ruby:{reason:"Контроль и восстановление помогают в затяжных боях, но эффективность зависит от состава соперника."},
+  Xavier:{reason:"Дальность навыков и контроль полезны, но текущая статистика не ставит его в число лидеров."},
+  Karrie:{reason:"Может хорошо разбирать выносливые цели, однако общая статистика сейчас ниже среднего."},
+  Diggie:{reason:"Особенно полезен против составов, зависящих от контроля; в текущем срезе относится к сильным выборам."},
+  Terizla:{reason:"Выносливость и контроль по области хороши в командных боях; текущий рейтинг — средний."},
+  Tigreal:{reason:"Сильное начало боя зависит от позиции и координации; текущая общая статистика низкая."},
+  Chou:{reason:"Может изолировать важную цель, но текущая общая статистика показывает слабый результат."},
+  Miya:{reason:"Хорошо масштабируется, но уязвима без прикрытия; текущая общая статистика ниже среднего."},
+  Layla:{reason:"Высокая дальность помогает в поздней игре, но выживание и позиционирование критичны."},
+  Eudora:{reason:"Опасна при удачной комбинации и имеет высокий ban rate, хотя недавний балансный патч снизил урон."},
+  Nana:{reason:"Контроль полезен, но текущая общая статистика указывает на ситуативный выбор."},
+  Saber:{reason:"Опасен против одиночных целей, но уязвим против сгруппированной команды."},
+  Alucard:{reason:"Нуждается в хорошем входе в бой; текущая общая статистика показывает низкую эффективность."},
+  Hanabi:{reason:"Сильнее в командных боях при прикрытии; в текущем срезе относится к сильным выборам."},
+  Gusion:{reason:"Высокий потенциал быстрого урона при хорошем исполнении, но общая статистика сейчас слабая."},
+  Faramis:{reason:"Командная поддержка может перевернуть бой; общая статистика находится около среднего."},
+  Lolita:{reason:"Защита от снарядов и контроль полезны; текущая статистика относит её к сильным выборам."}
 };
+
+const CURRENT_PATCH_TIER_GROUPS = {
+  S:["Masha","Aulus","Rafaela","Marcel","Argus","Minotaur","Khufra","Popol and Kupa","Gloo","Floryn","Carmilla","Obsidia","Hirara"],
+  A:["Lolita","Valir","Diggie","Bruno","Gord","Lukas","Estes","Edith","Benedetta","Irithel","Ling","Zhask","Sun","Hanabi","Belerick","Atlas","Barats","Kagura","Eudora","Minsitthar","Guinevere","Kadita","Zetian"],
+  B:["Yve","Cyclops","Beatrix","Natan","Bane","Fredrinn","Faramis","Natalia","Cecilion","Silvanna","Alice","Brody","Terizla","Khaleed","Clint","Leomord","Akai","Hilda","Aldous","Paquito","Zhuxin","Badang","Ixia","Vale","Aamon","Julian","Moskov","X.Borg","Saber","Xavier","Kaja","Novaria","Suyou","Ruby","Sora","Hanzo","Yi Sun-shin","Lylia","Vexana","Miya","Odette","Cici","Layla","Angela","Claude","Selena","Nolan","Dyrroth","Lesley"],
+  C:["Uranus","Joy","Yu Zhong","Hylos","Yin","Kimmy","Roger","Karrie","Thamuz","Lapu-Lapu","Melissa","Aurora","Phoveus","Lunox","Johnson","Wanwan","Hayabusa","Arlott","Freya","Alpha","Gusion","Chang'e","Alucard","Luo Yi","Karina","Jawhead","Harley","Chip","Nana","Pharsa","Martis","Esmeralda","Helcurt"],
+  D:["Baxia","Grock","Balmond","Harith","Valentina","Zilong","Kalea","Chou","Gatotkaca","Mathilda","Tigreal","Granger","Lancelot","Fanny","Franco"]
+};
+const CURRENT_PATCH_TIER_BY_HERO = new Map(
+  Object.entries(CURRENT_PATCH_TIER_GROUPS).flatMap(([tier,names]) =>
+    names.map(name => [heroImageKey(name),tier])
+  )
+);
+const TIER_DATA_SNAPSHOT = "Патч 2.2.16a · 15 октября 2026 · все ранги";
 
 function tierReason(hero, tier) {
   const custom = tierHighlights[hero.name];
@@ -1355,18 +1369,21 @@ function tierReason(hero, tier) {
 }
 
 function getTierEntries() {
-  const knownNames = new Map(Object.entries(tierHighlights).map(([name, data]) => [name.toLocaleLowerCase(), data]));
   return heroes.map(hero => {
-    const custom = knownNames.get(hero.name.toLocaleLowerCase());
-    const tier = custom?.tier || "B";
-    return {
-      hero,
-      tier,
-      role: getHeroClasses(hero),
-      reason: custom?.reason || tierReason(hero, tier)
+    const custom = tierHighlights[hero.name] || tierHighlights[hero.name.replace(/[^a-z0-9]/gi,"")];
+    const tier = CURRENT_PATCH_TIER_BY_HERO.get(heroImageKey(hero.name)) || "B";
+    const role = getHeroClasses(hero);
+    const tierReasonText = {
+      S:"Текущий срез относит героя к S: один из самых сильных вариантов по общей статистике.",
+      A:"Текущий срез относит героя к A: сильный выбор, хотя результат зависит от роли и состава.",
+      B:"Текущий срез относит героя к B: средний/надёжный вариант, не обязательный первый выбор.",
+      C:"Текущий срез относит героя к C: ситуативный выбор; особенно важны состав команды и мастерство.",
+      D:"Текущий срез относит героя к D: по общей статистике он сейчас уступает большинству героев."
     };
+    const reason = [tierReasonText[tier],custom?.reason || ""].filter(Boolean).join(" ");
+    return {hero,tier,role,reason};
   }).sort((a,b) => {
-    const order = {S:0,A:1,B:2,C:3};
+    const order = {S:0,A:1,B:2,C:3,D:4};
     return order[a.tier]-order[b.tier] || a.hero.name.localeCompare(b.hero.name);
   });
 }
