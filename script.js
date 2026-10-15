@@ -277,6 +277,7 @@ const HERO_SPLASH_ART_OVERRIDES = {
   "eudora": "Eudora/Lightning Weaver.png",
   "hanzo": "Hanzo/The Pale Phantom.png",
   "harley": "Harley/Star Magician.png",
+  "hirara": "Hiara/Gilded Embers.png",
   "kimmy": "Kimmy/Charge Leader.png",
   "lancelot": "Lancelot/Swordmaster.png",
   "minotaur": "Minotaur/Son of Minos.png",
