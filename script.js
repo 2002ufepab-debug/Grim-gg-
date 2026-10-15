@@ -887,8 +887,8 @@ function heroCircleImageMarkup(hero) {
   const key = heroImageKey(hero.name);
   if (["aamon", "alpha", "alucard"].includes(key)) return heroImageMarkup(hero);
   const initial = escapeHTML((hero.name || "?").slice(0, 1).toUpperCase());
-  const primaryImage = hero.fallbackImage || heroImageUrl(hero.name);
-  const retryImage = heroImageUrl(hero.name);
+  const primaryImage = hero.image || heroHDImageUrl(hero.name) || heroImageUrl(hero.name);
+  const retryImage = hero.fallbackImage && hero.fallbackImage !== primaryImage ? hero.fallbackImage : heroImageUrl(hero.name);
   return `<img class="hero-image hero-image--avatar hero-image--circle-icon" src="${escapeHTML(primaryImage)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
