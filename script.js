@@ -1371,6 +1371,16 @@ function getTierEntries() {
   });
 }
 
+/* Tier-list-only image resolver: prefer the square in-game hero icon for consistent source dimensions.
+   This is intentionally separate from heroImageMarkup/heroCircleImageMarkup so the catalog is unchanged. */
+function tierHeroImageMarkup(hero) {
+  const name = hero.name || "?";
+  const initial = heroInitialJS(name);
+  const primary = heroImageUrl(name);
+  const fallback = hero.image && hero.image !== primary ? hero.image : "";
+  return `<img class="hero-image tier-hero-image" src="${escapeHTML(primary)}" alt="${escapeHTML(name)}" loading="lazy" decoding="async" fetchpriority="low" data-tier-fallback="${escapeHTML(fallback)}" onerror="if(this.dataset.tierFallback && this.dataset.tierFallback!==this.src){const next=this.dataset.tierFallback;this.dataset.tierFallback='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${initial},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+}
+
 function renderTierList() {
   const grid = $("tierGrid");
   const count = $("tierCount");
@@ -1393,7 +1403,7 @@ function renderTierList() {
   }
   const tierNames = {S:"Высокий приоритет",A:"Надёжный выбор",B:"Ситуативный выбор",C:"Требует условий"};
   grid.innerHTML = filtered.map(entry => {
-    const art = heroImageMarkup(entry.hero);
+    const art = tierHeroImageMarkup(entry.hero);
     const roles = entry.role.map(role => `<span>${escapeHTML(role)}</span>`).join("");
     return `<article class="tier-card">
       <div class="tier-card-art">${art}<span class="tier-rank tier-${entry.tier.toLowerCase()}">${entry.tier}</span></div>
