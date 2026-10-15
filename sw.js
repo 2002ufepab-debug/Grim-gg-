@@ -1,5 +1,5 @@
 /* Grim_gg PWA service worker */
-const CACHE_NAME = "grim-gg-pwa-v3";
+const CACHE_NAME = "grim-gg-pwa-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -14,7 +14,9 @@ const APP_SHELL = [
   "./favicon.svg",
   "./icon-192.svg",
   "./icon-512.svg",
-  "./manifest.webmanifest"
+  "./manifest.webmanifest",
+  "./data/hero-catalog.json",
+  "./data/equipment-catalog.json"
 ];
 
 self.addEventListener("install", (event) => {
@@ -41,6 +43,39 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
+
+  // Cache community-hosted hero/equipment artwork as it is viewed online.
+  // Opaque image responses are valid cache entries and can be displayed offline.
+  const isCommunityImage = request.destination === "image"
+    && url.hostname === "raw.githubusercontent.com"
+    && (url.pathname.includes("/images-hero/") || url.pathname.includes("/logo-equipment/"));
+  if (isCommunityImage) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(request);
+      if (cached) {
+        fetch(request).then(response => {
+          if (response && (response.ok || response.type === "opaque")) {
+            cache.put(request, response.clone()).catch(() => {});
+          }
+        }).catch(() => {});
+        return cached;
+      }
+      try {
+        const response = await fetch(request);
+        if (response && (response.ok || response.type === "opaque")) {
+          cache.put(request, response.clone()).catch(() => {});
+        }
+        return response;
+      } catch (error) {
+        const fallback = await cache.match(request);
+        if (fallback) return fallback;
+        throw error;
+      }
+    })());
+    return;
+  }
+
   if (url.origin !== self.location.origin || !url.href.startsWith(self.registration.scope)) return;
 
   if (request.mode === "navigate") {
