@@ -1,5 +1,5 @@
 /* Grim_gg PWA service worker */
-const CACHE_NAME = "grim-gg-pwa-v1";
+const CACHE_NAME = "grim-gg-pwa-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,7 +11,7 @@ const APP_SHELL = [
   "./mobile-optimization.css?v=38",
   "./script.js?v=100",
   "./talents.js?v=23",
-  "./favicon.svg",
+  "./favicon.svg",\n  "./icon-192.svg",\n  "./icon-512.svg",
   "./manifest.webmanifest"
 ];
 
