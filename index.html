@@ -24,13 +24,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <meta name="description" content="Grim_MLBB — неофициальная тактическая база Mobile Legends: герои по ролям, предметы, сборки, таланты, комбо и гайды.">
   <title>Grim_MLBB — тактическая база Mobile Legends</title>
-  <link rel="stylesheet" href="styles.css?v=59">
+  <link rel="stylesheet" href="styles.css?v=60">
   <link rel="stylesheet" href="talents.css?v=11">
   <link rel="stylesheet" href="layout-wide.css?v=18">
   <link rel="stylesheet" href="visual-refresh.css?v=2">
   <link rel="stylesheet" href="premium-update.css?v=6">
   <link rel="stylesheet" href="mobile-optimization.css?v=39">
-  <script src="script.js?v=101" defer></script>
+  <script src="script.js?v=102" defer></script>
   <script src="talents.js?v=23" defer></script>
 </head>
 <body>
@@ -49,6 +49,7 @@
     <a href="?page=favorites">Избранное</a>
     <a href="?page=guides">Комбо и гайды</a>
     <a href="?page=esports">Киберспорт</a>
+    <a class="nav-download" href="?page=download">Скачать приложение</a>
     <a href="https://mlbb.tools/models" target="_blank" rel="noopener noreferrer">3D-модели ↗</a>
   </nav>
 </header>
@@ -352,6 +353,43 @@
   <p class="fine-print esports-disclaimer">Grim_gg — фанатский справочный проект, не связанный с MOONTON Games. Новости собраны со страниц организаторов; лента автоматически собирается из доступных официальных публикаций MOONTON Games. Расписание и результаты матчей могут обновляться с задержкой и проверяются по ссылкам организаторов.</p>
 </section>
 
+<section class="section download-section page-hidden" id="download">
+  <div class="section-heading">
+    <div><div class="eyebrow">09 / INSTALL GRIM_GG</div><h2>GRIM_GG <span class="red">НА ТВОЁМ ТЕЛЕФОНЕ</span></h2></div>
+    <p>Установи тактическую базу на главный экран и открывай её как отдельное приложение.</p>
+  </div>
+  <div class="download-intro">
+    <span class="download-app-mark" aria-hidden="true">G<span>_</span></span>
+    <div><h3>Твой помощник по MLBB — всегда под рукой</h3><p>Герои, сборки, таланты и гайды. После предварительной загрузки сайт поддерживает офлайн-режим.</p></div>
+  </div>
+  <div class="download-platform-grid">
+    <article class="download-platform-card" id="downloadAndroid">
+      <div class="download-platform-icon" aria-hidden="true">ANDROID</div>
+      <h3>Для Android</h3>
+      <p>Открой Grim_gg в Chrome и установи его на главный экран. Если браузер поддерживает быструю установку, кнопка ниже запустит её.</p>
+      <button class="btn btn-red download-install-button" type="button" id="installAndroidApp">Установить на Android</button>
+      <ol class="download-steps">
+        <li>Открой этот сайт в Google Chrome.</li>
+        <li>Нажми «Установить приложение», если появится предложение. Если нет — открой меню <strong>⋮</strong> и выбери «Установить приложение» или «Добавить на главный экран».</li>
+        <li>Подтверди установку и запускай Grim_gg с иконки.</li>
+      </ol>
+    </article>
+    <article class="download-platform-card" id="downloadApple">
+      <div class="download-platform-icon" aria-hidden="true">iOS</div>
+      <h3>Для iPhone</h3>
+      <p>На iPhone Grim_gg устанавливается с помощью Safari — отдельный APK или скачивание из App Store для этого сайта не нужны.</p>
+      <ol class="download-steps">
+        <li>Открой Grim_gg в браузере <strong>Safari</strong>.</li>
+        <li>Нажми кнопку «Поделиться» — значок квадрата со стрелкой вверх.</li>
+        <li>Выбери «На экран Домой» (при необходимости — «Ещё»), затем нажми «Добавить».</li>
+      </ol>
+    </article>
+  </div>
+  <p class="download-status" id="installStatus" role="status" aria-live="polite">Grim_gg устанавливается с этого сайта. Установка добавляет ярлык-приложение и не удаляет данные браузера.</p>
+  <p class="fine-print">Grim_gg — неофициальный фанатский справочник Mobile Legends: Bang Bang. Это веб-приложение (PWA), а не отдельный APK и не приложение из App Store. Для первоначальной загрузки и обновления данных нужен интернет.</p>
+  <div class="download-footer-actions"><a class="btn btn-ghost" href="./">Открыть сайт</a><button class="btn btn-ghost" type="button" id="copySiteLink">Скопировать ссылку</button></div>
+</section>
+
 <section class="join-banner">
   <div><div class="eyebrow">YOUR NEXT MATCH STARTS HERE</div><h2>ТАКТИКА — ТВОЁ <span class="red">ПРЕИМУЩЕСТВО.</span></h2><p>Возвращайся в Grim_gg перед следующим матчем.</p></div>
   <a class="btn btn-red" href="?page=home">Наверх ↑</a>
@@ -384,7 +422,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js?v=4", { scope: "./" })
+        navigator.serviceWorker.register("./sw.js?v=5", { scope: "./" })
           .catch((error) => console.warn("Grim_gg: service worker registration failed", error));
       });
     }
