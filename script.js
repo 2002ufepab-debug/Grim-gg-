@@ -1362,7 +1362,8 @@ function tierReason(hero, tier) {
   const defaults = {
     S:"Предварительно высокий приоритет. Проверь, подходит ли герой под состав команды и текущий патч.",
     A:"Надёжный вариант во многих ситуациях; результат зависит от противостояния, сборки и мастерства игрока.",
-    B:"Ситуативный выбор. Оцени составы команд, контрпики и собственный опыт игры на герое.",
+    B:"Средний вариант. Учитывай составы команд, контрпики и собственный опыт игры на герое.",
+    D:"По общей статистике герой сейчас уступает большинству вариантов; учитывай контрпики и особенности своего ранга.",
     C:"Выбор требует подходящих условий или хорошего владения героем; учитывай контрпики и план команды."
   };
   return `${defaults[tier]} Роль в каталоге: ${role}.`;
@@ -1376,8 +1377,9 @@ function getTierEntries() {
     const tierReasonText = {
       S:"Текущий срез относит героя к S: один из самых сильных вариантов по общей статистике.",
       A:"Текущий срез относит героя к A: сильный выбор, хотя результат зависит от роли и состава.",
-      B:"Текущий срез относит героя к B: средний/надёжный вариант, не обязательный первый выбор.",
-      C:"Текущий срез относит героя к C: ситуативный выбор; особенно важны состав команды и мастерство.",
+      B:"Текущий срез относит героя к B: средний вариант, эффективность которого зависит от состава команды и ситуации.",
+      D:"Текущий срез относит героя к D: по общей статистике он сейчас уступает большинству героев.",
+      C:"Текущий срез относит героя к C: ситуативный выбор; особенно важны состав команды и мастерство игрока.",
       D:"Текущий срез относит героя к D: по общей статистике он сейчас уступает большинству героев."
     };
     const reason = [tierReasonText[tier],custom?.reason || ""].filter(Boolean).join(" ");
@@ -1410,15 +1412,12 @@ function renderTierList() {
   );
   count.textContent = `Показано ${filtered.length} из ${heroes.length} героев · сортировка по уровню и имени`;
   if (!filtered.length) {
-    const tierHasNoAssignedHeroes = activeTier === "C" && !query && activeTierRole === "Все";
-    const emptyTitle = tierHasNoAssignedHeroes ? "Уровень C пока не назначен" : "Ничего не найдено";
-    const emptyMessage = tierHasNoAssignedHeroes
-      ? "В текущей редакционной оценке герои уровня C не указаны. Герои без отдельной оценки временно отображаются на уровне B."
-      : "Измени поиск или сбрось фильтры.";
+    const emptyTitle = "Ничего не найдено";
+    const emptyMessage = "Измени поиск или сбрось фильтры.";
     grid.innerHTML = `<div class="tier-empty"><strong>${emptyTitle}</strong><p>${emptyMessage}</p><button class="btn btn-ghost" type="button" data-tier-reset>Сбросить фильтры</button></div>`;
     return;
   }
-  const tierNames = {S:"Высокий приоритет",A:"Надёжный выбор",B:"Ситуативный выбор",C:"Требует условий"};
+  const tierNames = {S:"Высокий приоритет",A:"Надёжный выбор",B:"Средний уровень",C:"Ситуативный выбор",D:"Ниже среднего"};
   grid.innerHTML = filtered.map(entry => {
     const art = tierHeroImageMarkup(entry.hero);
     const roles = entry.role.map(role => `<span>${escapeHTML(role)}</span>`).join("");
@@ -1868,7 +1867,7 @@ function renderBuilds() {
   });
 
   const count = $("buildCount");
-  if (count) count.textContent = `Сборок в каталоге: ${filtered.length} из ${heroes.length} героев`;
+  if (count) count.textContent = `Героев в списке сборок: ${filtered.length} из ${heroes.length}`;
 
   if (!filtered.length) {
     grid.innerHTML = '<p class="empty-state">Герои не найдены. Измени поиск или выбери другую роль.</p>';
