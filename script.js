@@ -258,7 +258,35 @@ const HERO_SPLASH_ART_OVERRIDES = {
   "yve": "Yve/Astrowarden.png",
   "zetian": "Zetian/Celestial Empress.png",
   "zhuxin": "Zhuxin/Emberwisp Mystic.png",
-  "zilong": "Zilong/Eastern Warrior.png"
+  "zilong": "Zilong/Eastern Warrior.png",
+  "akai": "Akai/Monk.png",
+  "aldous": "Aldous/Death.png",
+  "alice": "Alice/Queen of Blood.png",
+  "angela": "Angela/Heartstring.png",
+  "atlas": "Atlas/Ocean Gladiator.png",
+  "aulus": "Aulus/Barren Pioneer.png",
+  "aurora": "Aurora/Maiden of the Glacier.png",
+  "badang": "Badang/Fist of Zen.png",
+  "balmond": "Balmond/Savage Hunter.png",
+  "barats": "Barats/Dino Rider.png",
+  "baxia": "Baxia/Black Tortoise.png",
+  "belerick": "Belerick/Guard of Nature.png",
+  "brody": "Brody/The Lone Star.png",
+  "change": "Chang'e/Lunar Magic.png",
+  "clint": "Clint/West Justice.png",
+  "eudora": "Eudora/Lightning Weaver.png",
+  "hanzo": "Hanzo/The Pale Phantom.png",
+  "harley": "Harley/Star Magician.png",
+  "kimmy": "Kimmy/Charge Leader.png",
+  "lancelot": "Lancelot/Swordmaster.png",
+  "minotaur": "Minotaur/Son of Minos.png",
+  "natan": "Natan/Time Wielder.png",
+  "paquito": "Paquito/The Heavenly Fist.png",
+  "popolandkupa": "Popol and Kupa/Tribal Howl.png",
+  "selena": "Selena/Abyssal Witch.png",
+  "valir": "Valir/Son of Flames.png",
+  "xborg": "Xborg/Moto Drifter.png",
+  "zhask": "Zhask/The King of Swarms.png"
 };
 const heroSplashImageUrl = path => {
   const source = "raw.githubusercontent.com/Sparkies01/Splash/main/" +
@@ -269,15 +297,8 @@ const heroSplashImageUrl = path => {
 const heroSplashDirectImageUrl = path =>
   "https://raw.githubusercontent.com/Sparkies01/Splash/main/" +
   String(path || "").split("/").map(part => encodeURIComponent(part)).join("/");
-const HERO_GAME_AVATAR_OVERRIDES = {
-  // Use the in-game avatar icons for the three circular portraits being refined.
-  "arlott": "https://raw.githubusercontent.com/Ceplin03/database-mlbb.Mobile-Legends-Bang-Bang/master/images-hero/arlott.png",
-  "atlas": "https://static.wikia.nocookie.net/mobile-legends/images/6/6e/Hero931-icon.png",
-  "badang": "https://static.wikia.nocookie.net/mobile-legends/images/a/a4/Hero771-icon.png"
-};
 const heroHDImageUrl = name => {
   const key = heroImageKey(name);
-  if (HERO_GAME_AVATAR_OVERRIDES[key]) return HERO_GAME_AVATAR_OVERRIDES[key];
   // Prefer higher-resolution splash artwork for other heroes where available.
   // Fall back to the portrait set, then to the base hero icon in heroImageUrl().
   const splashPath = HERO_SPLASH_ART_OVERRIDES[key];
