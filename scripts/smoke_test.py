@@ -233,7 +233,7 @@ try:
             "Local hero snapshot must not contain duplicate IDs or names")
 
     # Every catalog hero should have a verified portrait or splash-art mapping.
-    # Hirara is the only current catalog entry without a matching, verified artwork path.
+    # Hirara's source folder is spelled Hiara in the community splash repository.
     verified_hero_art: dict[str, str] = {}
     for map_name in ("HERO_HD_IMAGE_FILES", "HERO_SPLASH_ART_OVERRIDES"):
         map_start = script.find(f"const {map_name} = {{")
@@ -254,7 +254,7 @@ try:
         if re.sub(r"[^a-z0-9]", "", str(row.get("name_hero", "")).casefold())
         not in verified_hero_art
     )
-    require(heroes_without_verified_art == ["Hirara"],
+    require(heroes_without_verified_art == [],
             "Hero artwork coverage changed unexpectedly; verify new image paths instead of guessing: "
             + ", ".join(heroes_without_verified_art))
 
