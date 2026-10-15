@@ -3502,3 +3502,87 @@ img.hero-image,
     max-width: 100%;
   }
 }
+
+
+/* Grim_gg install/download page */
+.nav .nav-download {
+  color:#fff;
+  border:1px solid #ff3048;
+  border-radius:5px;
+  padding:7px 10px;
+  white-space:nowrap;
+}
+.nav .nav-download:hover,
+.nav .nav-download[aria-current="page"] {
+  background:#ff3048;
+  color:#fff;
+}
+.download-section { min-height:65vh; }
+.download-intro {
+  display:flex;
+  align-items:center;
+  gap:20px;
+  margin:26px 0;
+  padding:24px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:radial-gradient(ellipse at 0 50%,#40121d 0,transparent 62%),var(--panel);
+}
+.download-app-mark {
+  flex:0 0 68px;
+  display:grid;
+  place-items:center;
+  width:68px;
+  height:68px;
+  border:2px solid var(--red);
+  color:#fff;
+  font:900 34px Orbitron,sans-serif;
+}
+.download-app-mark span { color:var(--red); }
+.download-intro h3 { margin:0 0 5px; font-size:clamp(18px,2.5vw,25px); }
+.download-intro p { margin:0; color:var(--muted); }
+.download-platform-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+  margin:24px 0;
+}
+.download-platform-card {
+  padding:24px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--panel);
+}
+.download-platform-icon {
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 10px;
+  border:1px solid #66303b;
+  border-radius:5px;
+  color:#ff7383;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+.download-platform-card h3 { margin:15px 0 8px; font-size:22px; }
+.download-platform-card p { color:var(--muted); }
+.download-install-button { margin:8px 0 14px; }
+.download-install-button:disabled { opacity:.7; cursor:default; }
+.download-steps { padding-left:22px; color:#e5dce5; }
+.download-steps li { margin:10px 0; padding-left:3px; }
+.download-status {
+  padding:13px 16px;
+  border-left:3px solid var(--red);
+  background:#191116;
+  color:#f4e9ee;
+  overflow-wrap:anywhere;
+}
+.download-footer-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+@media(max-width:650px) {
+  .nav .nav-download { border:0; padding:0; }
+  .download-intro { align-items:flex-start; padding:17px; gap:14px; }
+  .download-app-mark { flex-basis:50px; width:50px; height:50px; font-size:25px; }
+  .download-platform-grid { grid-template-columns:1fr; gap:14px; }
+  .download-platform-card { padding:19px; }
+}
