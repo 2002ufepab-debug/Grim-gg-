@@ -911,3 +911,6 @@ footer { border-top: 1px solid rgba(255,54,84,.18); background: #090a0f; }
   font-size: clamp(2rem, 6vw, 4rem);
 }
 #tierlist .tier-card-art .tier-rank { z-index: 2; }
+
+/* Lowest current-meta tier badge. */
+.tier-d { background: #29252d; border-color: #817b88; color: #e2dce8; }
