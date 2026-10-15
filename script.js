@@ -720,6 +720,7 @@ let perkCategory = "Все";
 let buildFilter = "Все";
 let buildRoleFilter = "Все";
 let buildQuery = "";
+let buildHeroPickerQuery = "";
 let favoriteTab = "heroes";
 let favoriteHeroes = new Set();
 let favoriteItems = new Set();
@@ -1640,7 +1641,8 @@ function renderBuildHeroAvatars() {
   const container = $("buildHeroAvatars");
   if (!container) return;
   if (container.dataset.rendered !== "true") {
-    container.innerHTML = heroes.map(hero => `
+    const sortedHeroes = [...heroes].sort((a, b) => String(a.name || "").localeCompare(String(b.name || ""), "en", { sensitivity: "base" }));
+    container.innerHTML = sortedHeroes.map(hero => `
       <button type="button" class="build-hero-avatar" data-build-hero="${escapeHTML(hero.name)}" aria-pressed="false" aria-label="Выбрать ${escapeHTML(hero.name)}">
         <span class="build-hero-avatar-art">${heroImageMarkup(hero)}</span>
         <span class="build-hero-avatar-name">${escapeHTML(hero.name)}</span>
@@ -1648,9 +1650,21 @@ function renderBuildHeroAvatars() {
     container.dataset.rendered = "true";
   }
   const selectedName = buildQuery.trim().toLocaleLowerCase();
+  const query = buildHeroPickerQuery.trim().toLocaleLowerCase();
+  let visible = 0;
   container.querySelectorAll("[data-build-hero]").forEach(button => {
-    button.setAttribute("aria-pressed", String(String(button.dataset.buildHero || "").toLocaleLowerCase() === selectedName));
+    const name = String(button.dataset.buildHero || "");
+    const matches = name.toLocaleLowerCase().includes(query);
+    button.hidden = !matches;
+    if (matches) visible++;
+    button.setAttribute("aria-pressed", String(name.toLocaleLowerCase() === selectedName));
   });
+  const count = $("buildHeroPickerCount");
+  if (count) {
+    count.textContent = query
+      ? (visible ? `Найдено героев: ${visible} из ${heroes.length}` : "Ничего не найдено — попробуй другое имя.")
+      : `Все герои: ${heroes.length}. Список отсортирован по алфавиту.`;
+  }
 }
 function renderBuilds() {
   const grid = $("buildGrid");
@@ -1886,11 +1900,17 @@ function setupFilters() {
     buildQuery = event.target.value;
     renderBuilds();
   });
+  $("buildHeroPickerSearch")?.addEventListener("input", event => {
+    buildHeroPickerQuery = event.target.value || "";
+    renderBuildHeroAvatars();
+  });
   $("buildHeroAvatars")?.addEventListener("click",event=>{
     const button = event.target.closest("[data-build-hero]");
     if (!button) return;
     buildQuery = button.dataset.buildHero || "";
     buildRoleFilter = "Все";
+    buildHeroPickerQuery = "";
+    if ($("buildHeroPickerSearch")) $("buildHeroPickerSearch").value = "";
     if ($("buildSearch")) $("buildSearch").value = buildQuery;
     const allRolesButton = $("buildFilters")?.querySelector('[data-build-role="Все"]');
     if (allRolesButton) syncFilterSelection($("buildFilters"),"[data-build-role]",allRolesButton);
