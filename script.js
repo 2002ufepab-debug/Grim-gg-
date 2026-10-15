@@ -2,7 +2,7 @@
 "use strict";
 
 /*
- * GRIM_GG — CLIENT-SIDE DATABASE
+ * MLBB GAME — CLIENT-SIDE DATABASE
  * Предметы и советы встроены в файл.
  * Внешний каталог героев используется только при успешной загрузке.
  * Точные значения характеристик не приводятся без проверки текущего патча.
@@ -1133,7 +1133,7 @@ function renderHeroDetailContent(hero, target) {
     ? talentPreset.talents.map((talent,index)=>`<article class="hero-talent-pick"><span class="hero-talent-pick-num">${["ТАЛАНТ I","ТАЛАНТ II","КЛЮЧЕВОЙ"][index] || "ТАЛАНТ"}</span><div class="hero-talent-pick-icon" aria-hidden="true">${talentIconMarkupForBuild(talent[1],index)}</div><div><strong>${escapeHTML(talent[1])}</strong><p>${escapeHTML(talent[2])}</p></div></article>`).join("")
     : `<p>${escapeHTML(talentText)}</p>`;
   const talentSection = `<div id="${profilePrefix}-hero-talents" class="hero-detail-section hero-talents-section">
-    <span class="eyebrow">GRIM_GG / EMBLEM & TALENTS</span>
+    <span class="eyebrow">MLBB GAME / EMBLEM & TALENTS</span>
     <h3>Эмблема, таланты и боевой навык</h3>
     <div class="hero-talent-grid">
       <div class="hero-talent-card"><span class="hero-talent-label">Эмблема</span><p>${escapeHTML(emblemText)}</p></div>
@@ -1151,7 +1151,7 @@ function renderHeroDetailContent(hero, target) {
     ? `<div id="${profilePrefix}-hero-skills" class="hero-detail-section"><h3>Навыки и комбо</h3><p class="fine-print">Комбо: ${combo.skills.map(escapeHTML).join(" → ")}</p><ol class="hero-skill-steps">${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><p>${escapeHTML(combo.tip)}</p></div>`
     : `<div id="${profilePrefix}-hero-skills" class="hero-detail-section"><h3>Навыки героя</h3><p class="fine-print">Подробные описания навыков этого героя ещё не подключены к справочнику. Не показываем выдуманные данные.</p><a class="btn btn-ghost" href="?page=guides">Открыть комбо и гайды ↗</a></div>`;
   const buildSection = `<div id="${profilePrefix}-hero-build" class="hero-detail-section hero-build-inline">
-    <div class="hero-build-inline-heading"><div><span class="eyebrow">GRIM_GG / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
+    <div class="hero-build-inline-heading"><div><span class="eyebrow">MLBB GAME / BUILD</span><h3>Сборка героя</h3></div><p>${escapeHTML(build.goal)}</p></div>
     <div class="build-item-list">${buildRows}</div>
     <p class="fine-print">${build.personalized ? "Подборка для конкретного героя." : "Стартовый шаблон по роли; не индивидуальная мета-сборка."} ${escapeHTML(build.note)}</p>
     <div class="hero-late-game">
@@ -1171,7 +1171,7 @@ function renderHeroDetailContent(hero, target) {
     <div class="hero-detail-layout">
       <div class="hero-detail-art">${heroImageMarkup(hero)}</div>
       <div class="hero-detail-copy">
-        <span class="eyebrow">GRIM_GG / HERO PROFILE</span>
+        <span class="eyebrow">MLBB GAME / HERO PROFILE</span>
         <h2 class="hero-profile-name" id="${headingId}">
           <span class="hero-profile-name-avatar" aria-hidden="true">${heroImageMarkup(hero).replace('class="hero-image ', 'class="hero-image hero-profile-avatar ').replace('class="hero-image-fallback"', 'class="hero-image-fallback hero-profile-avatar-fallback"')}</span>
           <span class="hero-profile-name-text">${escapeHTML(hero.name)}</span>
@@ -1187,7 +1187,7 @@ function renderHeroDetailContent(hero, target) {
     ${buildSection}
     ${talentSection}
     ${skillsSection}
-    <div class="hero-detail-section hero-detail-tip hero-detail-tip-bottom"><strong>Совет Grim_gg</strong><p>${escapeHTML(tip)}</p></div>`;
+    <div class="hero-detail-section hero-detail-tip hero-detail-tip-bottom"><strong>Совет MLBB Game</strong><p>${escapeHTML(tip)}</p></div>`;
 }
 
 function renderHeroFullPage(name) {
@@ -1984,7 +1984,7 @@ function renderComboGuides() {
       </div>
       <div class="combo-card-heading"><div class="combo-avatar">${(() => { const matchedHero = heroes.find(hero => hero.name.toLocaleLowerCase() === combo.key.toLocaleLowerCase()); return matchedHero ? heroImageMarkup(matchedHero) : `<span aria-hidden="true">${escapeHTML(combo.hero.slice(0,1).toUpperCase())}</span>`; })()}</div><div><h3>${escapeHTML(combo.hero)}</h3><span class="combo-role">${escapeHTML(combo.role)} · ${escapeHTML(combo.situation)}</span></div></div>
       <div class="combo-sequence" aria-label="Порядок навыков" tabindex="0">${combo.skills.map((skill,i)=>`<span class="combo-step"><b>${escapeHTML(skill)}</b><small>${i===combo.skills.length-1?"Финиш":"Шаг "+(i+1)}</small></span>`).join('<span class="combo-arrow" aria-hidden="true">›</span>')}</div>
-      <details class="combo-details"><summary>Показать объяснение комбо</summary><ol>${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><div class="combo-tip"><strong>Совет Grim_gg</strong><p>${escapeHTML(combo.tip)}</p></div></details>
+      <details class="combo-details"><summary>Показать объяснение комбо</summary><ol>${combo.steps.map(step=>`<li>${escapeHTML(step)}</li>`).join("")}</ol><div class="combo-tip"><strong>Совет MLBB Game</strong><p>${escapeHTML(combo.tip)}</p></div></details>
     </article>`).join("");
 }
 
@@ -2258,7 +2258,7 @@ async function fetchCatalogWithLocalFallback(remoteUrl, localUrl, label) {
     if (!Array.isArray(data) || !data.length) throw new Error(label + ": неверный формат локального каталога");
     return { data, source: "local" };
   } catch (localError) {
-    console.warn("Grim_gg: не удалось загрузить ни внешний, ни локальный каталог " + label + ".", localError);
+    console.warn("MLBB Game: не удалось загрузить ни внешний, ни локальный каталог " + label + ".", localError);
     throw remoteError || localError;
   }
 }
@@ -2308,7 +2308,7 @@ async function loadExternalItems() {
     renderFavorites();
     // renderItems() owns the visible count so active search, category and favorites filters stay accurate.
   } catch (error) {
-    console.warn("Grim_gg: внешний каталог предметов недоступен.",error);
+    console.warn("MLBB Game: внешний каталог предметов недоступен.",error);
   }
 }
 
@@ -2350,7 +2350,7 @@ async function loadExternalHeroes() {
   } catch (error) {
     heroDataSource = "fallback";
     if (note) note.textContent = "Не удалось загрузить каталоги. Показан сокращённый встроенный список; он не является полным каталогом игры.";
-    console.warn("Grim_gg: не удалось загрузить внешний и локальный каталоги героев.",error);
+    console.warn("MLBB Game: не удалось загрузить внешний и локальный каталоги героев.",error);
   }
 }
 
@@ -2389,7 +2389,7 @@ function applyPageNavigation(requestedPage, shouldScroll = true) {
     download: "Скачать приложение",
     hero: "Профиль героя"
   };
-  document.title = page ? `Grim_gg — ${titles[page]}` : "Grim_gg — тактическая база Mobile Legends";
+  document.title = page ? `MLBB Game — ${titles[page]}` : "MLBB Game — тактическая база Mobile Legends";
 
   if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
 }
@@ -2410,7 +2410,7 @@ function setupAppInstall() {
       installButton.disabled = false;
       installButton.textContent = "Установить приложение";
     }
-    say("Браузер поддерживает быструю установку Grim_gg — нажми кнопку выше.");
+    say("Браузер поддерживает быструю установку MLBB Game — нажми кнопку выше.");
   });
 
   window.addEventListener("appinstalled", () => {
@@ -2419,7 +2419,7 @@ function setupAppInstall() {
       installButton.disabled = true;
       installButton.textContent = "Приложение установлено";
     }
-    say("Grim_gg установлен. Ищи его значок на главном экране телефона.");
+    say("MLBB Game установлен. Ищи его значок на главном экране телефона.");
   });
 
   installButton?.addEventListener("click", async () => {
@@ -2431,7 +2431,7 @@ function setupAppInstall() {
     const choice = await deferredInstallPrompt.userChoice;
     deferredInstallPrompt = null;
     if (choice?.outcome === "accepted") {
-      say("Установка подтверждена. Подожди, пока Grim_gg появится среди приложений.");
+      say("Установка подтверждена. Подожди, пока MLBB Game появится среди приложений.");
     } else {
       say("Установка пока не завершена. Ты можешь вернуться и попробовать ещё раз или воспользоваться инструкцией ниже.");
     }
@@ -2441,7 +2441,7 @@ function setupAppInstall() {
     const link = window.location.origin + window.location.pathname;
     try {
       await navigator.clipboard.writeText(link);
-      say("Ссылка на Grim_gg скопирована. Отправь её друзьям, чтобы они тоже могли установить сайт.");
+      say("Ссылка на MLBB Game скопирована. Отправь её друзьям, чтобы они тоже могли установить сайт.");
     } catch {
       say("Скопируй ссылку вручную: " + link);
     }
@@ -2453,9 +2453,9 @@ function setupAppInstall() {
   if (isStandalone) {
     if (installButton) {
       installButton.disabled = true;
-      installButton.textContent = "Grim_gg уже установлен";
+      installButton.textContent = "MLBB Game уже установлен";
     }
-    say("Похоже, Grim_gg уже установлен на этом устройстве. Можешь поделиться ссылкой с друзьями.");
+    say("Похоже, MLBB Game уже установлен на этом устройстве. Можешь поделиться ссылкой с друзьями.");
   } else if (isIOS) {
     say("Для iPhone: открой эту страницу в Safari → «Поделиться» → «На экран Домой» → «Добавить».");
   }
