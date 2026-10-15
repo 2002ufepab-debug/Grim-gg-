@@ -1,5 +1,5 @@
 /* Grim_gg PWA service worker */
-const CACHE_NAME = "grim-gg-pwa-v4";
+const CACHE_NAME = "grim-gg-pwa-v5";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -28,14 +28,24 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(
-        keys.filter((key) => key.startsWith("grim-gg-pwa-") && key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      ))
-      .then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    const currentCache = await caches.open(CACHE_NAME);
+
+    // Preserve anything already downloaded by older Grim_gg versions, including images.
+    for (const key of keys) {
+      if (!key.startsWith("grim-gg-pwa-") || key === CACHE_NAME) continue;
+      const oldCache = await caches.open(key);
+      for (const request of await oldCache.keys()) {
+        if (await currentCache.match(request)) continue;
+        const response = await oldCache.match(request);
+        if (response) await currentCache.put(request, response);
+      }
+      await caches.delete(key);
+    }
+
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener("fetch", (event) => {
@@ -44,12 +54,10 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
 
-  // Cache community-hosted hero/equipment artwork as it is viewed online.
-  // Opaque image responses are valid cache entries and can be displayed offline.
-  const isCommunityImage = request.destination === "image"
-    && url.hostname === "raw.githubusercontent.com"
-    && (url.pathname.includes("/images-hero/") || url.pathname.includes("/logo-equipment/"));
-  if (isCommunityImage) {
+  // Cache images from every host used by Grim_gg: hero portraits, splash art,
+  // item icons and talent icons. Most hero art is served by weserv.nl / Lara_Image,
+  // not just raw.githubusercontent.com. This is cache-first and refreshes in background.
+  if (request.destination === "image") {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
       const cached = await cache.match(request);
