@@ -958,13 +958,36 @@ function talentIconMarkupForBuild(name, index) {
   return '<span class="talent-icon talent-icon-art" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 4 54 17v30L32 60 10 47V17Z" fill="#21131d" stroke="#ff8795" stroke-width="2"/><text x="32" y="41" text-anchor="middle" font-size="27" font-family="Arial,sans-serif" font-weight="700" fill="#ffe6eb">' + glyph + '</text></svg></span>';
 }
 
+const BATTLE_SPELL_ICON_BASE = "https://mlbbhub.com/images/spells/";
+const BATTLE_SPELL_ICON_RULES = [
+  {slug:"flicker", names:["вспышка","flicker"]},
+  {slug:"retribution", names:["возмездие","retribution"]},
+  {slug:"inspire", names:["вдохновение","inspire"]},
+  {slug:"execute", names:["исполнение","казнь","execute"]},
+  {slug:"revitalize", names:["исцеление","восстановление","revitalize"]},
+  {slug:"sprint", names:["спринт","sprint"]},
+  {slug:"aegis", names:["щит","aegis"]},
+  {slug:"petrify", names:["окаменение","petrify"]},
+  {slug:"purify", names:["очищение","purify"]},
+  {slug:"flameshot", names:["огненный выстрел","пылающий выстрел","flameshot"]},
+  {slug:"vengeance", names:["возмездие духа","vengeance","мщение"]},
+  {slug:"arrival", names:["прибытие","arrival"]}
+];
 function battleSpellMarkup(spellText) {
   const label = String(spellText || "Выбери боевой навык под героя и матч.");
-  if (/возмездие|retribution/i.test(label)) {
-    const src = new URL("assets/retribution.svg", window.location.href).href;
-    return '<span class="build-spell-display"><img class="build-spell-icon" src="' + escapeHTML(src) + '" alt="Иконка Возмездия" loading="lazy" decoding="async"><span>' + escapeHTML(label) + '</span></span>';
-  }
-  return '<span class="build-spell-display"><span class="build-spell-placeholder" aria-hidden="true">✦</span><span>' + escapeHTML(label) + '</span></span>';
+  const normalized = label.toLocaleLowerCase("ru");
+  const matched = BATTLE_SPELL_ICON_RULES.filter(rule =>
+    rule.names.some(name => normalized.includes(name))
+  );
+  // "Возмездие духа" is Vengeance, not jungle Retribution.
+  const safeMatched = matched.filter(rule => !(rule.slug === "retribution" && normalized.includes("возмездие духа")));
+  const icons = safeMatched.map(rule =>
+    '<img class="build-spell-icon" src="' + escapeHTML(BATTLE_SPELL_ICON_BASE + rule.slug + '.png') +
+    '" alt="' + escapeHTML(rule.names[0]) + '" title="' + escapeHTML(rule.names[0]) +
+    '" loading="lazy" decoding="async" onerror="this.onerror=null;this.remove();">'
+  ).join("");
+  return '<span class="build-spell-display">' + icons +
+    '<span>' + escapeHTML(label) + '</span></span>';
 }
 
 function getHeroTalentPreset(heroName, roles, style = "Командные бои") {
@@ -1413,24 +1436,28 @@ function renderItemCards(filtered, grid, emptyMessage) {
     // Показываем только изображения из набора оригинальных игровых иконок.
     // Если оригинального файла нет или он недоступен, не подменяем его самодельной пиктограммой.
     const missingIcon = '<div class="item-symbol item-symbol-fallback" role="img" aria-label="Оригинальная иконка недоступна"><span style="font:600 10px/1.4 sans-serif;text-align:center;padding:6px">Нет оригинальной иконки</span></div>';
-    // Retribution is a battle spell, not equipment: its original icon lives in the spell dataset.
-    // Roaming Blessing is a category card, so use the real base-boots icon rather than a made-up file.
-    const retrySource = item.id === "retribution" ? "" : item.name === "Roaming Blessing"
-      ? ITEM_IMAGE_BASE + "boots.png"
-      : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
-    const iconSource = item.id === "retribution"
-      ? new URL("assets/retribution.svg", window.location.href).href
+    // Use real game-icon artwork for jungle spell upgrades and roaming blessings.
+    const specialIconSlugs = {
+      "retribution":"retribution",
+      "ice-retribution":"ice-retribution",
+      "flame-retribution":"flame-retribution",
+      "bloody-retribution":"bloody-retribution",
+      "roam-boots":"boots",
+      "roam-conceal":"conceal",
+      "roam-encourage":"encourage",
+      "roam-favor":"favor",
+      "roam-dire-hit":"dire-hit"
+    };
+    const specialSlug = specialIconSlugs[item.id];
+    const iconSource = specialSlug
+      ? "https://mlbbhub.com/images/items/" + specialSlug + ".png"
       : item.imageFile
         ? ITEM_IMAGE_BASE + item.imageFile
-        : item.name === "Roaming Blessing"
-          ? ITEM_IMAGE_BASE + "boots.png"
-          : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
-    // Use the locally-rendered vector artwork for battle spells and Roam effects.
-    // This avoids missing remote icons and keeps those special cards visually consistent.
-    const vectorMarkup = effectIconMarkup(item);
-    const iconMarkup = vectorMarkup || (iconSource
+        : iconSlug ? ITEM_IMAGE_BASE + iconSlug + ".png" : "";
+    const retrySource = "";
+    const iconMarkup = iconSource
       ? `<img class="item-image" src="${escapeHTML(iconSource)}" data-retry="${escapeHTML(retrySource)}" data-fallback="${escapeHTML(missingIcon)}" alt="${escapeHTML(item.ru)}" loading="lazy" decoding="async" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.outerHTML=this.dataset.fallback}">`
-      : missingIcon);
+      : missingIcon;
     return `<article class="item-card">
       <div class="item-image-wrap">${iconMarkup}</div>
       <div class="item-content">
