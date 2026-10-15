@@ -29,8 +29,8 @@
   <link rel="stylesheet" href="layout-wide.css?v=18">
   <link rel="stylesheet" href="visual-refresh.css?v=2">
   <link rel="stylesheet" href="premium-update.css?v=6">
-  <link rel="stylesheet" href="mobile-optimization.css?v=38">
-  <script src="script.js?v=100" defer></script>
+  <link rel="stylesheet" href="mobile-optimization.css?v=39">
+  <script src="script.js?v=101" defer></script>
   <script src="talents.js?v=23" defer></script>
 </head>
 <body>
@@ -229,8 +229,11 @@
     <p>Каталог сборок для всех загруженных героев. Выбирай роль, находи персонажа и открывай варианты экипировки, эмблем и боевых заклинаний.</p>
   </div>
   <div class="build-hero-picker">
-    <div class="build-hero-picker-heading"><h3>ПЕРСОНАЖИ</h3><span>Нажми на аватар, чтобы открыть сборку и настроить таланты</span></div>
-    <div class="build-hero-avatars" id="buildHeroAvatars" aria-label="Выбор персонажа для сборки и талантов"></div>
+    <div class="build-hero-picker-heading"><h3>ВСЕ ГЕРОИ</h3><span>Выбери любого персонажа — сборка и таланты откроются ниже</span></div>
+    <label class="build-hero-picker-search-label" for="buildHeroPickerSearch">Найти героя в каталоге</label>
+    <input class="search build-hero-picker-search" id="buildHeroPickerSearch" type="search" autocomplete="off" placeholder="Например: Клинт, Фанни, Кадита…" aria-label="Поиск героя в списке сборок и талантов">
+    <p class="build-hero-picker-count" id="buildHeroPickerCount" aria-live="polite">Загружаем список героев…</p>
+    <div class="build-hero-avatars" id="buildHeroAvatars" aria-label="Все герои для выбора сборки и талантов"></div>
   </div>
   <input class="search build-search" id="buildSearch" type="search" placeholder="Найти героя для сборки..." aria-label="Поиск героя для сборки">
   <div class="filter-row" id="buildFilters" aria-label="Фильтр сборок по роли">
