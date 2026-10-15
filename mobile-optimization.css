@@ -1498,3 +1498,24 @@
   .build-hero-picker-search { min-height: 44px; font-size: 14px; }
   .build-hero-picker-count { font-size: 10px; }
 }
+
+
+/* Grim_gg circular hero portraits: use the same square crop and scale everywhere.
+   This prevents portrait/splash aspect ratios from leaving empty space in the circle. */
+#main-content .hero-grid .hero-image-wrap .hero-image--circle-icon,
+#heroGrid.hero-grid .hero-image-wrap .hero-image--circle-icon,
+#favoritesGrid.hero-grid .hero-image-wrap .hero-image--circle-icon,
+.build-hero-avatar-art .hero-image--circle-icon {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  transform: none !important;
+  filter: none !important;
+}
