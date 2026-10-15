@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="visual-refresh.css?v=2">
   <link rel="stylesheet" href="premium-update.css?v=8">
   <link rel="stylesheet" href="mobile-optimization.css?v=41">
-  <script src="script.js?v=114" defer></script>
+  <script src="script.js?v=115" defer></script>
   <script src="talents.js?v=23" defer></script>
 </head>
 <body>
@@ -140,7 +140,7 @@
   </div>
   <div class="tier-disclaimer">
     <strong>Тир-лист по общей статистике · патч 2.2.16a · 15.10.2026</strong>
-    <p>Ранги отражают общий срез всех рангов, а не отдельную силу на каждой линии. Процент побед не отражает всей картины: на результат влияют сложность героя, составы команд и уровень игроков. <a href="https://mlbbhub.com/tier-list" target="_blank" rel="noopener noreferrer">Источник статистики MLBBHub</a>.</p>
+    <p>Ранги основаны на статистике по всем рангам и не отражают эффективность героя на каждой отдельной линии. Процент побед не отражает всей картины: на результат влияют сложность героя, составы команд и уровень игроков. <a href="https://mlbbhub.com/tier-list" target="_blank" rel="noopener noreferrer">Источник статистики MLBBHub</a>.</p>
   </div>
   <input class="search tier-search" id="tierSearch" type="search" placeholder="Найти героя в тир-листе…" aria-label="Поиск героя в тир-листе">
   <div class="filter-row tier-filters" id="tierFilters" aria-label="Фильтр по уровню">
@@ -287,9 +287,9 @@
   <p class="count" id="comboCount" aria-live="polite"></p>
   <div class="combo-grid" id="comboGrid"></div>
   <div class="guide-grid combo-basics">
-    <article class="guide-card"><span class="guide-num">GUIDE_001</span><h3>ПЕРЕД ВХОДОМ В БОЙ</h3><p>Проверь мини-карту и положение союзников. Если ключевые умения контроля противника готовы, не входи в бой без плана отхода.</p></article>
-    <article class="guide-card"><span class="guide-num">GUIDE_002</span><h3>ПОСЛЕ КОМБО</h3><p>Не стой на месте ради ещё одной атаки. Оцени здоровье, доступные навыки и численность команд, затем решай — продолжить бой или отступить.</p></article>
-    <article class="guide-card"><span class="guide-num">GUIDE_003</span><h3>ТРЕНИРУЙ ПО ЧАСТЯМ</h3><p>Повтори порядок навыков отдельно, затем добавь перемещение и базовые атаки. Стабильное выполнение полезнее случайного быстрого нажатия.</p></article>
+    <article class="guide-card"><span class="guide-num">GUIDE_001</span><h3>ПЕРЕД ВХОДОМ В БОЙ</h3><p>Проверь мини-карту и положение союзников. Если у противника готовы ключевые навыки контроля, не вступай в бой без плана отхода.</p></article>
+    <article class="guide-card"><span class="guide-num">GUIDE_002</span><h3>ПОСЛЕ КОМБО</h3><p>Не стой на месте ради ещё одной атаки. Оцени здоровье, доступные навыки и соотношение сил команд, затем реши, продолжать бой или отступить.</p></article>
+    <article class="guide-card"><span class="guide-num">GUIDE_003</span><h3>ТРЕНИРУЙ ПО ЧАСТЯМ</h3><p>Повтори порядок навыков отдельно, затем добавь перемещение и базовые атаки. Стабильное выполнение комбинации полезнее, чем случайные быстрые нажатия.</p></article>
     <article class="guide-card"><span class="guide-num">GUIDE_004</span><h3>АДАПТИРУЙСЯ К МАТЧУ</h3><p>Комбо — это ориентир, а не обязательная цепочка. Против контроля, мобильных героев или нескольких соперников порядок действий может меняться.</p></article>
   </div>
   <p class="fine-print">Комбо Grim_gg — учебные ориентиры, а не официальные рекомендации разработчика. Названия и эффекты навыков, а также оптимальный порядок могут меняться после обновлений.</p>
@@ -423,7 +423,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js?v=13", { scope: "./" })
+        navigator.serviceWorker.register("./sw.js?v=14", { scope: "./" })
           .catch((error) => console.warn("Grim_gg: service worker registration failed", error));
       });
     }
