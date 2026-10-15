@@ -877,8 +877,21 @@ function normalizeRemoteHero(hero,index) {
   };
 }
 
+function heroInitialJS(name) {
+  const character = String((name || "?").slice(0, 1).toUpperCase());
+  // Event-handler attributes are double-quoted HTML. Keep both quote characters
+  // out of the embedded JavaScript string literal so failed-image fallbacks parse.
+  return "'" + character
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\x27")
+    .replace(/"/g, "\\x22")
+    .replace(/\r/g, "\\r")
+    .replace(/\n/g, "\\n") + "'";
+}
+
 function heroImageMarkup(hero) {
   const initial = escapeHTML((hero.name || "?").slice(0,1).toUpperCase());
+  const initialJS = heroInitialJS(hero.name);
   if (!hero.image) {
     return `<div class="hero-image-fallback" role="img" aria-label="Изображение героя недоступно">${initial}</div>`;
   }
@@ -898,7 +911,7 @@ function heroImageMarkup(hero) {
   const shapeFallback = String(hero.image).includes("Lara_Image") && splashPath && !keepSquarePortrait
     ? heroSplashImageUrl(splashPath)
     : "";
-  return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-shape-fallback="${escapeHTML(shapeFallback)}" data-retry="${escapeHTML(directSplashFallback || retryImage)}" data-retry2="${escapeHTML(directSplashFallback ? retryImage : "")}" onload="if(this.classList.contains('hero-image--portrait') && this.naturalWidth > this.naturalHeight * 0.82 && this.dataset.shapeFallback){const next=this.dataset.shapeFallback;this.dataset.shapeFallback='';this.classList.remove('hero-image--portrait');this.classList.add('hero-image--splash');this.src=next;}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else if(this.dataset.retry2 && this.dataset.retry2!==this.src){const next=this.dataset.retry2;this.dataset.retry2='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+  return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-shape-fallback="${escapeHTML(shapeFallback)}" data-retry="${escapeHTML(directSplashFallback || retryImage)}" data-retry2="${escapeHTML(directSplashFallback ? retryImage : "")}" onload="if(this.classList.contains('hero-image--portrait') && this.naturalWidth > this.naturalHeight * 0.82 && this.dataset.shapeFallback){const next=this.dataset.shapeFallback;this.dataset.shapeFallback='';this.classList.remove('hero-image--portrait');this.classList.add('hero-image--splash');this.src=next;}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else if(this.dataset.retry2 && this.dataset.retry2!==this.src){const next=this.dataset.retry2;this.dataset.retry2='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${initialJS},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
 
@@ -908,9 +921,10 @@ function heroCircleImageMarkup(hero) {
   const key = heroImageKey(hero.name);
   if (["aamon", "alpha", "alucard"].includes(key)) return heroImageMarkup(hero);
   const initial = escapeHTML((hero.name || "?").slice(0, 1).toUpperCase());
+  const initialJS = heroInitialJS(hero.name);
   const primaryImage = hero.image || heroHDImageUrl(hero.name) || heroImageUrl(hero.name);
   const retryImage = hero.fallbackImage && hero.fallbackImage !== primaryImage ? hero.fallbackImage : heroImageUrl(hero.name);
-  return `<img class="hero-image hero-image--avatar hero-image--circle-icon" src="${escapeHTML(primaryImage)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+  return `<img class="hero-image hero-image--avatar hero-image--circle-icon" src="${escapeHTML(primaryImage)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${initialJS},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
 function favoriteButton(type,id,saved) {
