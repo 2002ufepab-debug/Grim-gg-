@@ -11,7 +11,9 @@ const APP_SHELL = [
   "./mobile-optimization.css?v=38",
   "./script.js?v=100",
   "./talents.js?v=23",
-  "./favicon.svg",\n  "./icon-192.svg",\n  "./icon-512.svg",
+  "./favicon.svg",
+  "./icon-192.svg",
+  "./icon-512.svg",
   "./manifest.webmanifest"
 ];
 
