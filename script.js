@@ -880,6 +880,18 @@ function heroImageMarkup(hero) {
   return `<img class="hero-image ${imageType}" src="${escapeHTML(hero.image)}" data-shape-fallback="${escapeHTML(shapeFallback)}" data-retry="${escapeHTML(directSplashFallback || retryImage)}" data-retry2="${escapeHTML(directSplashFallback ? retryImage : "")}" onload="if(this.classList.contains('hero-image--portrait') && this.naturalWidth > this.naturalHeight * 0.82 && this.dataset.shapeFallback){const next=this.dataset.shapeFallback;this.dataset.shapeFallback='';this.classList.remove('hero-image--portrait');this.classList.add('hero-image--splash');this.src=next;}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.classList.remove('hero-image--splash','hero-image--portrait');this.classList.add('hero-image--avatar');this.src=next;}else if(this.dataset.retry2 && this.dataset.retry2!==this.src){const next=this.dataset.retry2;this.dataset.retry2='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
 }
 
+
+/* Circular catalog/selector portraits use square in-game icons so every hero fills
+   the same frame. Keep the already-approved Aamon, Alpha and Alucard artwork unchanged. */
+function heroCircleImageMarkup(hero) {
+  const key = heroImageKey(hero.name);
+  if (["aamon", "alpha", "alucard"].includes(key)) return heroImageMarkup(hero);
+  const initial = escapeHTML((hero.name || "?").slice(0, 1).toUpperCase());
+  const primaryImage = hero.fallbackImage || heroImageUrl(hero.name);
+  const retryImage = heroImageUrl(hero.name);
+  return `<img class="hero-image hero-image--avatar hero-image--circle-icon" src="${escapeHTML(primaryImage)}" data-retry="${escapeHTML(retryImage)}" alt="${escapeHTML(hero.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="if(this.dataset.retry && this.dataset.retry!==this.src){const next=this.dataset.retry;this.dataset.retry='';this.src=next;}else{this.onerror=null;this.replaceWith(Object.assign(document.createElement('div'),{className:'hero-image-fallback',textContent:${JSON.stringify(initial)},role:'img',ariaLabel:'Изображение героя недоступно'}))}">`;
+}
+
 function favoriteButton(type,id,saved) {
   return `<button type="button" class="favorite-btn ${saved?"saved":""}" data-favorite-type="${type}" data-favorite-id="${escapeHTML(id)}" aria-pressed="${saved}">${saved?"★ В избранном":"☆ В избранное"}</button>`;
 }
@@ -1224,7 +1236,7 @@ function renderHeroes() {
     return `<article class="hero-card">
       <div class="hero-image-wrap">
         <button type="button" class="hero-image-open" data-open-hero-full="${escapeHTML(hero.name)}" aria-label="Открыть сборку и таланты героя ${escapeHTML(hero.name)}">
-          ${heroImageMarkup(hero)}
+          ${heroCircleImageMarkup(hero)}
         </button>
       </div>
       <div class="hero-card-content">
@@ -1646,7 +1658,7 @@ function renderBuildHeroAvatars() {
   if (container.dataset.rosterSignature !== rosterSignature) {
     container.innerHTML = sortedHeroes.map(hero => `
       <button type="button" class="build-hero-avatar" data-build-hero="${escapeHTML(hero.name)}" aria-pressed="false" aria-label="Выбрать ${escapeHTML(hero.name)}">
-        <span class="build-hero-avatar-art">${heroImageMarkup(hero)}</span>
+        <span class="build-hero-avatar-art">${heroCircleImageMarkup(hero)}</span>
         <span class="build-hero-avatar-name">${escapeHTML(hero.name)}</span>
       </button>`).join("");
     container.dataset.rendered = "true";
